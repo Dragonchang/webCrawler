@@ -10,7 +10,7 @@ CREATE TABLE `t_company` (
                             `tyc_id` int(11) unsigned DEFAULT NULL COMMENT 'tyc公司id',
                             `company_name` VARCHAR(128) NULL DEFAULT NULL COMMENT '公司名称',
                             `stock_code` VARCHAR(32) NULL DEFAULT NULL COMMENT '公司股票代码',
-                            `is_delete` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
+                            `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
                             `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE,
