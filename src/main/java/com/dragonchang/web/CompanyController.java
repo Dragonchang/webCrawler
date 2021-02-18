@@ -28,6 +28,7 @@ public class CompanyController {
     @PostMapping(value = "/findPage")
     @ApiOperation(value = "分页获取设备信息")
     public JsonResult<IPage<Company>> findPage(@RequestBody CompanyRequestDTO pageRequest) {
+        companyService.syncShareInfoWithCompanyId(1L);
         return JsonResult.success(companyService.findPage(pageRequest));
     }
 }

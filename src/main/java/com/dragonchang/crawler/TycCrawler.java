@@ -11,6 +11,7 @@ import com.dragonchang.tianyancha.HeaderUtils;
 import com.dragonchang.tianyancha.HttpClientUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import java.util.Map;
  * @create: 2021-02-17 13:08
  **/
 @Slf4j
+@Component
 public class TycCrawler {
 
     private static String defaultList[] = {
@@ -41,20 +43,20 @@ public class TycCrawler {
 
     /**
      * 获取指定公司的股权穿透持有公司股份信息
-     * @param companyID
+     * @param tycCompanyID
      * @return
      */
-    public List<ShareCompanyListDto> getShareCompanyInfo(String companyID) {
-        NameDto dto = getNameResult(companyID);
+    public ShareCompanyListDto getShareCompanyInfo(String tycCompanyID) {
+        NameDto dto = getNameResult(tycCompanyID);
         String cloud_token = getCloudToken(dto);
         System.out.println(cloud_token);
-        String cloud_utm = getCloudUtm(companyID, dto);
+        String cloud_utm = getCloudUtm(tycCompanyID, dto);
         Map<String, String> params = new HashMap<>();
-        params.put("id", companyID);
+        params.put("id", tycCompanyID);
         String result = HttpClientUtils.doGetForString(UrlConstant.Share_Node_URL,
                 HeaderUtils.getTYCWebIndexNodeHeaders(cloud_token, cloud_utm), params);
         System.out.println(result);
-        TycResult<List<ShareCompanyListDto>> tycResult = JSONObject.parseObject(result, new TypeReference<TycResult<List<ShareCompanyListDto>>>() {
+        TycResult<ShareCompanyListDto> tycResult = JSONObject.parseObject(result, new TypeReference<TycResult<ShareCompanyListDto>>() {
         });
         return tycResult.getData();
     }
@@ -180,7 +182,7 @@ public class TycCrawler {
     public static void main(String[] args) {
         String companyID = "3484794127";
         TycCrawler tycCrawler = new TycCrawler();
-        List<ShareCompanyListDto> list = tycCrawler.getShareCompanyInfo(companyID);
+        ShareCompanyListDto list = tycCrawler.getShareCompanyInfo(companyID);
         System.out.println(companyID);
 //        NameDto dto = tycCrawler.getNameResult(companyID);
 //        String cloud_token = tycCrawler.getCloudToken(dto);

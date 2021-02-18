@@ -13,5 +13,11 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface CompanyMapper extends BaseMapper<Company> {
 
+    /**
+     *
+     * @param page
+     * @param request
+     * @return
+     */
     IPage<Company> findPage(Page page, @Param("request") CompanyRequestDTO request);
 }

@@ -15,4 +15,10 @@ public interface ICompanyService {
      * @return
      */
     IPage<Company> findPage(CompanyRequestDTO pageRequest);
+
+    /**
+     * 为指定公司同步股权穿透信息
+     * @param companyId
+     */
+    void syncShareInfoWithCompanyId(Long companyId);
 }
