@@ -7,10 +7,14 @@ import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.ICompanyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @program: webcrawler
@@ -18,12 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: zhangfl
  * @create: 2021-02-18 11:36
  **/
-@RestController
+@Controller
 @RequestMapping("/company")
 public class CompanyController {
 
     @Autowired
     ICompanyService companyService;
+
+    @RequestMapping
+    public String index(Model model) {
+        return "company";
+    }
 
     @PostMapping(value = "/findPage")
     @ApiOperation(value = "分页获取设备信息")
