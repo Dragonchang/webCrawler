@@ -66,5 +66,14 @@
     <script>
         var base_url = '${request.contextPath}';
     </script>
+</#macro>
 
+<#macro commonFooter >
+    <footer class="main-footer">
+        Powered by <b>dragonchang</b>
+        <div class="pull-right hidden-xs">
+            <strong>Copyright &copy; 2015-${.now?string('yyyy')} &nbsp;
+            </strong><!-- All rights reserved. -->
+        </div>
+    </footer>
 </#macro>

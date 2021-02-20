@@ -15,7 +15,7 @@
     <!-- left -->
     <@netCommon.commonLeft />
     <div class="content-wrapper">
-        index
+        ${companyId}
     </div>
     <!-- footer -->
     <@netCommon.commonFooter />

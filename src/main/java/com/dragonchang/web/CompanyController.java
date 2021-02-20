@@ -38,13 +38,14 @@ public class CompanyController {
 
     @GetMapping(value = "/syncShare")
     @ApiOperation(value = "同步公司信息")
-    public @ResponseBody
-    JsonResult<IPage<Company>> syncShareInfoWithCompanyId(@RequestParam Long companyId) {
+    @ResponseBody
+    public JsonResult<IPage<Company>> syncShareInfoWithCompanyId(@RequestParam Long companyId) {
         companyService.syncShareInfoWithCompanyId(companyId);
         return JsonResult.success();
     }
 
     @RequestMapping("/pageList")
+    @ApiOperation(value = "分页获取公司信息")
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,

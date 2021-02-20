@@ -22,6 +22,11 @@ $(function() {
         //"scrollX": true,	// scroll x，close self-adaption
         "columns": [
             {
+                "data": 'id',
+                "visible" : false,
+                "width":'10%'
+            },
+            {
                 "data": 'tycId',
                 "visible" : true,
                 "width":'10%'
@@ -40,6 +45,21 @@ $(function() {
                 "data": 'createdTime',
                 "visible" : true,
                 "width":'10%'
+            },
+            {
+                "data": 'detail',
+                "width":'10%',
+                "render": function ( data, type, row ) {
+                    return function(){
+                        // html
+                        tableData['key'+row.id] = row;
+                        var html = '<p id="'+ row.id +'" >'+
+                            '<button class="btn btn-warning btn-xs detail" type="button">'+ "detail" +'</button>  '+
+                            '</p>';
+
+                        return html;
+                    };
+                }
             }
         ],
         "language" : {
@@ -75,4 +95,11 @@ $(function() {
     $('#searchBtn').on('click', function(){
         companyListTable.fnDraw();
     });
-});
+
+    // job operate
+    $("#company_list").on('click', '.detail',function() {
+        var id = $(this).parent('p').attr("id");
+        window.open(base_url + '/shareCompany?companyId=' + id, '_self');
+    });
+
+    });

@@ -60,11 +60,12 @@
                                 <table id="company_list" class="table table-bordered text-center" width="100%" >
                                     <thead>
                                     <tr>
+                                        <th name="id" >id</th>
                                         <th name="tycId" >天眼查ID</th>
                                         <th name="companyName" >公司名称</th>
                                         <th name="stockCode" >股票代码</th>
                                         <th name="createdTime" >创建时间</th>
-                                        <th>详情</th>
+                                        <th>detail</th>
                                     </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -77,6 +78,8 @@
             </div>
         </section>
     </div>
+    <!-- footer -->
+    <@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
