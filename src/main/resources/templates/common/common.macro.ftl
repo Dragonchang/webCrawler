@@ -37,3 +37,34 @@
         <!-- /.sidebar -->
     </aside>
 </#macro>
+
+
+<#macro commonScript>
+    <!-- jQuery 2.1.4 -->
+    <script src="${request.contextPath}/js/adminlte/bower_components/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 3.3.5 -->
+    <script src="${request.contextPath}/js/adminlte/bower_components/bootstrap/js/bootstrap.min.js"></script>
+    <!-- FastClick -->
+    <script src="${request.contextPath}/js/adminlte/bower_components/fastclick/fastclick.js"></script>
+    <!-- AdminLTE App -->
+    <script src="${request.contextPath}/js/adminlte/dist/js/adminlte.min.js"></script>
+    <!-- jquery.slimscroll -->
+    <script src="${request.contextPath}/js/adminlte/bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- pace -->
+    <script src="${request.contextPath}/js/adminlte/bower_components/PACE/pace.min.js"></script>
+<#-- jquery cookie -->
+    <script src="${request.contextPath}/js/plugins/jquery/jquery.cookie.js"></script>
+<#-- jquery.validate -->
+    <script src="${request.contextPath}/js/plugins/jquery/jquery.validate.min.js"></script>
+
+<#-- layer -->
+    <script src="${request.contextPath}/js/plugins/layer/layer.js"></script>
+
+<#-- common -->
+    <script src="${request.contextPath}/js/js/common.1.js"></script>
+    <script>
+        var base_url = '${request.contextPath}';
+    </script>
+
+</#macro>

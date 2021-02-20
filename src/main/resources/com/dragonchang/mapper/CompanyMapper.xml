@@ -14,5 +14,14 @@
     <select id="findPage" resultMap="BaseResultMap">
         select * from t_company
         where deleted=0
+        <if test="request.tycId != null and request.tycId != ''">
+            and tyc_id like CONCAT('%', #{request.tycId} , '%')
+        </if>
+        <if test="request.companyName != null and request.companyName != ''">
+            and company_name like CONCAT('%', #{request.companyName} , '%')
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
     </select>
 </mapper>
