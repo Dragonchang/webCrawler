@@ -1,39 +1,14 @@
 <#macro commonLeft>
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="/" class="brand-link">
-            <img src="${request.contextPath}/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">crawler</span>
-        </a>
-
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <!-- Sidebar Menu -->
-            <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <!-- Add icons to the links using the .nav-icon class
-                         with font-awesome or any other icon font library -->
-                    <li class="nav-item">
-                        <a href="/" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="${request.contextPath}/company" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Company
-                            </p>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <!-- /.sidebar-menu -->
-        </div>
+    <aside class="main-sidebar">
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="nav-click " ><a href="${request.contextPath}/"><i class="fa fa-circle-o text-aqua"></i><span>${"Dashboard"}</span></a></li>
+                <li class="nav-click " ><a href="${request.contextPath}/company"><i class="fa fa-circle-o text-yellow"></i><span>${"Company"}</span></a></li>
+            </ul>
+        </section>
         <!-- /.sidebar -->
     </aside>
 </#macro>
@@ -76,4 +51,36 @@
             </strong><!-- All rights reserved. -->
         </div>
     </footer>
+</#macro>
+
+<#macro commonStyle>
+
+<#-- favicon -->
+    <link rel="icon" href="${request.contextPath}/js/favicon.ico" />
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/bower_components/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/bower_components/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/bower_components/Ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/dist/css/skins/_all-skins.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- pace -->
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/bower_components/PACE/themes/blue/pace-theme-flash.css">
+
 </#macro>
