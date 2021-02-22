@@ -7,6 +7,7 @@ import com.dragonchang.crawler.TycCrawler;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.dto.tyc.ShareCompanyDto;
 import com.dragonchang.domain.dto.tyc.ShareCompanyListDto;
+import com.dragonchang.domain.dto.tyc.ShareStructureRequestDto;
 import com.dragonchang.domain.po.Company;
 import com.dragonchang.domain.po.ShareStructure;
 import com.dragonchang.mapper.CompanyMapper;
@@ -16,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -49,15 +50,15 @@ public class CompanyService implements ICompanyService {
     @Override
     public void syncShareInfoWithCompanyId(Long companyId) {
         Company company = mapper.selectById(companyId);
-        if(company == null) {
-            log.error("db with empty info for "+companyId);
+        if (company == null) {
+            log.error("db with empty info for " + companyId);
             return;
         }
         ShareCompanyListDto shareCompanyInfo = tycCrawler.getShareCompanyInfo(company.getTycId());
         if (shareCompanyInfo != null) {
             List<ShareCompanyDto> investorList = shareCompanyInfo.getInvestorList();
-            if(CollectionUtils.isNotEmpty(investorList)) {
-                for ( ShareCompanyDto shareCompanyDto : investorList ) {
+            if (CollectionUtils.isNotEmpty(investorList)) {
+                for (ShareCompanyDto shareCompanyDto : investorList) {
                     ShareStructure shareStructure = new ShareStructure();
                     shareStructure.setCompanyId(company.getId());
                     shareStructure.setShareCompanyName(shareCompanyDto.getName());
@@ -70,11 +71,15 @@ public class CompanyService implements ICompanyService {
                     shareStructureMapper.insert(shareStructure);
                 }
             } else {
-
+                log.warn("return empty info");
             }
         } else {
             log.error("companyId :" + companyId + " return empty info");
         }
     }
 
+    @Override
+    public Company getCompanyById(Long companyId) {
+        return mapper.selectById(companyId);
+    }
 }

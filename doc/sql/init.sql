@@ -32,7 +32,7 @@ CREATE TABLE `t_share_structure` (
                             `share_company_finance_label` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '股权类型',
                             `share_company_percent` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '参股比例',
                             `share_company_brand` varchar(512) CHARACTER SET utf8mb4 NOT NULL COMMENT '参股公司品牌',
-                            `is_delete` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
+                            `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
                             `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE,

@@ -10,7 +10,9 @@
     <!-- left -->
     <@netCommon.commonLeft />
     <div class="content-wrapper">
-        index
+        <section class="content-header">
+            <h1>Dashboard</h1>
+        </section>
     </div>
     <!-- footer -->
     <@netCommon.commonFooter />

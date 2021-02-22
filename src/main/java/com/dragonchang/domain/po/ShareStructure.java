@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("t_share_structure")
-public class ShareStructure {
+public class  ShareStructure {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
