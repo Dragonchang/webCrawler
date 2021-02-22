@@ -1,105 +1,50 @@
-$(function() {
-    // init date tables
-    var shareCompanyListTable = $("#shard_company_list").dataTable({
-        "deferRender": true,
-        "processing" : true,
-        "serverSide": true,
-        "ajax": {
-            url: base_url + "/shareCompany/shareList",
-            type:"post",
-            data : function ( d ) {
-                var obj = {};
-                obj.tycId = $('#tyc_id').val();
-                obj.companyName = $('#company_name').val();
-                obj.stockCode = $('#stock_code').val();
-                obj.start = d.start;
-                obj.length = d.length;
-                return obj;
-            }
-        },
-        "searching": false,
-        "ordering": false,
-        //"scrollX": true,	// scroll x，close self-adaption
-        "columns": [
-            {
-                "data": 'id',
-                "visible" : false,
-                "width":'10%'
-            },
-            {
-                "data": 'tycId',
-                "visible" : true,
-                "width":'10%'
-            },
-            {
-                "data": 'companyName',
-                "visible" : true,
-                "width":'20%'
-            },
-            {
-                "data": 'stockCode',
-                "visible" : true,
-                "width":'20%'
-            },
-            {
-                "data": 'createdTime',
-                "visible" : true,
-                "width":'10%'
-            },
-            {
-                "data": 'detail',
-                "width":'10%',
-                "render": function ( data, type, row ) {
-                    return function(){
-                        // html
-                        tableData['key'+row.id] = row;
-                        var html = '<p id="'+ row.id +'" >'+
-                            '<button class="btn btn-warning btn-xs detail" type="button">'+ "detail" +'</button>  '+
-                            '</p>';
-
-                        return html;
-                    };
-                }
-            }
-        ],
-        "language" : {
-            "sProcessing" : "处理中..." ,
-            "sLengthMenu" : "每页 _MENU_ 条记录" ,
-            "sZeroRecords" : "没有匹配结果" ,
-            "sInfo" : "第 _PAGE_ 页 ( 总共 _PAGES_ 页，_TOTAL_ 条记录 )" ,
-            "sInfoEmpty" : "无记录" ,
-            "sInfoFiltered" : "(由 _MAX_ 项结果过滤)" ,
-            "sInfoPostFix" : "",
-            "sSearch" : "搜索" ,
-            "sUrl" : "",
-            "sEmptyTable" : "表中数据为空" ,
-            "sLoadingRecords" : "载入中..." ,
-            "sInfoThousands" : ",",
-            "oPaginate" : {
-                "sFirst" : "首页" ,
-                "sPrevious" : "上页" ,
-                "sNext" : "下页" ,
-                "sLast" : "末页"
-            },
-            "oAria" : {
-                "sSortAscending" : "以升序排列此列" ,
-                "sSortDescending" : "以降序排列此列"
-            }
-        }
-    });
-
-    // table data
-    var tableData = {};
-
+$(function () {
     // search btn
-    $('#searchBtn').on('click', function(){
-        companyListTable.fnDraw();
+    $('#searchBtn').on('click', function () {
+        var id = document.getElementById("company_id").innerText;
+        var condition = document.getElementById("condition");
+        var select = condition.options[condition.selectedIndex].value;
+        if(select == 2) {
+            window.open(base_url + '/shareCompany?companyId=' + id + '&filterTime='+$('#filterTime').val()+'&orderByPercent=1', '_self');
+        } else {
+            window.open(base_url + '/shareCompany?companyId=' + id + '&filterTime='+$('#filterTime').val(), '_self');
+        }
+
+
     });
 
-    // job operate
-    $("#company_list").on('click', '.detail',function() {
-        var id = $(this).parent('p').attr("id");
-        window.open(base_url + '/shareCompany?companyId=' + id, '_self');
+    // filter Time
+    var rangesConf = {};
+    rangesConf['今日'] = [moment().startOf('day'), moment().endOf('day')];
+    rangesConf["昨日"] = [moment().subtract(1, 'days').startOf('day'), moment().subtract(1, 'days').endOf('day')];
+    rangesConf["本月"] = [moment().startOf('month'), moment().endOf('month')];
+    rangesConf["上个月"] = [moment().subtract(1, 'months').startOf('month'), moment().subtract(1, 'months').endOf('month')];
+    rangesConf["最近一周"] = [moment().subtract(1, 'weeks').startOf('day'), moment().endOf('day')];
+    rangesConf["最近一月"] = [moment().subtract(1, 'months').startOf('day'), moment().endOf('day')];
+
+    $('#filterTime').daterangepicker({
+        autoApply: false,
+        singleDatePicker: false,
+        showDropdowns: false,        // 是否显示年月选择条件
+        timePicker: true, 			// 是否显示小时和分钟选择条件
+        timePickerIncrement: 10, 	// 时间的增量，单位为分钟
+        timePicker24Hour: true,
+        opens: 'left', //日期选择框的弹出位置
+        ranges: rangesConf,
+        locale: {
+            format: 'YYYY-MM-DD HH:mm:ss',
+            separator: ' - ',
+            customRangeLabel: '自定义',
+            applyLabel: '确定',
+            cancelLabel: '取消',
+            fromLabel: '起始时间',
+            toLabel: '结束时间',
+            daysOfWeek: '日,一,二,三,四,五,六'.split(','),        // '日', '一', '二', '三', '四', '五', '六'
+            monthNames: '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月'.split(','),        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
+            firstDay: 1
+        },
+        startDate: rangesConf["今日"][0],
+        endDate: rangesConf["今日"][1]
     });
 
 });

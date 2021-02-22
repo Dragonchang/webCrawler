@@ -23,7 +23,7 @@
                 <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">排序条件:</span>
-                        <select class="form-control" id="logStatus" >
+                        <select class="form-control" id="condition" >
                             <option value="1" >${"投资金额"}</option>
                             <option value="2" >${"持股比例"}</option>
                         </select>
@@ -38,6 +38,7 @@
                     </div>
                 </div>
                 <div class="col-xs-1">
+                    <span id="company_id" style="display:none;">${company.id}</span>
                     <button class="btn btn-block btn-info" id="searchBtn">查询</button>
                 </div>
             </div>
@@ -95,8 +96,9 @@
     <@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />
-<script src="${request.contextPath}/js/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="${request.contextPath}/js/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<!-- daterangepicker -->
+<script src="${request.contextPath}/js/adminlte/bower_components/moment/moment.min.js"></script>
+<script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <script src="${request.contextPath}/js/share.js"></script>
 </body>
 </html>
