@@ -90,6 +90,9 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                ${totalAmount} 亿
+            </div>
         </section>
     </div>
     <!-- footer -->

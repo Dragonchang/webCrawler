@@ -9,8 +9,6 @@ $(function () {
         } else {
             window.open(base_url + '/shareCompany?companyId=' + id + '&filterTime='+$('#filterTime').val(), '_self');
         }
-
-
     });
 
     // filter Time
