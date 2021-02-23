@@ -43,6 +43,22 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-xs-4">
+                    <div class="input-group">
+                		<span class="input-group-addon">
+	                  		总数: ${count} 家
+	                	</span>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="input-group">
+                		<span class="input-group-addon">
+	                  		总金额: ${totalAmount} 亿
+	                	</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body" >
@@ -89,9 +105,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                ${totalAmount} 亿
             </div>
         </section>
     </div>

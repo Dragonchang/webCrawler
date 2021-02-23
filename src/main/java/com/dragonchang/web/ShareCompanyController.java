@@ -89,6 +89,7 @@ public class ShareCompanyController {
         model.addAttribute("company", company);
         model.addAttribute("data", shareStructures);
         model.addAttribute("totalAmount", totalAmount);
+        model.addAttribute("count", shareStructures.size());
         return "shareCompany";
     }
 
@@ -129,8 +130,8 @@ public class ShareCompanyController {
         }
         if(ret == null) {
             log.error("amount: "+amount);
+            ret = new BigDecimal(amount).divide(new BigDecimal(10000), 6, BigDecimal.ROUND_HALF_UP);
         }
-        ret = new BigDecimal(amount).divide(new BigDecimal(10000), 6, BigDecimal.ROUND_HALF_UP);;
         return ret;
     }
 

@@ -54,7 +54,8 @@ $(function() {
                         // html
                         tableData['key'+row.id] = row;
                         var html = '<p id="'+ row.id +'" >'+
-                            '<button class="btn btn-warning btn-xs detail" type="button">'+ "detail" +'</button>  '+
+                            '<button class="btn btn-warning btn-xs detail" type="button">'+ "详情" +'</button>  '+
+                            '<button class="btn btn-warning btn-xs sync" type="button">'+ "同步" +'</button>  '+
                             '</p>';
 
                         return html;
@@ -102,4 +103,21 @@ $(function() {
         window.open(base_url + '/shareCompany?companyId=' + id, '_self');
     });
 
+    // job operate
+    $("#company_list").on('click', '.sync',function() {
+        var id = $(this).parent('p').attr("id");
+
+        var paramData = {
+            "companyId": id
+        };
+
+        $.get(base_url + "/company/syncShare", paramData, function(data, status) {
+            if (data.code == "200") {
+                //alert("success");
+            } else {
+                //alert("failed")
+            }
+        });
     });
+
+});
