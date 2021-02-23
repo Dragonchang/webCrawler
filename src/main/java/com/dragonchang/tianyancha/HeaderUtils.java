@@ -44,4 +44,17 @@ public class HeaderUtils {
         headers.put("Cookie", cookie);
         return headers;
     }
+
+    public static Map<String, String> getEastMoneyWebHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "em_hq_fls=js; intellpositionL=1098.55px; cowCookie=true; qgqp_b_id=6b3919ddd2627ee0b79a811b768ed9c7; st_si=38158891947471; waptgshowtime=2021223; ct=rWrV5tp0cim5qdboh2dznhmXG633Y9tEuryPCu3cNdNBeZV3VIBDSWYZpZBUAJqfEfOoqIhqTvLCq2985qr7JzTE5AMVu_TFRohdFzroNMCVfvxYcyVdQ7JOd2ySiZ6OCsa2G159yzjmrPW3XHWqdazFjL9K6Hu1iNlz6v8-_eo; ut=FobyicMgeV54OLFNgnrRkxIk0Th1XtPFM_6m4ChA38ixLvuYNpEeU8DKSYF-CS4ozMuBKq6ZkP9Tfpe_EJwfTuwm1Q1xE3iJyd2zfAchVGKWBiV-gUn8DmRP7kacmavO53irf6rFPCqYTBXzDbLB0f_DINjMrH8BRicYN3CS8MdqhktPwZOgPh9Tp5mSplRoGMhqBQiAPweT-wPWZTliOBuVzk9EhvXD73wh03ffN3_QFZNCQ7LoMI9YgsDlB3B9z9-l5599yzE; pi=3914356125019460%3bu3914356125019460%3b%e8%82%a1%e5%8f%8b189d763T18%3b5R4UtE1Sq45uEc47dK70qD4OFgXsyqFmZyagv8yPiJOE%2f50r9sI4hSmXKsctXZrsfeOtxgF6F6f1wBV8hhSPt7t881duAU%2fKAGTP6m0%2bb3Oks4lJoeXgwLQoXVF6eqKm1kKZmxHf2GmUkxu9wGb3NqXPYdLFWu43cPcM7hlgKqLGUC8z8ODY3RAg%2fDcFLgTMNiQvk5ei%3bkYSp%2bhVzJFgozBdqquyA9awAVkkl58vo4FkAl3VfnLppjWRULAA9bcYM58sVfDMKCiY2y060uBmoG0OaIXeEMYAEfcXTCwOguoiKHlNqkKhaaG6e0GyJZJNueYUiWAY2p3cZEdc0JObhCSALO3N1YsuGA2xCPA%3d%3d; uidal=3914356125019460%e8%82%a1%e5%8f%8b189d763T18; sid=159759623; vtpst=|; emshistory=%5B%22%E9%A6%99%E6%B8%AF%E4%B8%AD%E5%A4%AE%E7%BB%93%E7%AE%97%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8%22%5D; HAList=a-sh-600519-%u8D35%u5DDE%u8305%u53F0%2Ca-sh-603893-%u745E%u82AF%u5FAE; yzmkey=8df120183ec24c1abf421e300a0b09f0; st_asi=delete; intellpositionT=546.304px; st_pvi=70086857373304; st_sp=2020-07-20%2016%3A35%3A41; st_inirUrl=https%3A%2F%2Fwww.baidu.com%2Flink; st_sn=33; st_psi=20210223141958826-113200301321-7980126401");
+        headers.put("Host", "39.push2.eastmoney.com");
+        headers.put("Referer", "http://quote.eastmoney.com/");
+        //headers.put("Content-Type", "application/json");
+        headers.put("Accept-Encoding", "gzip, deflate");
+        headers.put("Accept", "*/*");
+        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36");
+        headers.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        return headers;
+    }
 }

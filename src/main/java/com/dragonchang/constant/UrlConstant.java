@@ -27,4 +27,9 @@ public class UrlConstant {
      */
     public static final String Share_Name_URL = "https://capi.tianyancha.com/cloud-equity-provider/v4/qq/name.json";
     public static final String Share_Node_URL = "https://capi.tianyancha.com/cloud-equity-provider/v4/equity/indexnode.json";
+
+    /**
+     * 东方财富获取所有股票列表
+     */
+    public static final String Stock_Info_URL = "http://16.push2.eastmoney.com/api/qt/clist/get";
 }

@@ -15,7 +15,7 @@ CREATE TABLE `t_company` (
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE,
                             KEY `index_tyc_id` (`tyc_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司信息';
 
 -- ----------------------------
 -- Table structure for t_share_structure
@@ -37,6 +37,23 @@ CREATE TABLE `t_share_structure` (
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE,
                             KEY `index_company_id` (`company_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司参股信息';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司参股信息';
 
-
+-- ----------------------------
+-- Table structure for t_share_structure
+-- ----------------------------
+DROP TABLE IF EXISTS `t_company_stock`;
+CREATE TABLE `t_company_stock` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+                            `company_id` int(11) unsigned DEFAULT NULL COMMENT '公司id',
+                            `name` varchar(512) CHARACTER SET utf8mb4 NOT NULL COMMENT '公司名称',
+                            `stock_code` VARCHAR(32) NULL NOT NULL COMMENT '公司股票代码',
+                            `last_price` VARCHAR(128) NULL NOT NULL COMMENT '公司股票最新价格',
+                            `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
+                            `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `updated_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `index_company_id` (`company_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司股票信息';

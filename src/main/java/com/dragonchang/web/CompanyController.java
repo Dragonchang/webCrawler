@@ -5,6 +5,7 @@ import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.po.Company;
 import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.ICompanyService;
+import com.dragonchang.service.ICompanyStockService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,9 @@ public class CompanyController {
     @Autowired
     ICompanyService companyService;
 
+    @Autowired
+    ICompanyStockService companyStockService;
+
     @RequestMapping
     public String index(Model model) {
         return "company";
@@ -41,6 +45,14 @@ public class CompanyController {
     @ResponseBody
     public JsonResult<IPage<Company>> syncShareInfoWithCompanyId(@RequestParam Long companyId) {
         companyService.syncShareInfoWithCompanyId(companyId);
+        return JsonResult.success();
+    }
+
+    @GetMapping(value = "/syncStock")
+    @ApiOperation(value = "同步公司股票列表信息")
+    @ResponseBody
+    public JsonResult<IPage<Company>> syncCompanyStock() {
+        companyStockService.syncStockListInfo();
         return JsonResult.success();
     }
 
