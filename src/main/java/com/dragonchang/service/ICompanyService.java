@@ -32,4 +32,10 @@ public interface ICompanyService {
      * @return
      */
     Company getCompanyById(Long companyId);
+
+    /**
+     * 获取所有关注公司机构或者个人的list
+     * @return
+     */
+    List<Company> getAllFocusCompanyList();
 }

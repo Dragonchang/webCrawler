@@ -22,4 +22,9 @@ public class StockInfoDto {
      * 股票最新价格
      */
     private String f2;
+
+    /**
+     * 昨天股价
+     */
+    private String f18;
 }

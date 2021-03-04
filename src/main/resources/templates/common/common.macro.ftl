@@ -5,8 +5,9 @@
         <section class="sidebar">
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu">
-                <li class="nav-click " ><a href="${request.contextPath}/"><i class="fa fa-circle-o text-aqua"></i><span>${"Dashboard"}</span></a></li>
-                <li class="nav-click " ><a href="${request.contextPath}/company"><i class="fa fa-circle-o text-yellow"></i><span>${"Company"}</span></a></li>
+                <li class="nav-click " ><a href="${request.contextPath}/"><i class="fa fa-circle-o text-aqua"></i><span>${"仪表盘"}</span></a></li>
+                <li class="nav-click " ><a href="${request.contextPath}/companyFocus"><i class="fa fa-circle-o text-yellow"></i><span>${"关注公司"}</span></a></li>
+                <li class="nav-click " ><a href="${request.contextPath}/companyStock"><i class="fa fa-circle-o text-yellow"></i><span>${"股份公司"}</span></a></li>
             </ul>
         </section>
         <!-- /.sidebar -->

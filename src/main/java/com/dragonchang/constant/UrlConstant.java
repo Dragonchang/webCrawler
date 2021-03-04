@@ -32,4 +32,9 @@ public class UrlConstant {
      * 东方财富获取所有股票列表
      */
     public static final String Stock_Info_URL = "http://16.push2.eastmoney.com/api/qt/clist/get";
+
+    /**
+     * 东方财富获取单个股票信息
+     */
+    public static final String Stock_Detail_Info_URL = "http://push2.eastmoney.com/api/qt/stock/get";
 }

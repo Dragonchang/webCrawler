@@ -41,7 +41,7 @@ public class EastMoneyCrawler {
         params.put("invt", "2");
         params.put("fid", "f3");
         params.put("fs", "m:0+t:6,m:0+t:13,m:0+t:80,m:1+t:2,m:1+t:23");
-        params.put("fields", "f2,f12,f14");
+        params.put("fields", "f2,f12,f14,f18");
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Info_URL,
                 HeaderUtils.getEastMoneyWebHeaders(), params);
         System.out.println(result);

@@ -1,10 +1,10 @@
 package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
+import com.dragonchang.domain.dto.CompanyStockRequestDTO;
 import com.dragonchang.domain.po.Company;
+import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.vo.JsonResult;
-import com.dragonchang.service.ICompanyService;
 import com.dragonchang.service.ICompanyStockService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,29 +23,17 @@ import java.util.Map;
  * @program: webcrawler
  * @description:
  * @author: zhangfl
- * @create: 2021-02-18 11:36
+ * @create: 2021-03-02 17:45
  **/
 @Controller
-@RequestMapping("/company")
-public class CompanyController {
-
-    @Autowired
-    ICompanyService companyService;
-
+@RequestMapping("/companyStock")
+public class CompanyStockController {
     @Autowired
     ICompanyStockService companyStockService;
 
     @RequestMapping
     public String index(Model model) {
-        return "company";
-    }
-
-    @GetMapping(value = "/syncShare")
-    @ApiOperation(value = "同步公司信息")
-    @ResponseBody
-    public JsonResult<IPage<Company>> syncShareInfoWithCompanyId(@RequestParam Long companyId) {
-        companyService.syncShareInfoWithCompanyId(companyId);
-        return JsonResult.success();
+        return "companyStock";
     }
 
     @GetMapping(value = "/syncStock")
@@ -57,15 +45,14 @@ public class CompanyController {
     }
 
     @RequestMapping("/pageList")
-    @ApiOperation(value = "分页获取公司信息")
+    @ApiOperation(value = "分页获取关注公司信息")
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String tycId, String companyName, String stockCode) {
-        CompanyRequestDTO pageRequest = new CompanyRequestDTO();
-        pageRequest.setCompanyName(companyName);
+                                        String name, String stockCode) {
+        CompanyStockRequestDTO pageRequest = new CompanyStockRequestDTO();
+        pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
-        pageRequest.setTycId(tycId);
         if (start == 0) {
             start = 1;
         } else {
@@ -76,11 +63,11 @@ public class CompanyController {
         pageRequest.setPage(start);
         pageRequest.setSize(length);
 
-        IPage<Company> companyPage = companyService.findPage(pageRequest);
+        IPage<CompanyStock> companyPage = companyStockService.findPage(pageRequest);
         if (companyPage.getTotal() > 0) {
             companyPage.setTotal(companyPage.getTotal() - 1);
         }
-        List<Company> list = companyPage.getRecords();
+        List<CompanyStock> list = companyPage.getRecords();
         int list_count = (int) companyPage.getTotal() + 1;
 
         // package result

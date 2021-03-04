@@ -1,16 +1,15 @@
 $(function() {
     // init date tables
-    var companyListTable = $("#company_list").dataTable({
+    var companyListTable = $("#company_stock_list").dataTable({
         "deferRender": true,
         "processing" : true,
         "serverSide": true,
         "ajax": {
-            url: base_url + "/companyFocus/pageList",
+            url: base_url + "/companyStock/pageList",
             type:"post",
             data : function ( d ) {
                 var obj = {};
-                obj.tycId = $('#tyc_id').val();
-                obj.companyName = $('#company_name').val();
+                obj.name = $('#name').val();
                 obj.stockCode = $('#stock_code').val();
                 obj.start = d.start;
                 obj.length = d.length;
@@ -27,17 +26,22 @@ $(function() {
                 "width":'10%'
             },
             {
-                "data": 'tycId',
+                "data": 'companyId',
                 "visible" : true,
                 "width":'10%'
             },
             {
-                "data": 'companyName',
+                "data": 'name',
                 "visible" : true,
                 "width":'20%'
             },
             {
                 "data": 'stockCode',
+                "visible" : true,
+                "width":'20%'
+            },
+            {
+                "data": 'lastPrice',
                 "visible" : true,
                 "width":'20%'
             },
@@ -98,13 +102,13 @@ $(function() {
     });
 
     // job operate
-    $("#company_list").on('click', '.detail',function() {
+    $("#company_stock_list").on('click', '.detail',function() {
         var id = $(this).parent('p').attr("id");
         window.open(base_url + '/shareCompany?companyId=' + id, '_self');
     });
 
     // job operate
-    $("#company_list").on('click', '.sync',function() {
+    $("#company_stock_list").on('click', '.sync',function() {
         var id = $(this).parent('p').attr("id");
 
         var paramData = {
