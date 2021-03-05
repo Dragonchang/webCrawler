@@ -9,6 +9,9 @@ $(function() {
             type:"post",
             data : function ( d ) {
                 var obj = {};
+                var condition = document.getElementById("condition");
+                var select = condition.options[condition.selectedIndex].value;
+                obj.order = select;
                 obj.name = $('#name').val();
                 obj.stockCode = $('#stock_code').val();
                 obj.start = d.start;
@@ -42,6 +45,16 @@ $(function() {
             },
             {
                 "data": 'lastPrice',
+                "visible" : true,
+                "width":'20%'
+            },
+            {
+                "data": 'lastCirculation',
+                "visible" : true,
+                "width":'20%'
+            },
+            {
+                "data": 'lastIncome',
                 "visible" : true,
                 "width":'20%'
             },

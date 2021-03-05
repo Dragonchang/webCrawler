@@ -48,7 +48,9 @@ CREATE TABLE `t_company_stock` (
                             `company_id` int(11) unsigned DEFAULT NULL COMMENT '公司id',
                             `name` varchar(512) CHARACTER SET utf8mb4 NOT NULL COMMENT '公司名称',
                             `stock_code` VARCHAR(32) NULL NOT NULL COMMENT '公司股票代码',
-                            `last_price` VARCHAR(128) NULL NOT NULL COMMENT '公司股票最新价格',
+                            `last_price` decimal(10,5) DEFAULT NULL COMMENT '公司股票最新价格',
+                            `last_circulation` decimal(25,5) DEFAULT NULL COMMENT '公司最新流通市值',
+                            `last_income` decimal(10,5) DEFAULT NULL COMMENT '公司最新收益',
                             `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
                             `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
@@ -56,6 +58,8 @@ CREATE TABLE `t_company_stock` (
                             `updated_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE,
                             KEY `index_company_id` (`company_id`) USING BTREE
+                            KEY `index_last_circulation` (`last_circulation`) USING BTREE
+                            KEY `index_last_income` (`last_income`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司股票信息';
 
 

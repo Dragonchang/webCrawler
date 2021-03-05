@@ -12,4 +12,5 @@ import lombok.Data;
 public class CompanyStockRequestDTO extends PageRequestDTO{
     String name;
     String stockCode;
+    String order;
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -42,7 +43,17 @@ public class CompanyStock {
     /**
      * 公司最新股价
      */
-    private String lastPrice;
+    private BigDecimal lastPrice;
+
+    /**
+     * 公司最新流通市值
+     */
+    private BigDecimal lastCirculation;
+
+    /**
+     * 公司最新收益
+     */
+    private BigDecimal lastIncome;
 
     /**
      * 是否删除，0表示未删除，1表示删除

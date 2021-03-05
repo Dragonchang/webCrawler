@@ -7,6 +7,8 @@
         <result column="name" property="name"/>
         <result column="stock_code" property="stockCode"/>
         <result column="last_price" property="lastPrice"/>
+        <result column="last_circulation" property="lastCirculation"/>
+        <result column="last_income" property="lastIncome"/>
         <result column="deleted" property="deleted"/>
         <result column="created_time" property="createdTime"/>
         <result column="created_by" property="createdBy"/>
@@ -22,6 +24,14 @@
         </if>
         <if test="request.stockCode != null and request.stockCode != ''">
             and stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+        <if test="request.order != null and request.order != ''">
+            <if test='request.order == "1"'>
+                order by last_circulation desc
+            </if>
+            <if test='request.order == "2"'>
+                order by last_income desc
+            </if>
         </if>
     </select>
 </mapper>

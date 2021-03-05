@@ -17,6 +17,15 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
+                <div class="col-xs-3">
+                    <div class="input-group">
+                        <span class="input-group-addon">排序条件:</span>
+                        <select class="form-control" id="condition" >
+                            <option value="1" >${"流通市值"}</option>
+                            <option value="2" >${"收益"}</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">公司名称</span>
@@ -45,6 +54,8 @@
                                     <th name="name" >公司名称</th>
                                     <th name="stockCode" >股票代码</th>
                                     <th name="lastPrice" >股票最新股价</th>
+                                    <th name="lastCirculation" >股票最新流通市值(亿)</th>
+                                    <th name="lastIncome" >股票最新收益</th>
                                     <th name="createdTime" >创建时间</th>
                                     <th name="detail" >详情</th>
                                 </tr>

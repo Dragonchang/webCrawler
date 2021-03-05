@@ -49,10 +49,11 @@ public class CompanyStockController {
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String name, String stockCode) {
+                                        String order, String name, String stockCode) {
         CompanyStockRequestDTO pageRequest = new CompanyStockRequestDTO();
         pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
+        pageRequest.setOrder(order);
         if (start == 0) {
             start = 1;
         } else {
