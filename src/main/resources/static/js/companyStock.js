@@ -30,33 +30,38 @@ $(function() {
             },
             {
                 "data": 'companyId',
-                "visible" : true,
+                "visible" : false,
                 "width":'10%'
             },
             {
                 "data": 'name',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
             },
             {
                 "data": 'stockCode',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
             },
             {
                 "data": 'lastPrice',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
+            },
+            {
+                "data": 'totalCapitalization',
+                "visible" : true,
+                "width":'10%'
             },
             {
                 "data": 'lastCirculation',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
             },
             {
                 "data": 'lastIncome',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
             },
             {
                 "data": 'createdTime',

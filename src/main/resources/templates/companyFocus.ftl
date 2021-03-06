@@ -11,7 +11,7 @@
     <@netCommon.commonLeft/>
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>公司管理</h1>
+            <h1>关注公司管理</h1>
         </section>
 
         <!-- Main content -->

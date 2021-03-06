@@ -60,7 +60,9 @@ public class CompanyStockService implements ICompanyStockService {
                         if (!StringUtils.isEmpty(detailDto.getF55()) && !detailDto.getF55().equals("-")) {
                             companyStock.setLastIncome(new BigDecimal(detailDto.getF55()));
                         }
-
+                        if (!StringUtils.isEmpty(detailDto.getF116()) && !detailDto.getF116().equals("-")) {
+                            companyStock.setTotalCapitalization(new BigDecimal(detailDto.getF116()).divide(BillionUnits, 4, RoundingMode.HALF_UP));
+                        }
                         if (!StringUtils.isEmpty(detailDto.getF117()) && !detailDto.getF117().equals("-")) {
                             companyStock.setLastCirculation(new BigDecimal(detailDto.getF117()).divide(BillionUnits, 4, RoundingMode.HALF_UP));
                         }
@@ -82,7 +84,9 @@ public class CompanyStockService implements ICompanyStockService {
                         if (!StringUtils.isEmpty(detailDto.getF55()) && !detailDto.getF55().equals("-")) {
                             companyStock.setLastIncome(new BigDecimal(detailDto.getF55()));
                         }
-
+                        if (!StringUtils.isEmpty(detailDto.getF116()) && !detailDto.getF116().equals("-")) {
+                            companyStock.setTotalCapitalization(new BigDecimal(detailDto.getF116()).divide(BillionUnits, 4, RoundingMode.HALF_UP));
+                        }
                         if (!StringUtils.isEmpty(detailDto.getF117()) && !detailDto.getF117().equals("-")) {
                             companyStock.setLastCirculation(new BigDecimal(detailDto.getF117()).divide(BillionUnits, 4, RoundingMode.HALF_UP));
                         }

@@ -7,6 +7,7 @@
         <result column="name" property="name"/>
         <result column="stock_code" property="stockCode"/>
         <result column="last_price" property="lastPrice"/>
+        <result column="total_capitalization" property="totalCapitalization"/>
         <result column="last_circulation" property="lastCirculation"/>
         <result column="last_income" property="lastIncome"/>
         <result column="deleted" property="deleted"/>

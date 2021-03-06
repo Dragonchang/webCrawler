@@ -26,13 +26,13 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-xs-3">
                     <div class="input-group">
                         <span class="input-group-addon">公司名称</span>
                         <input type="text" class="form-control" id="name" autocomplete="on" >
                     </div>
                 </div>
-                <div class="col-xs-2">
+                <div class="col-xs-3">
                     <div class="input-group">
                         <span class="input-group-addon">股票代码</span>
                         <input type="text" class="form-control" id="stock_code" autocomplete="on" >
@@ -54,6 +54,7 @@
                                     <th name="name" >公司名称</th>
                                     <th name="stockCode" >股票代码</th>
                                     <th name="lastPrice" >股票最新股价</th>
+                                    <th name="totalCapitalization" >股票最新总市值(亿)</th>
                                     <th name="lastCirculation" >股票最新流通市值(亿)</th>
                                     <th name="lastIncome" >股票最新收益</th>
                                     <th name="createdTime" >创建时间</th>

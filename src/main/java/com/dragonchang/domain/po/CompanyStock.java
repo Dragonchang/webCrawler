@@ -46,6 +46,11 @@ public class CompanyStock {
     private BigDecimal lastPrice;
 
     /**
+     * 公司最新总市值
+     */
+    private BigDecimal totalCapitalization;
+
+    /**
      * 公司最新流通市值
      */
     private BigDecimal lastCirculation;

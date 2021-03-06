@@ -22,6 +22,11 @@ public class StockDetailDto {
     private String f55;
 
     /**
+     * 最新总市值
+     */
+    private String f116;
+
+    /**
      * 最新流通市值
      */
     private String f117;
