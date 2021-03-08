@@ -64,7 +64,7 @@ $(function() {
                 "width":'10%'
             },
             {
-                "data": 'createdTime',
+                "data": 'updatedTime',
                 "visible" : true,
                 "width":'10%'
             },
