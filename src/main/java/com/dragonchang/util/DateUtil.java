@@ -73,6 +73,11 @@ public class DateUtil {
         return format(date, DATETIME_FORMAT);
     }
 
+    public static String formatLocalDateTime(LocalDateTime date) {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern(DATETIME_FORMAT);
+        return df.format(date);
+    }
+
     /**
      * format date
      *

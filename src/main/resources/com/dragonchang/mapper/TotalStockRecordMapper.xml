@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragonchang.mapper.TotalStockRecordMapper">
+    <resultMap id="BaseResultMap" type="com.dragonchang.domain.po.TotalStockRecord">
+        <id column="id" property="id"/>
+        <result column="average_price" property="averagePrice"/>
+        <result column="total_capitalization" property="totalCapitalization"/>
+        <result column="last_circulation" property="lastCirculation"/>
+        <result column="deleted" property="deleted"/>
+        <result column="record_time" property="recordTime"/>
+        <result column="created_by" property="createdBy"/>
+    </resultMap>
+
+    <select id="seletListByTime" resultMap="BaseResultMap">
+        select * from t_total_stock_record
+        where deleted=0
+        <if test="startDate != null">
+            and record_time &gt;= #{startDate}
+        </if>
+        <if test="endDate != null">
+            and record_time &lt;= #{endDate}
+        </if>
+        order by record_time asc
+    </select>
+</mapper>

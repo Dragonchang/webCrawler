@@ -84,9 +84,21 @@ CREATE TABLE `t_company_stock_record` (
                             `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
                             `record_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录时间',
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
-                            PRIMARY KEY (`id`) USING BTREE,
-                            KEY `index_company_id` (`company_id`) USING BTREE
+                            PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司股票信息';
 
-
+-- ----------------------------
+-- Table structure for t_total_statistics_record
+-- ----------------------------
+DROP TABLE IF EXISTS `t_total_statistics_record`;
+CREATE TABLE `t_total_stock_record` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+                            `average_price` decimal(10,5) DEFAULT NULL COMMENT '所有公司股票平均价格',
+                            `total_capitalization` decimal(40,5) DEFAULT NULL COMMENT '所有公司总市值',
+                            `last_circulation` decimal(40,5) DEFAULT NULL COMMENT '所有公司流通市值',
+                            `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
+                            `record_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '记录时间',
+                            `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司股票统计信息';
 

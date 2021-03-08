@@ -6,6 +6,7 @@ import com.dragonchang.domain.po.Company;
 import com.dragonchang.service.ICompanyService;
 import com.dragonchang.service.IShareStructureService;
 import com.dragonchang.util.DateUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,7 @@ public class ShareCompanyController {
      * @return
      */
     @RequestMapping
+    @ApiOperation(value = "获取某个公司的股权穿透列表")
     public String index(Model model,
                         @RequestParam Long companyId,
                         @RequestParam(defaultValue = "1") Integer orderByAmount,
