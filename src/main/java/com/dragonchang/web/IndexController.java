@@ -36,4 +36,13 @@ public class IndexController {
         JsonResult<Map<String, Object>> chartInfo = dashboardService.avgChartInfo(startDate, endDate);
         return chartInfo;
     }
+
+    @RequestMapping("/totalChartInfo")
+    @ApiOperation(value = "获取总市值统计信息")
+    @ResponseBody
+    public JsonResult<Map<String, Object>> totalChartInfo(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startDate,
+                                                        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endDate) {
+        JsonResult<Map<String, Object>> chartInfo = dashboardService.totalChartInfo(startDate, endDate);
+        return chartInfo;
+    }
 }

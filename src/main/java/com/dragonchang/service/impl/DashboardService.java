@@ -45,4 +45,24 @@ public class DashboardService implements IDashboardService {
         }
         return JsonResult.success(result);
     }
+
+    @Override
+    public JsonResult<Map<String, Object>> totalChartInfo(Date startDate, Date endDate) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        List<String> dayList = new ArrayList<String>();
+        List<Double> totalCapitalizationList = new ArrayList<Double>();
+        List<Double> lastCirculation = new ArrayList<Double>();
+        List<TotalStockRecord> recordList = totalStockRecordMapper.seletListByTime(startDate, endDate);
+        if(CollectionUtils.isNotEmpty(recordList)) {
+            for(TotalStockRecord record : recordList) {
+                dayList.add(DateUtil.formatLocalDateTime(record.getRecordTime()));
+                totalCapitalizationList.add(record.getTotalCapitalization().doubleValue());
+                lastCirculation.add(record.getLastCirculation().doubleValue());
+            }
+            result.put("dayList", dayList);
+            result.put("totalCapitalizationList", totalCapitalizationList);
+            result.put("lastCirculation", lastCirculation);
+        }
+        return JsonResult.success(result);
+    }
 }
