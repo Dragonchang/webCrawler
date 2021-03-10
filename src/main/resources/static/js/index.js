@@ -86,7 +86,13 @@ $(function () {
                    data:["股价"]
                },
                toolbox: {
-                   feature: {
+                   show : true,
+                   feature : {
+                       mark : {show: true},
+                       dataView : {show: true, readOnly: false},
+                       magicType : {show: true, type: ['line', 'bar', 'stack', 'tiled']},
+                       restore : {show: true},
+                       saveAsImage : {show: true}
                    }
                },
                grid: {
@@ -190,7 +196,13 @@ $(function () {
                 text: "市值日期分布图"
             },
             tooltip : {
-                trigger: 'axis'
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                        backgroundColor: '#6a7985'
+                    }
+                }
             },
             legend: {
                 data:["总市值","总流通市值"]

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.dragonchang.constant.UrlConstant;
 import com.dragonchang.domain.dto.eastmoney.StockDetailDto;
+import com.dragonchang.domain.dto.eastmoney.StockHolderRecordListDTO;
 import com.dragonchang.domain.dto.eastmoney.StockInfoDto;
 import com.dragonchang.domain.dto.eastmoney.StockInfoListDto;
 import com.dragonchang.domain.dto.tyc.ShareCompanyListDto;
@@ -76,11 +77,33 @@ public class EastMoneyCrawler {
         return eastMoneyResult.getData();
     }
 
+
+    /**
+     * 获取公司股股东细信息
+     * @return
+     */
+    public StockHolderRecordListDTO getStockHodlerInfoByCode(String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            stockCode = "sz"+stockCode;
+        } else if(stockCode.startsWith("6")) {
+            stockCode = "sh"+stockCode;
+        }
+        params.put("code", stockCode);
+        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
+                HeaderUtils.getEastMoneyHolderHeaders(stockCode), params);
+        System.out.println(result);
+        StockHolderRecordListDTO eastMoneyResult = JSONObject.parseObject(result, StockHolderRecordListDTO.class);
+        return eastMoneyResult;
+    }
+
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         //List<StockInfoDto> list = tycCrawler.getStockList();
 
-        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
+       // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
+
+        StockHolderRecordListDTO dto = tycCrawler.getStockHodlerInfoByCode("603893");
         log.info("test");
     }
 }

@@ -34,13 +34,16 @@ import java.util.List;
 public class CompanyStockService implements ICompanyStockService {
 
     @Autowired
-    EastMoneyCrawler eastMoneyCrawler;
+    private EastMoneyCrawler eastMoneyCrawler;
 
     @Autowired
-    CompanyStockMapper mapper;
+    private CompanyStockMapper mapper;
 
     @Autowired
-    TotalStockRecordMapper totalStockRecordMapper;
+    private TotalStockRecordMapper totalStockRecordMapper;
+
+    @Autowired
+    private CompanyShareHolderService companyShareHolderService;
 
     private static BigDecimal BillionUnits = new BigDecimal(100000000);
     @Override
@@ -86,6 +89,8 @@ public class CompanyStockService implements ICompanyStockService {
                     }
                     companyStock.setUpdatedTime(LocalDateTime.now());
                     mapper.updateById(companyStock);
+                    //同步股东信息
+                    companyShareHolderService.syncStockHolderByCode(companyStock);
                 } else {
                     companyStock = new CompanyStock();
                     companyStock.setStockCode(stockInfoDto.getF12());
@@ -117,6 +122,8 @@ public class CompanyStockService implements ICompanyStockService {
                         }
                     }
                     mapper.insert(companyStock);
+                    //同步股东信息
+                    companyShareHolderService.syncStockHolderByCode(companyStock);
                 }
             }
             TotalStockRecord totalStockRecord = new TotalStockRecord();

@@ -58,8 +58,8 @@ CREATE TABLE `t_company_stock` (
                             `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                             `updated_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE,
-                            KEY `index_company_id` (`company_id`) USING BTREE
-                            KEY `index_last_circulation` (`last_circulation`) USING BTREE
+                            KEY `index_company_id` (`company_id`) USING BTREE,
+                            KEY `index_last_circulation` (`last_circulation`) USING BTREE,
                             KEY `index_last_income` (`last_income`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司股票信息';
 
@@ -86,6 +86,49 @@ CREATE TABLE `t_company_stock_record` (
                             `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='公司股票信息';
+
+-- ----------------------------
+-- Table structure for t_company_share_holder
+-- ----------------------------
+DROP TABLE IF EXISTS `t_company_share_holder`;
+CREATE TABLE `t_company_share_holder` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+                            `company_stock_id` int(11) unsigned DEFAULT NULL COMMENT 't_company_stock主键',
+                            `holder_type` char(2) DEFAULT NULL COMMENT '股东类型(1-股东，2-流通股东)',
+                            `report_time` varchar(512) CHARACTER SET utf8mb4 NOT NULL COMMENT '股东信息发布时间',
+                            `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
+                            `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `updated_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `index_company_stock_id` (`company_stock_id`) USING BTREE,
+                            KEY `index_report_time` (`report_time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='股东信息记录';
+
+-- ----------------------------
+-- Table structure for t_company_share_holder
+-- ----------------------------
+DROP TABLE IF EXISTS `t_share_holder_detail`;
+CREATE TABLE `t_share_holder_detail` (
+                            `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+                            `holder_id` int(11) unsigned NOT NULL COMMENT 't_company_share_holder主键',
+                            `holder_rank` int(11) unsigned DEFAULT NULL COMMENT '股东排名',
+                            `holder_name` varchar(512) CHARACTER SET utf8mb4 NOT NULL COMMENT '持股人/机构名称',
+                            `holder_type` varchar(36) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '股东性质',
+                            `stock_type` varchar(36) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '股份类型',
+                            `hold_count` bigint(64) unsigned DEFAULT NULL COMMENT '持股数(股)',
+                            `hold_percent` varchar(36) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '占总流通/总股本持股比例',
+                            `zj` varchar(512) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '增减',
+                            `change_percent` varchar(36) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '变动比例',
+                            `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
+                            `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `created_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            `updated_by` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT 'sys',
+                            PRIMARY KEY (`id`) USING BTREE,
+                            KEY `index_holder_id` (`holder_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='股东信息详情';
 
 -- ----------------------------
 -- Table structure for t_total_statistics_record

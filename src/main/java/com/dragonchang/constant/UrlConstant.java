@@ -37,4 +37,10 @@ public class UrlConstant {
      * 东方财富获取单个股票信息
      */
     public static final String Stock_Detail_Info_URL = "http://push2.eastmoney.com/api/qt/stock/get";
+
+
+    /**
+     * 东方财富获取公司持股股东信息
+     */
+    public static final String Stock_Holder_Info_URL = "http://f10.eastmoney.com/ShareholderResearch/ShareholderResearchAjax";
 }
