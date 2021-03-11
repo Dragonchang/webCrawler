@@ -45,7 +45,7 @@ public class CompanyStockController {
     }
 
     @RequestMapping("/pageList")
-    @ApiOperation(value = "分页获取关注公司信息")
+    @ApiOperation(value = "分页获取股份公司信息")
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,

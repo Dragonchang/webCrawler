@@ -129,4 +129,17 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
             log.error("sync Stock Holder failed: " + companyStock.getStockCode());
         }
     }
+
+    @Override
+    public List<CompanyShareHolder> getHodlderListByStockId(Long stockId) {
+
+        return companyShareHolderMapper.selectList(new LambdaQueryWrapper<CompanyShareHolder>()
+                .eq(CompanyShareHolder::getCompanyStockId, stockId));
+    }
+
+    @Override
+    public List<ShareHolderDetail> getHodlderDetailListByStockId(Long holderId) {
+        return shareHolderDetailMapper.selectList(new LambdaQueryWrapper<ShareHolderDetail>()
+                .eq(ShareHolderDetail::getHolderId, holderId));
+    }
 }

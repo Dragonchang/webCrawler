@@ -77,7 +77,7 @@ $(function() {
                         tableData['key'+row.id] = row;
                         var html = '<p id="'+ row.id +'" >'+
                             '<button class="btn btn-warning btn-xs detail" type="button">'+ "详情" +'</button>  '+
-                            '<button class="btn btn-warning btn-xs sync" type="button">'+ "同步" +'</button>  '+
+                            '<button class="btn btn-warning btn-xs add" type="button">'+ "加关注" +'</button>  '+
                             '</p>';
 
                         return html;
@@ -122,24 +122,22 @@ $(function() {
     // job operate
     $("#company_stock_list").on('click', '.detail',function() {
         var id = $(this).parent('p').attr("id");
-        window.open(base_url + '/shareCompany?companyId=' + id, '_self');
+        window.open(base_url + '/stockDetail?companyStockId=' + id, '_self');
     });
 
-    // job operate
-    $("#company_stock_list").on('click', '.sync',function() {
+    $("#company_stock_list").on('click', '.add',function() {
         var id = $(this).parent('p').attr("id");
 
         var paramData = {
             "companyId": id
         };
 
-        $.get(base_url + "/companyFocus/syncShare", paramData, function(data, status) {
-            if (data.code == "200") {
-                //alert("success");
-            } else {
-                //alert("failed")
-            }
-        });
+        // $.get(base_url + "/companyFocus/syncShare", paramData, function(data, status) {
+        //     if (data.code == "200") {
+        //         //alert("success");
+        //     } else {
+        //         //alert("failed")
+        //     }
+        // });
     });
-
 });

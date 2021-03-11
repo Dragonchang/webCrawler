@@ -90,7 +90,7 @@ public class CompanyStockService implements ICompanyStockService {
                     companyStock.setUpdatedTime(LocalDateTime.now());
                     mapper.updateById(companyStock);
                     //同步股东信息
-                    companyShareHolderService.syncStockHolderByCode(companyStock);
+                    //companyShareHolderService.syncStockHolderByCode(companyStock);
                 } else {
                     companyStock = new CompanyStock();
                     companyStock.setStockCode(stockInfoDto.getF12());
@@ -123,7 +123,7 @@ public class CompanyStockService implements ICompanyStockService {
                     }
                     mapper.insert(companyStock);
                     //同步股东信息
-                    companyShareHolderService.syncStockHolderByCode(companyStock);
+                    //companyShareHolderService.syncStockHolderByCode(companyStock);
                 }
             }
             TotalStockRecord totalStockRecord = new TotalStockRecord();
@@ -142,5 +142,12 @@ public class CompanyStockService implements ICompanyStockService {
         page.setCurrent(pageRequest.getPage());
         page.setSize(pageRequest.getSize());
         return mapper.findPage(page, pageRequest);
+    }
+
+    @Override
+    public CompanyStock getStockById(Long id) {
+        CompanyStock companyStock = mapper.selectOne(new LambdaQueryWrapper<CompanyStock>()
+                .eq(CompanyStock::getId, id));
+        return companyStock;
     }
 }

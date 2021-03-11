@@ -21,4 +21,11 @@ public interface ICompanyStockService {
      * @return
      */
     IPage<CompanyStock> findPage(CompanyStockRequestDTO pageRequest);
+
+    /**
+     * 通过id获取stock信息
+     * @param id
+     * @return
+     */
+    CompanyStock getStockById(Long id);
 }
