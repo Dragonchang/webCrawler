@@ -260,4 +260,10 @@ $(function () {
         var lineChart = echarts.init(document.getElementById('total_lineChart'));
         lineChart.setOption(option);
     }
+
+
+    $(".holder_name").on('click',function() {
+        var name = $(this).text();
+        window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
+    });
 });

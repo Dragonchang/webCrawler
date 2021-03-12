@@ -1,5 +1,6 @@
 package com.dragonchang.service;
 
+import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.po.CompanyShareHolder;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.ShareHolderDetail;
@@ -29,4 +30,11 @@ public interface ICompanyShareHolderService {
      * @return
      */
     List<ShareHolderDetail> getHodlderDetailListByStockId(Long holderId);
+
+    /**
+     * 根据股东名称获取所有持股信息
+     * @param name
+     * @return
+     */
+    List<HolderCompanyListDTO> getHolderListByName(String name);
 }

@@ -3,6 +3,7 @@ package com.dragonchang.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.dragonchang.crawler.EastMoneyCrawler;
+import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderDetailDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderRecordDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderRecordListDTO;
@@ -132,14 +133,19 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
 
     @Override
     public List<CompanyShareHolder> getHodlderListByStockId(Long stockId) {
-
         return companyShareHolderMapper.selectList(new LambdaQueryWrapper<CompanyShareHolder>()
-                .eq(CompanyShareHolder::getCompanyStockId, stockId));
+                .eq(CompanyShareHolder::getCompanyStockId, stockId)
+                .orderByDesc(CompanyShareHolder::getReportTime));
     }
 
     @Override
     public List<ShareHolderDetail> getHodlderDetailListByStockId(Long holderId) {
         return shareHolderDetailMapper.selectList(new LambdaQueryWrapper<ShareHolderDetail>()
                 .eq(ShareHolderDetail::getHolderId, holderId));
+    }
+
+    @Override
+    public List<HolderCompanyListDTO> getHolderListByName(String name) {
+        return companyShareHolderMapper.getHolderListByName(name);
     }
 }

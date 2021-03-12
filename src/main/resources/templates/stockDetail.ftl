@@ -120,22 +120,22 @@
                                                         <table class="layui-table" border="0" cellspacing="1" cellpadding="0">
                                                             <tr class="layui-table-header">
                                                                 <td width="105">名次</td>
-                                                                <td width="181">股东名称</td>
+                                                                <td width="281">股东名称</td>
                                                                 <td width="112">股份类型</td>
-                                                                <td width="181">持股数(股)</td>
-                                                                <td width="112">占总股本持股比例</td>
-                                                                <td width="181">增减(股)</td>
-                                                                <td width="112">变动比例</td>
+                                                                <td width="100">持股数(股)</td>
+                                                                <td width="50">占总股本持股比例</td>
+                                                                <td width="100">增减(股)</td>
+                                                                <td width="50">变动比例</td>
                                                             </tr>
                                                             <#list holder[key] as holder>
                                                                 <tr  class="layui-table-body">
-                                                                    <td width="112">${holder.holderRank}</td>
-                                                                    <td width="112">${holder.holderName}</td>
-                                                                    <td width="112">${holder.stockType}</td>
-                                                                    <td width="112">${holder.holdCount}</td>
-                                                                    <td width="112">${holder.holdPercent}</td>
-                                                                    <td width="112">${holder.zj}</td>
-                                                                    <td width="112">${holder.changePercent}</td>
+                                                                    <td>${holder.holderRank}</td>
+                                                                    <td class="holder_name" style= "cursor:pointer; color: #00ca6d">${holder.holderName}</td>
+                                                                    <td>${holder.stockType}</td>
+                                                                    <td>${holder.holdCount}</td>
+                                                                    <td>${holder.holdPercent}</td>
+                                                                    <td>${holder.zj}</td>
+                                                                    <td>${holder.changePercent}</td>
                                                                 </tr>
                                                             </#list>
                                                         </table>
@@ -145,22 +145,22 @@
                                                         <table class="layui-table" border="0" cellspacing="1" cellpadding="0">
                                                             <tr class="layui-table-header">
                                                                 <td width="105">名次</td>
-                                                                <td width="181">股东名称</td>
+                                                                <td width="281">股东名称</td>
                                                                 <td width="112">股份类型</td>
-                                                                <td width="181">持股数(股)</td>
-                                                                <td width="112">占总股本持股比例</td>
-                                                                <td width="181">增减(股)</td>
-                                                                <td width="112">变动比例</td>
+                                                                <td width="100">持股数(股)</td>
+                                                                <td width="50">占总股本持股比例</td>
+                                                                <td width="100">增减(股)</td>
+                                                                <td width="50">变动比例</td>
                                                             </tr>
                                                             <#list holder[key] as holder>
                                                                 <tr  class="layui-table-body">
-                                                                    <td width="112">${holder.holderRank}</td>
-                                                                    <td width="112">${holder.holderName}</td>
-                                                                    <td width="112">${holder.stockType}</td>
-                                                                    <td width="112">${holder.holdCount}</td>
-                                                                    <td width="112">${holder.holdPercent}</td>
-                                                                    <td width="112">${holder.zj}</td>
-                                                                    <td width="112">${holder.changePercent}</td>
+                                                                    <td>${holder.holderRank}</td>
+                                                                    <td class="holder_name" style= "cursor:pointer; color: #00ca6d">${holder.holderName}</td>
+                                                                    <td>${holder.stockType}</td>
+                                                                    <td>${holder.holdCount}</td>
+                                                                    <td>${holder.holdPercent}</td>
+                                                                    <td>${holder.zj}</td>
+                                                                    <td>${holder.changePercent}</td>
                                                                 </tr>
                                                             </#list>
                                                         </table>
@@ -206,22 +206,22 @@
                                                         <table class="layui-table" border="0" cellspacing="1" cellpadding="0">
                                                             <tr class="layui-table-header">
                                                                 <td width="105">名次</td>
-                                                                <td width="181">股东名称</td>
+                                                                <td width="281">股东名称</td>
                                                                 <td width="112">股份类型</td>
-                                                                <td width="181">持股数(股)</td>
-                                                                <td width="112">占总股本持股比例</td>
-                                                                <td width="181">增减(股)</td>
-                                                                <td width="112">变动比例</td>
+                                                                <td width="100">持股数(股)</td>
+                                                                <td width="50">占总股本持股比例</td>
+                                                                <td width="100">增减(股)</td>
+                                                                <td width="50">变动比例</td>
                                                             </tr>
                                                             <#list ltHolder[key] as holder>
                                                                 <tr  class="layui-table-body">
-                                                                    <td width="112">${holder.holderRank}</td>
-                                                                    <td width="112">${holder.holderName}</td>
-                                                                    <td width="112">${holder.stockType}</td>
-                                                                    <td width="112">${holder.holdCount}</td>
-                                                                    <td width="112">${holder.holdPercent}</td>
-                                                                    <td width="112">${holder.zj}</td>
-                                                                    <td width="112">${holder.changePercent}</td>
+                                                                    <td>${holder.holderRank}</td>
+                                                                    <td class="holder_name" style= "cursor:pointer; color: #00ca6d">${holder.holderName}</td>
+                                                                    <td>${holder.stockType}</td>
+                                                                    <td>${holder.holdCount}</td>
+                                                                    <td>${holder.holdPercent}</td>
+                                                                    <td>${holder.zj}</td>
+                                                                    <td>${holder.changePercent}</td>
                                                                 </tr>
                                                             </#list>
                                                         </table>
@@ -231,22 +231,22 @@
                                                         <table class="layui-table" border="0" cellspacing="1" cellpadding="0">
                                                             <tr class="layui-table-header">
                                                                 <td width="105">名次</td>
-                                                                <td width="181">股东名称</td>
+                                                                <td width="281">股东名称</td>
                                                                 <td width="112">股份类型</td>
-                                                                <td width="181">持股数(股)</td>
-                                                                <td width="112">占总股本持股比例</td>
-                                                                <td width="181">增减(股)</td>
-                                                                <td width="112">变动比例</td>
+                                                                <td width="100">持股数(股)</td>
+                                                                <td width="50">占总股本持股比例</td>
+                                                                <td width="100">增减(股)</td>
+                                                                <td width="50">变动比例</td>
                                                             </tr>
                                                             <#list ltHolder[key] as holder>
                                                                 <tr  class="layui-table-body">
-                                                                    <td width="112">${holder.holderRank}</td>
-                                                                    <td width="112">${holder.holderName}</td>
-                                                                    <td width="112">${holder.stockType}</td>
-                                                                    <td width="112">${holder.holdCount}</td>
-                                                                    <td width="112">${holder.holdPercent}</td>
-                                                                    <td width="112">${holder.zj}</td>
-                                                                    <td width="112">${holder.changePercent}</td>
+                                                                    <td>${holder.holderRank}</td>
+                                                                    <td class="holder_name" style= "cursor:pointer; color: #00ca6d">${holder.holderName}</td>
+                                                                    <td>${holder.stockType}</td>
+                                                                    <td>${holder.holdCount}</td>
+                                                                    <td>${holder.holdPercent}</td>
+                                                                    <td>${holder.zj}</td>
+                                                                    <td>${holder.changePercent}</td>
                                                                 </tr>
                                                             </#list>
                                                         </table>
