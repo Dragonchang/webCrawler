@@ -57,6 +57,8 @@ public class CompanyStockDetailController {
                 }
             }
             model.addAttribute("company", stock);
+            model.addAttribute("ltHolder", lTRetMap);
+            model.addAttribute("holder", retMap);
         }
         return "stockDetail";
     }

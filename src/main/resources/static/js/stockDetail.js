@@ -1,4 +1,16 @@
 $(function () {
+    new IScroll('#report_wrapper',{
+        scrollbars: true,
+        scrollX: true
+        // 横向滚动导航栏
+    });
+
+    new IScroll('#report_wrapper_LT',{
+        scrollbars: true,
+        scrollX: true
+        // 横向滚动导航栏
+    });
+
     // filter Time
     var rangesConf = {};
     rangesConf["最近一周"] = [moment().subtract(1, 'weeks').startOf('day'), moment().endOf('day')];
