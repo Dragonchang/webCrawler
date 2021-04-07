@@ -12,6 +12,6 @@
         <if test="name != null and name != ''">
             and holder_name = #{name}
         </if>
-        ORDER BY b.report_time DESC;
+        ORDER BY c.name DESC, b.report_time DESC;
     </select>
 </mapper>
