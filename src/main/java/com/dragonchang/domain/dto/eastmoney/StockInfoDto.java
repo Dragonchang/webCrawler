@@ -27,4 +27,9 @@ public class StockInfoDto {
      * 昨天股价
      */
     private String f18;
+
+    /**
+     * 上市时间
+     */
+    private String f26;
 }

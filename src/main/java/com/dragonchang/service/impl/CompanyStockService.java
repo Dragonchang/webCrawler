@@ -13,6 +13,7 @@ import com.dragonchang.domain.po.TotalStockRecord;
 import com.dragonchang.mapper.CompanyStockMapper;
 import com.dragonchang.mapper.TotalStockRecordMapper;
 import com.dragonchang.service.ICompanyStockService;
+import com.dragonchang.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,9 +59,13 @@ public class CompanyStockService implements ICompanyStockService {
                 StockDetailDto detailDto = eastMoneyCrawler.getStockInfoByStockCode(stockInfoDto.getF12());
                 CompanyStock companyStock = mapper.selectOne(new LambdaQueryWrapper<CompanyStock>()
                         .eq(CompanyStock::getStockCode, stockInfoDto.getF12()));
-
+                String marketTime = stockInfoDto.getF26();
+                log.info(marketTime);
                 if (companyStock != null) {
                     companyStock.setName(stockInfoDto.getF14());
+                    if(StringUtils.isNotEmpty(marketTime)) {
+                        companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
+                    }
                     if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
                         BigDecimal price = new BigDecimal(stockInfoDto.getF2());
                         total_price = total_price.add(price);
@@ -95,6 +100,9 @@ public class CompanyStockService implements ICompanyStockService {
                     companyStock = new CompanyStock();
                     companyStock.setStockCode(stockInfoDto.getF12());
                     companyStock.setName(stockInfoDto.getF14());
+                    if(StringUtils.isNotEmpty(marketTime)) {
+                        companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
+                    }
                     if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
                         BigDecimal price = new BigDecimal(stockInfoDto.getF2());
                         total_price = total_price.add(price);

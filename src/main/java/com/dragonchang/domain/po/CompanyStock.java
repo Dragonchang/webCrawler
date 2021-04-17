@@ -61,6 +61,12 @@ public class CompanyStock {
     private BigDecimal lastIncome;
 
     /**
+     * 上市时间
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+    private LocalDateTime marketTime;
+
+    /**
      * 是否删除，0表示未删除，1表示删除
      */
     private Integer deleted;

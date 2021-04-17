@@ -196,4 +196,26 @@ public class DateUtil {
         c.add(calendarField, amount);
         return c.getTime();
     }
+
+    /**
+     * 20201203 -->2020-12-03
+     * @param time
+     * @return
+     */
+    public static LocalDateTime strToLocalDateTime(String time) {
+        if(time.length()<8) {
+            return null;
+        }
+        StringBuilder builder = new StringBuilder(time);
+        builder.insert(4,"-");
+        builder.insert(7,"-");
+        builder.append(" 00:00:01");
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(builder.toString(), df);
+    }
+
+    public static void main(String[] args) {
+        LocalDateTime str = DateUtil.strToLocalDateTime("20201203");
+        System.out.println(">>>"+str.toString());
+    }
 }
