@@ -132,14 +132,14 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
     }
 
     @Override
-    public List<CompanyShareHolder> getHodlderListByStockId(Long stockId) {
+    public List<CompanyShareHolder> getHolderListByStockId(Long stockId) {
         return companyShareHolderMapper.selectList(new LambdaQueryWrapper<CompanyShareHolder>()
                 .eq(CompanyShareHolder::getCompanyStockId, stockId)
                 .orderByDesc(CompanyShareHolder::getReportTime));
     }
 
     @Override
-    public List<ShareHolderDetail> getHodlderDetailListByStockId(Long holderId) {
+    public List<ShareHolderDetail> getHolderDetailListByStockId(Long holderId) {
         return shareHolderDetailMapper.selectList(new LambdaQueryWrapper<ShareHolderDetail>()
                 .eq(ShareHolderDetail::getHolderId, holderId));
     }

@@ -10,6 +10,7 @@
         <result column="total_capitalization" property="totalCapitalization"/>
         <result column="last_circulation" property="lastCirculation"/>
         <result column="last_income" property="lastIncome"/>
+        <result column="market_time" property="marketTime"/>
         <result column="deleted" property="deleted"/>
         <result column="created_time" property="createdTime"/>
         <result column="created_by" property="createdBy"/>
@@ -32,6 +33,9 @@
             </if>
             <if test='request.order == "2"'>
                 order by last_income desc
+            </if>
+            <if test='request.order == "3"'>
+                order by market_time desc
             </if>
         </if>
     </select>

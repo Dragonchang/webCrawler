@@ -145,6 +145,14 @@ public class CompanyStockService implements ICompanyStockService {
     }
 
     @Override
+    public void syncAllStockShareHolder() {
+        List<CompanyStock> companyStockList = mapper.selectList(new LambdaQueryWrapper<CompanyStock>());
+        for(CompanyStock stock : companyStockList) {
+            companyShareHolderService.syncStockHolderByCode(stock);
+        }
+    }
+
+    @Override
     public IPage<CompanyStock> findPage(CompanyStockRequestDTO pageRequest) {
         Page page = new Page();
         page.setCurrent(pageRequest.getPage());

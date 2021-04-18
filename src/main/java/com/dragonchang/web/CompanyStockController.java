@@ -44,6 +44,14 @@ public class CompanyStockController {
         return JsonResult.success();
     }
 
+    @GetMapping(value = "/syncShareHolder")
+    @ApiOperation(value = "同步公司流通股东列表信息")
+    @ResponseBody
+    public JsonResult<IPage<Company>> syncCompanyShareHolderStock() {
+        companyStockService.syncAllStockShareHolder();
+        return JsonResult.success();
+    }
+
     @RequestMapping("/pageList")
     @ApiOperation(value = "分页获取股份公司信息")
     @ResponseBody

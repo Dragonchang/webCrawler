@@ -23,6 +23,7 @@
                         <select class="form-control" id="condition" >
                             <option value="1" >${"流通市值"}</option>
                             <option value="2" >${"收益"}</option>
+                            <option value="3" >${"上市时间"}</option>
                         </select>
                     </div>
                 </div>
@@ -57,6 +58,7 @@
                                     <th name="totalCapitalization" >股票最新总市值(亿)</th>
                                     <th name="lastCirculation" >股票最新流通市值(亿)</th>
                                     <th name="lastIncome" >股票最新收益</th>
+                                    <th name="marketTime" >上市时间</th>
                                     <th name="updatedTime" >更新时间</th>
                                     <th name="detail" >详情</th>
                                 </tr>

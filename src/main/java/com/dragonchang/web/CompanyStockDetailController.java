@@ -40,16 +40,16 @@ public class CompanyStockDetailController {
         if (stock != null) {
             Map<String, List<ShareHolderDetail>> lTRetMap = new LinkedHashMap<>();
             Map<String, List<ShareHolderDetail>> retMap = new LinkedHashMap<>();
-            List<CompanyShareHolder> result = companyShareHolderService.getHodlderListByStockId(companyStockId);
+            List<CompanyShareHolder> result = companyShareHolderService.getHolderListByStockId(companyStockId);
             if (CollectionUtils.isNotEmpty(result)) {
                 for (CompanyShareHolder holder : result) {
                     if (HolderTypeEnum.GD.getCode().equals(holder.getHolderType())) {
-                        List<ShareHolderDetail> shareHolderDetails = companyShareHolderService.getHodlderDetailListByStockId(holder.getId());
+                        List<ShareHolderDetail> shareHolderDetails = companyShareHolderService.getHolderDetailListByStockId(holder.getId());
                         if (CollectionUtils.isNotEmpty(shareHolderDetails)) {
                             retMap.put(holder.getReportTime(), shareHolderDetails);
                         }
                     } else {
-                        List<ShareHolderDetail> shareHolderDetails = companyShareHolderService.getHodlderDetailListByStockId(holder.getId());
+                        List<ShareHolderDetail> shareHolderDetails = companyShareHolderService.getHolderDetailListByStockId(holder.getId());
                         if (CollectionUtils.isNotEmpty(shareHolderDetails)) {
                             lTRetMap.put(holder.getReportTime(), shareHolderDetails);
                         }

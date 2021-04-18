@@ -133,7 +133,7 @@ CREATE TABLE `t_share_holder_detail` (
 -- ----------------------------
 -- Table structure for t_total_statistics_record
 -- ----------------------------
-DROP TABLE IF EXISTS `t_total_statistics_record`;
+DROP TABLE IF EXISTS `t_total_stock_record`;
 CREATE TABLE `t_total_stock_record` (
                             `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增主键',
                             `average_price` decimal(10,5) DEFAULT NULL COMMENT '所有公司股票平均价格',

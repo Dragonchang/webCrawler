@@ -64,6 +64,11 @@ $(function() {
                 "width":'10%'
             },
             {
+                "data": 'marketTime',
+                "visible" : true,
+                "width":'10%'
+            },
+            {
                 "data": 'updatedTime',
                 "visible" : true,
                 "width":'10%'

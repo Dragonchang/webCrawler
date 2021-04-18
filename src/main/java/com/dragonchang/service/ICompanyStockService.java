@@ -15,6 +15,11 @@ public interface ICompanyStockService {
     void syncStockListInfo();
 
     /**
+     * 同步所有公司的流通股东
+     */
+    void syncAllStockShareHolder();
+
+    /**
      * 分页查询公司信息
      *
      * @param pageRequest
