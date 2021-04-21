@@ -2,6 +2,8 @@ package com.dragonchang.domain.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @program: webcrawler
  * @description:
@@ -13,4 +15,7 @@ public class CompanyStockRequestDTO extends PageRequestDTO{
     String name;
     String stockCode;
     String order;
+    LocalDateTime startTime;
+    LocalDateTime endTime;
+
 }

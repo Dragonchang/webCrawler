@@ -16,6 +16,7 @@ $(function() {
                 obj.stockCode = $('#stock_code').val();
                 obj.start = d.start;
                 obj.length = d.length;
+                obj.marketTime = $('#reservation').val();
                 return obj;
             }
         },
@@ -116,6 +117,18 @@ $(function() {
         }
     });
 
+    $('#reservation').daterangepicker({
+        autoUpdateInput: false, autoclose: true
+    },
+        function (start, end) {
+            $('#reservation').data('daterangepicker').autoUpdateInput=true
+        }
+    )
+
+    $('#clear').on('click', function(){
+         $('#reservation').val('');
+     })
+
     // table data
     var tableData = {};
 
@@ -145,4 +158,6 @@ $(function() {
         //     }
         // });
     });
+
+
 });

@@ -4,6 +4,7 @@
     <title>drip</title>
     <#import "./common/common.macro.ftl" as netCommon>
     <@netCommon.commonStyle />
+    <link rel="stylesheet" href="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.css">
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -17,28 +18,43 @@
         <!-- Main content -->
         <section class="content">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">排序条件:</span>
                         <select class="form-control" id="condition" >
                             <option value="1" >${"流通市值"}</option>
                             <option value="2" >${"收益"}</option>
                             <option value="3" >${"上市时间"}</option>
+                            <option value="4" >${"股票价格"}</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">公司名称</span>
                         <input type="text" class="form-control" id="name" autocomplete="on" >
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-1">
                     <div class="input-group">
                         <span class="input-group-addon">股票代码</span>
                         <input type="text" class="form-control" id="stock_code" autocomplete="on" >
                     </div>
                 </div>
+                <!-- Date range -->
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">上市时间：</span>
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right" id="reservation">
+
+                        <div class="input-group-addon clearBtns" id="clear" >x</div>
+                    </div>
+                    <!-- /.input group -->
+                </div>
+
                 <div class="col-xs-1">
                     <button class="btn btn-block btn-info" id="searchBtn">查询</button>
                 </div>
@@ -76,6 +92,12 @@
     <@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />
+<!-- daterangepicker -->
+<script src="${request.contextPath}/js/adminlte/bower_components/moment/moment.min.js"></script>
+<script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap datepicker -->
+<script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="${request.contextPath}/js/companyStock.js"></script>

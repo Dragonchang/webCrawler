@@ -37,6 +37,15 @@
             <if test='request.order == "3"'>
                 order by market_time desc
             </if>
+            <if test='request.order == "4"'>
+                order by last_price desc
+            </if>
+        </if>
+        <if test="request.startTime != null">
+            and a.market_time &gt;= #{request.startTime}
+        </if>
+        <if test="request.endTime != null">
+            and a.market_time &lt;= #{request.endTime}
         </if>
     </select>
 </mapper>
