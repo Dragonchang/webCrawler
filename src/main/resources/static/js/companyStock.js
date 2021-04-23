@@ -118,7 +118,18 @@ $(function() {
     });
 
     $('#reservation').daterangepicker({
-        autoUpdateInput: false, autoclose: true
+         autoUpdateInput: false,
+         autoclose: true,
+         maxDate: moment(new Date()), //设置最大日期
+         "opens": "center",
+          ranges: {
+                '今天': [moment(), moment()],
+                '昨天': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days'), moment()],
+                '最近一月': [moment().subtract(1, 'months').startOf('day'), moment().endOf('day')],
+                '最近六月': [moment().subtract(6, 'months').startOf('day'), moment().endOf('day')],
+                '最近一年月': [moment().subtract(12, 'months').startOf('day'), moment().endOf('day')]
+          }
     },
         function (start, end) {
             $('#reservation').data('daterangepicker').autoUpdateInput=true

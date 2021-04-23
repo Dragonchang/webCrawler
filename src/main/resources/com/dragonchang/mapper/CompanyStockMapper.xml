@@ -27,6 +27,12 @@
         <if test="request.stockCode != null and request.stockCode != ''">
             and stock_code like CONCAT('%', #{request.stockCode} , '%')
         </if>
+        <if test="request.startTime != null">
+            and market_time &gt;= #{request.startTime}
+        </if>
+        <if test="request.endTime != null">
+            and market_time &lt;= #{request.endTime}
+        </if>
         <if test="request.order != null and request.order != ''">
             <if test='request.order == "1"'>
                 order by last_circulation desc
@@ -41,11 +47,6 @@
                 order by last_price desc
             </if>
         </if>
-        <if test="request.startTime != null">
-            and a.market_time &gt;= #{request.startTime}
-        </if>
-        <if test="request.endTime != null">
-            and a.market_time &lt;= #{request.endTime}
-        </if>
+
     </select>
 </mapper>

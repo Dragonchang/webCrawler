@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,16 +93,21 @@ public class CompanyStockController {
         maps.put("data", list);                    // 分页列表
         return maps;
     }
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     private LocalDateTime getStartTime(String timeRange) {
         int endIndex = timeRange.indexOf("-");
         String startTime = timeRange.substring(0, endIndex);
-        return null;
+        startTime = startTime.substring(6, startTime.length()-1) +"-"+ startTime.substring(0,2)+"-"+startTime.substring(3,5);
+        startTime = startTime+" 00:00:00";
+        return LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
     }
 
     private LocalDateTime getEndTime(String timeRange) {
         int endIndex = timeRange.indexOf("-");
-        String startTime = timeRange.substring(endIndex+1, timeRange.length());
-        return null;
+        String endTime = timeRange.substring(endIndex+1, timeRange.length());
+        endTime = endTime.substring(7, endTime.length()) +"-"+ endTime.substring(1,3)+"-"+endTime.substring(4,6);
+        endTime = endTime+" 24:00:00";
+        return LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
     }
 }
