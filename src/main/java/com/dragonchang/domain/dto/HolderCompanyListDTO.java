@@ -1,8 +1,10 @@
 package com.dragonchang.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * @program: webcrawler
@@ -76,6 +78,12 @@ public class HolderCompanyListDTO {
      * 股东类型(1-股东，2-流通股东)
      */
     private String holderType;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
+    private LocalDateTime createdTime;
 
     /**
      * 股东信息发布时间

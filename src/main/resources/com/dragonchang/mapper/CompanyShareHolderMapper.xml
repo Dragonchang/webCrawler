@@ -4,7 +4,7 @@
 
     <select id="getHolderListByName" resultType="com.dragonchang.domain.dto.HolderCompanyListDTO">
         SELECT c.name, c.stock_code, c.last_price, c.last_circulation,c.total_capitalization, c.last_income,
-        a.holder_rank, a.holder_name, a.hold_count, a.hold_percent,a.zj ,a.change_percent,b.holder_type,
+        a.holder_rank, a.holder_name, a.hold_count, a.hold_percent,a.zj ,a.change_percent,b.holder_type, a.created_time,
         b.report_time FROM t_share_holder_detail a
         LEFT JOIN t_company_share_holder b on a.holder_id = b.id
         LEFT JOIN t_company_stock c on b.company_stock_id = c.id

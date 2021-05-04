@@ -44,7 +44,8 @@
                                     <th name="zj" >增减</th>
                                     <th name="changePercent" >变动比例</th>
                                     <th name="holderType" >股东类型</th>
-                                    <th name="reportTime" >股东信息发布时间</th>
+                                    <th name="createdTime" >创建时间</th>
+                                    <th name="reportTime" >信息发布时间</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -63,6 +64,7 @@
                                         <td>${holder.zj!}</td>
                                         <td>${holder.changePercent!}</td>
                                         <td>${holder.holderType!}</td>
+                                        <td>${holder.createdTime!}</td>
                                         <td>${holder.reportTime!}</td>
                                     </tr>
                                 </#list>
