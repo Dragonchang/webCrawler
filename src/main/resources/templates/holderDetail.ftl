@@ -16,6 +16,7 @@
     <div class="content-wrapper">
         <section class="content-header">
             <h1>持股名称: ${name}</h1>
+            <span id="holderName" style="display:none;">${name}</span>
         </section>
         <!-- Main content -->
         <section class="content">
@@ -24,6 +25,29 @@
                     <button class="btn btn-block btn-info" id="addBtn">加关注</button>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">季度持股公司个数</h3>
+                            <div class="pull-right box-tools">
+                                <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" id="filterTime_avg" >
+                                    <i class="fa fa-calendar"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div id="avg_lineChart" style="height: 350px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
@@ -80,5 +104,11 @@
     <@netCommon.commonFooter />
 </div>
 <@netCommon.commonScript />
+<!-- daterangepicker -->
+<script src="${request.contextPath}/js/adminlte/bower_components/moment/moment.min.js"></script>
+<script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
+<#-- echarts -->
+<script src="${request.contextPath}/js/plugins/echarts/echarts.common.min.js"></script>
+<script src="${request.contextPath}/js/holderDetail.js"></script>
 </body>
 </html>

@@ -152,7 +152,7 @@ $(function () {
         startDate: rangesConf["最近一周"][0],
         endDate: rangesConf["最近一周"][1]
     }, function (start, end, label) {
-        freshChartDate(start, end);
+        freshTotalChartDate(start, end);
     });
 
     freshTotalChartDate(rangesConf["最近一周"][0], rangesConf["最近一周"][1]);
