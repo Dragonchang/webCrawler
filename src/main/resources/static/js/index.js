@@ -5,6 +5,7 @@ $(function () {
     rangesConf["最近一月"] = [moment().subtract(1, 'months').startOf('day'), moment().endOf('day')];
     rangesConf["最近二月"] = [moment().subtract(2, 'months').startOf('day'), moment().endOf('day')];
     rangesConf["最近三个月"] = [moment().subtract(3, 'months').startOf('day'), moment().endOf('day')];
+    rangesConf["最近一年"] = [moment().subtract(12, 'months').startOf('day'), moment().endOf('day')];
 
     $('#filterTime_avg').daterangepicker({
         autoApply: false,
@@ -27,13 +28,13 @@ $(function () {
             monthNames: '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月'.split(','),        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
             firstDay: 1
         },
-        startDate: rangesConf["最近一周"][0],
-        endDate: rangesConf["最近一周"][1]
+        startDate: rangesConf["最近一年"][0],
+        endDate: rangesConf["最近一年"][1]
     }, function (start, end, label) {
         freshChartDate(start, end);
     });
 
-    freshChartDate(rangesConf["最近一周"][0], rangesConf["最近一周"][1]);
+    freshChartDate(rangesConf["最近一年"][0], rangesConf["最近一年"][1]);
     /**
      * fresh Chart Date
      *
@@ -149,13 +150,13 @@ $(function () {
             monthNames: '一月,二月,三月,四月,五月,六月,七月,八月,九月,十月,十一月,十二月'.split(','),        // '一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'
             firstDay: 1
         },
-        startDate: rangesConf["最近一周"][0],
-        endDate: rangesConf["最近一周"][1]
+        startDate: rangesConf["最近一年"][0],
+        endDate: rangesConf["最近一年"][1]
     }, function (start, end, label) {
         freshTotalChartDate(start, end);
     });
 
-    freshTotalChartDate(rangesConf["最近一周"][0], rangesConf["最近一周"][1]);
+    freshTotalChartDate(rangesConf["最近一年"][0], rangesConf["最近一年"][1]);
     /**
      * fresh Chart Date
      *
