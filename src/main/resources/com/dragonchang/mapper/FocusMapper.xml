@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.dragonchang.mapper.CompanyMapper">
-    <resultMap id="BaseResultMap" type="com.dragonchang.domain.po.Company">
+<mapper namespace="com.dragonchang.mapper.FocusMapper">
+    <resultMap id="BaseResultMap" type="com.dragonchang.domain.po.Focus">
         <id column="id" property="id"/>
         <result column="tyc_id" property="tycId"/>
         <result column="company_name" property="companyName"/>

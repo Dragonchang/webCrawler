@@ -12,22 +12,22 @@ import java.time.LocalDateTime;
 
 /**
  * @program: webcrawler
- * @description: 公司信息
+ * @description: 关注列表
  * @author: zhangfl
  * @create: 2021-02-18 11:20
  **/
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("t_company")
-public class Company {
+@TableName("t_focus")
+public class Focus {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
-     * 天眼查公司id
+     * 股份公司id
      */
-    private String tycId;
+    private String stockCompanyId;
 
     /**
      * 公司名称
@@ -35,9 +35,9 @@ public class Company {
     private String companyName;
 
     /**
-     * 公司股票代码
+     * 关注类型 1.股份公司 2.机构 3.个人
      */
-    private String stockCode;
+    private String type;
 
     /**
      * 是否删除，0表示未删除，1表示删除

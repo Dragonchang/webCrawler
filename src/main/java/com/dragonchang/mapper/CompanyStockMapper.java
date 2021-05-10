@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
-import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
-import com.dragonchang.domain.po.Company;
 import com.dragonchang.domain.po.CompanyStock;
 import org.apache.ibatis.annotations.Param;
 

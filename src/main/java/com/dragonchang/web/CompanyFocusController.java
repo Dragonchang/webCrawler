@@ -2,14 +2,12 @@ package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
-import com.dragonchang.domain.po.Company;
-import com.dragonchang.domain.vo.JsonResult;
-import com.dragonchang.service.ICompanyService;
+import com.dragonchang.domain.po.Focus;
+import com.dragonchang.service.IFocusService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,19 +27,11 @@ import java.util.Map;
 public class CompanyFocusController {
 
     @Autowired
-    ICompanyService companyService;
+    IFocusService focusService;
 
     @RequestMapping
     public String index(Model model) {
         return "companyFocus";
-    }
-
-    @GetMapping(value = "/syncShare")
-    @ApiOperation(value = "同步公司信息")
-    @ResponseBody
-    public JsonResult<IPage<Company>> syncShareInfoWithCompanyId(@RequestParam Long companyId) {
-        companyService.syncShareInfoWithCompanyId(companyId);
-        return JsonResult.success();
     }
 
     @RequestMapping("/pageList")
@@ -64,11 +54,11 @@ public class CompanyFocusController {
         pageRequest.setPage(start);
         pageRequest.setSize(length);
 
-        IPage<Company> companyPage = companyService.findPage(pageRequest);
+        IPage<Focus> companyPage = focusService.findPage(pageRequest);
         if (companyPage.getTotal() > 0) {
             companyPage.setTotal(companyPage.getTotal() - 1);
         }
-        List<Company> list = companyPage.getRecords();
+        List<Focus> list = companyPage.getRecords();
         int list_count = (int) companyPage.getTotal() + 1;
 
         // package result

@@ -1,7 +1,5 @@
 package com.dragonchang.schedule;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.dragonchang.domain.po.Company;
 import com.dragonchang.service.ICompanyStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +9,6 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @program: webcrawler
