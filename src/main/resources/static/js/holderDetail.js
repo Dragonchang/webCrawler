@@ -135,6 +135,7 @@ $(function () {
             focusType = "3";
         }
         var dataValue = {
+            stockCode:  "无",
             companyName: holderName,
             type: focusType
         };

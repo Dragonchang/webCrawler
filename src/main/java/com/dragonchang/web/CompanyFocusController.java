@@ -8,6 +8,7 @@ import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.IFocusService;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +49,9 @@ public class CompanyFocusController {
         CompanyRequestDTO pageRequest = new CompanyRequestDTO();
         pageRequest.setCompanyName(companyName);
         pageRequest.setStockCode(stockCode);
-        pageRequest.setType(type);
+        if(StringUtils.isNotBlank(type) && !type.equals("0")) {
+            pageRequest.setType(type);
+        }
         if (start == 0) {
             start = 1;
         } else {

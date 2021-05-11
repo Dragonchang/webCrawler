@@ -9,7 +9,9 @@ $(function() {
             type:"post",
             data : function ( d ) {
                 var obj = {};
-                obj.type = $('#type').val();
+                var condition = document.getElementById("condition");
+                var select = condition.options[condition.selectedIndex].value;
+                obj.type = select;
                 obj.companyName = $('#company_name').val();
                 obj.stockCode = $('#stock_code').val();
                 obj.start = d.start;

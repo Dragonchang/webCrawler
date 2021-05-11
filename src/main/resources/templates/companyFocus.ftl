@@ -11,7 +11,7 @@
     <@netCommon.commonLeft/>
     <div class="content-wrapper">
         <section class="content-header">
-            <h1>关注公司管理</h1>
+            <h1>关注管理</h1>
         </section>
 
         <!-- Main content -->
@@ -19,14 +19,19 @@
             <div class="row">
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">公司名称</span>
+                        <span class="input-group-addon">名称</span>
                         <input type="text" class="form-control" id="company_name" autocomplete="on" >
                     </div>
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">关注类型</span>
-                        <input type="text" class="form-control" id="type" autocomplete="on" >
+                        <select class="form-control" id="condition" >
+                            <option value="0" >${"无"}</option>
+                            <option value="1" >${"股份公司"}</option>
+                            <option value="2" >${"机构"}</option>
+                            <option value="3" >${"个人"}</option>
+                        </select>
                     </div>
                 </div>
                 <div class="col-xs-2">
@@ -39,7 +44,7 @@
                     <button class="btn btn-block btn-info" id="searchBtn">查询</button>
                 </div>
                 <div class="col-xs-2">
-                    <button class="btn btn-block btn-success add" type="button">添加公司</button>
+                    <button class="btn btn-block btn-success add" type="button">添加关注</button>
                 </div>
             </div>
             <div class="row">
@@ -52,7 +57,7 @@
                                     <th name="id" >id</th>
                                     <th name="stockCompanyId" >股份公司ID</th>
                                     <th name="stockCode" >公司股票代码</th>
-                                    <th name="companyName" >公司名称</th>
+                                    <th name="companyName" >关注名称</th>
                                     <th name="type" >类型</th>
                                     <th name="createdTime" >创建时间</th>
                                     <th name="detail" >详情</th>
