@@ -3,25 +3,26 @@
 <mapper namespace="com.dragonchang.mapper.FocusMapper">
     <resultMap id="BaseResultMap" type="com.dragonchang.domain.po.Focus">
         <id column="id" property="id"/>
-        <result column="tyc_id" property="tycId"/>
+        <id column="stock_company_id" property="stockCompanyId"/>
         <result column="company_name" property="companyName"/>
         <result column="stock_code" property="stockCode"/>
+        <result column="type" property="type"/>
         <result column="deleted" property="deleted"/>
         <result column="created_time" property="createdTime"/>
         <result column="created_by" property="createdBy"/>
     </resultMap>
 
     <select id="findPage" resultMap="BaseResultMap">
-        select * from t_company
+        select * from t_focus f
         where deleted=0
-        <if test="request.tycId != null and request.tycId != ''">
-            and tyc_id like CONCAT('%', #{request.tycId} , '%')
+        <if test="request.type != null and request.type != ''">
+            and f.type = #{request.type}
         </if>
         <if test="request.companyName != null and request.companyName != ''">
-            and company_name like CONCAT('%', #{request.companyName} , '%')
+            and f.company_name like CONCAT('%', #{request.companyName} , '%')
         </if>
         <if test="request.stockCode != null and request.stockCode != ''">
-            and stock_code like CONCAT('%', #{request.stockCode} , '%')
+            and f.stock_code like CONCAT('%', #{request.stockCode} , '%')
         </if>
     </select>
 </mapper>

@@ -8,7 +8,7 @@
                 <li class="nav-click " ><a href="${request.contextPath}/"><i class="fa fa-circle-o text-aqua"></i><span>${"仪表盘"}</span></a></li>
                 <li class="nav-click " ><a href="${request.contextPath}/companyFocus"><i class="fa fa-circle-o text-yellow"></i><span>${"关注公司"}</span></a></li>
                 <li class="nav-click " ><a href="${request.contextPath}/companyStock"><i class="fa fa-circle-o text-yellow"></i><span>${"股份公司"}</span></a></li>
-                <li class="nav-click " ><a href="${request.contextPath}/companyStock"><i class="fa fa-circle-o text-yellow"></i><span>${"推荐"}</span></a></li>
+                <li class="nav-click " ><a href="${request.contextPath}/recommend"><i class="fa fa-circle-o text-yellow"></i><span>${"推荐"}</span></a></li>
             </ul>
         </section>
         <!-- /.sidebar -->

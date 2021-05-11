@@ -32,5 +32,6 @@ public class CompanyStockTask {
     @Transactional
     public void tempMigrateWithMerchantTask() {
         companyStockService.syncStockListInfo();
+        companyStockService.syncAllStockShareHolder();
     }
 }

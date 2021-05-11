@@ -266,4 +266,27 @@ $(function () {
         var name = $(this).text();
         window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
     });
+
+    $('#addBtn').on('click', function(){
+        var dataValue = {
+            stockCompanyId: parseInt(document.getElementById("stockCompanyId").innerText),
+            stockCode: document.getElementById("stockCode").innerText,
+            companyName: document.getElementById("companyName").innerText,
+            type: "1"
+        };
+        $.ajax({
+            type : 'POST',
+            dataType: 'json' ,
+            contentType: "application/json" ,
+            url : base_url + '/companyFocus/add',
+            data : JSON.stringify(dataValue),
+            dataType : "json",
+            success : function(data){
+                if (data.code == 0) {
+
+                } else {
+                }
+            }
+        });
+    });
 });

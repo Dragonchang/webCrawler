@@ -127,4 +127,30 @@ $(function () {
         var lineChart = echarts.init(document.getElementById('avg_lineChart'));
         lineChart.setOption(option);
     }
+
+    $('#addBtn').on('click', function(){
+        var focusType = "2";
+        var holderName = document.getElementById("holderName").innerText;
+        if(holderName.length <4) {
+            focusType = "3";
+        }
+        var dataValue = {
+            companyName: holderName,
+            type: focusType
+        };
+        $.ajax({
+            type : 'POST',
+            dataType: 'json' ,
+            contentType: "application/json" ,
+            url : base_url + '/companyFocus/add',
+            data : JSON.stringify(dataValue),
+            dataType : "json",
+            success : function(data){
+                if (data.code == 0) {
+
+                } else {
+                }
+            }
+        });
+    });
 });

@@ -9,7 +9,7 @@ $(function() {
             type:"post",
             data : function ( d ) {
                 var obj = {};
-                obj.tycId = $('#tyc_id').val();
+                obj.type = $('#type').val();
                 obj.companyName = $('#company_name').val();
                 obj.stockCode = $('#stock_code').val();
                 obj.start = d.start;
@@ -27,7 +27,12 @@ $(function() {
                 "width":'10%'
             },
             {
-                "data": 'tycId',
+                "data": 'stockCompanyId',
+                "visible" : false,
+                "width":'10%'
+            },
+            {
+                "data": 'stockCode',
                 "visible" : true,
                 "width":'10%'
             },
@@ -37,7 +42,7 @@ $(function() {
                 "width":'20%'
             },
             {
-                "data": 'stockCode',
+                "data": 'type',
                 "visible" : true,
                 "width":'20%'
             },
@@ -55,7 +60,7 @@ $(function() {
                         tableData['key'+row.id] = row;
                         var html = '<p id="'+ row.id +'" >'+
                             '<button class="btn btn-warning btn-xs detail" type="button">'+ "详情" +'</button>  '+
-                            '<button class="btn btn-warning btn-xs sync" type="button">'+ "同步" +'</button>  '+
+                            '<button class="btn btn-warning btn-xs delete" type="button">'+ "删除" +'</button>  '+
                             '</p>';
 
                         return html;
@@ -100,23 +105,30 @@ $(function() {
     // job operate
     $("#company_list").on('click', '.detail',function() {
         var id = $(this).parent('p').attr("id");
-        window.open(base_url + '/shareCompany?companyId=' + id, '_self');
+        var row = tableData['key'+id];
+        var companyStockId = row.stockCompanyId;
+        var name = row.companyName;
+        var type = row.type;
+        if(type == "股份公司") {
+            window.open(base_url + '/stockDetail?companyStockId=' + companyStockId, '_self');
+        } else if(type == "机构"){
+            window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
+        } else if(type == "个人") {
+            window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
+        } else {
+            alert("未知关注类型"+$(this).parent('p').attr("type"))
+        }
     });
 
     // job operate
-    $("#company_list").on('click', '.sync',function() {
+    $("#company_list").on('click', '.delete',function() {
         var id = $(this).parent('p').attr("id");
-
         var paramData = {
-            "companyId": id
+            "id": id
         };
 
-        $.get(base_url + "/companyFocus/syncShare", paramData, function(data, status) {
-            if (data.code == "200") {
-                //alert("success");
-            } else {
-                //alert("failed")
-            }
+        $.get(base_url + "/companyFocus/delete", paramData, function(data, status) {
+            companyListTable.fnDraw();
         });
     });
 

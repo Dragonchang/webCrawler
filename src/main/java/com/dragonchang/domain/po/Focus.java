@@ -30,6 +30,11 @@ public class Focus {
     private String stockCompanyId;
 
     /**
+     * 公司股票代码
+     */
+    private String stockCode;
+
+    /**
      * 公司名称
      */
     private String companyName;

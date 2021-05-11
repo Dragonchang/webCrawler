@@ -25,8 +25,8 @@
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">天眼查ID</span>
-                        <input type="text" class="form-control" id="tyc_id" autocomplete="on" >
+                        <span class="input-group-addon">关注类型</span>
+                        <input type="text" class="form-control" id="type" autocomplete="on" >
                     </div>
                 </div>
                 <div class="col-xs-2">
@@ -50,9 +50,10 @@
                                 <thead>
                                 <tr>
                                     <th name="id" >id</th>
-                                    <th name="tycId" >天眼查ID</th>
+                                    <th name="stockCompanyId" >股份公司ID</th>
+                                    <th name="stockCode" >公司股票代码</th>
                                     <th name="companyName" >公司名称</th>
-                                    <th name="stockCode" >股票代码</th>
+                                    <th name="type" >类型</th>
                                     <th name="createdTime" >创建时间</th>
                                     <th name="detail" >详情</th>
                                 </tr>
@@ -72,6 +73,6 @@
 <@netCommon.commonScript />
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="${request.contextPath}/js/company.js"></script>
+<script src="${request.contextPath}/js/focus.js"></script>
 </body>
 </html>

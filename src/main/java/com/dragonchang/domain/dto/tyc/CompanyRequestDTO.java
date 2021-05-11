@@ -11,7 +11,7 @@ import lombok.Data;
  **/
 @Data
 public class CompanyRequestDTO extends PageRequestDTO {
-    String tycId;
+    String type;
     String companyName;
     String stockCode;
 }

@@ -156,19 +156,25 @@ $(function() {
 
     $("#company_stock_list").on('click', '.add',function() {
         var id = $(this).parent('p').attr("id");
-
-        var paramData = {
-            "companyId": id
+        var row = tableData['key'+id];
+        var dataValue = {
+            stockCompanyId: id,
+            stockCode: row.stockCode,
+            companyName: row.name,
+            type: "1"
         };
-
-        // $.get(base_url + "/companyFocus/syncShare", paramData, function(data, status) {
-        //     if (data.code == "200") {
-        //         //alert("success");
-        //     } else {
-        //         //alert("failed")
-        //     }
-        // });
+        $.ajax({
+            type : 'POST',
+            dataType: 'json' ,
+            contentType: "application/json" ,
+            url : base_url + '/companyFocus/add',
+            data : JSON.stringify(dataValue),
+            dataType : "json",
+            success : function(data){
+                if (data.code == 0) {
+                } else {
+                }
+            }
+        });
     });
-
-
 });

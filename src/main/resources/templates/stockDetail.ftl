@@ -43,6 +43,9 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-1 pull-right">
+                    <span id="stockCompanyId" style="display:none;">${company.id}</span>
+                    <span id="stockCode" style="display:none;">${company.stockCode}</span>
+                    <span id="companyName" style="display:none;">${company.name}</span>
                     <button class="btn btn-block btn-info" id="addBtn">加关注</button>
                 </div>
             </div>
