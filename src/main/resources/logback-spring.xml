@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProperty scope="context" name="profile.active" source="spring.profiles.active"></springProperty>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径 -->
+    <property name="LOG_HOME" value="./logs" />
+
+
+    <appender name="eventFile"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover 保存历史记录到这个文件夹一日起为后缀 -->
+            <FileNamePattern>${LOG_HOME}/webcrawler-%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg %n</Pattern>
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->
+        </encoder>
+    </appender>
+
+    <springProfile name="native,dev,test,uat">
+        <!-- 打印 日志级别 -->
+        <root level="info">
+            <appender-ref ref="eventFile" />
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <!-- 打印 日志级别 -->
+        <root level="info">
+            <appender-ref ref="eventFile" />
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+</configuration>
