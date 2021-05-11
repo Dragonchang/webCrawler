@@ -27,7 +27,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">关注类型</span>
                         <select class="form-control" id="condition" >
-                            <option value="0" >${"无"}</option>
+                            <option value="0" >${"所有"}</option>
                             <option value="1" >${"股份公司"}</option>
                             <option value="2" >${"机构"}</option>
                             <option value="3" >${"个人"}</option>
@@ -42,9 +42,6 @@
                 </div>
                 <div class="col-xs-1">
                     <button class="btn btn-block btn-info" id="searchBtn">查询</button>
-                </div>
-                <div class="col-xs-2">
-                    <button class="btn btn-block btn-success add" type="button">添加关注</button>
                 </div>
             </div>
             <div class="row">

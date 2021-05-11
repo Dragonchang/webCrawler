@@ -35,7 +35,7 @@
                         <input type="text" class="form-control" id="name" autocomplete="on" >
                     </div>
                 </div>
-                <div class="col-xs-1">
+                <div class="col-xs-2">
                     <div class="input-group">
                         <span class="input-group-addon">股票代码</span>
                         <input type="text" class="form-control" id="stock_code" autocomplete="on" >
