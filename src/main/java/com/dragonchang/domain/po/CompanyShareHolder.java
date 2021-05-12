@@ -22,12 +22,12 @@ import java.time.LocalDateTime;
 @TableName("t_company_share_holder")
 public class CompanyShareHolder {
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * t_company_stock主键
      */
-    private Long companyStockId;
+    private Integer companyStockId;
 
     /**
      * 股东类型(1-股东，2-流通股东)

@@ -22,14 +22,14 @@ public interface ICompanyShareHolderService {
      * @param stockId
      * @return
      */
-    List<CompanyShareHolder> getHolderListByStockId(Long stockId);
+    List<CompanyShareHolder> getHolderListByStockId(Integer stockId);
 
     /**
      * 获取持股股东详情
      * @param holderId
      * @return
      */
-    List<ShareHolderDetail> getHolderDetailListByStockId(Long holderId);
+    List<ShareHolderDetail> getHolderDetailListByStockId(Integer holderId);
 
     /**
      * 根据股东名称获取所有持股信息

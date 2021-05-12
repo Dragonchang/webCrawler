@@ -65,7 +65,7 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
                             for(StockHolderDetailDTO holderDetailDTO : sdltgdDetail) {
                                 ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
                                 shareHolderDetail.setHolderId(shareHolder.getId());
-                                shareHolderDetail.setHolderRank(Long.valueOf(holderDetailDTO.getMc()));
+                                shareHolderDetail.setHolderRank(Integer.valueOf(holderDetailDTO.getMc()));
                                 shareHolderDetail.setHolderName(holderDetailDTO.getGdmc());
                                 shareHolderDetail.setHolderType(holderDetailDTO.getGdxz());
                                 shareHolderDetail.setStockType(holderDetailDTO.getGflx());
@@ -105,7 +105,7 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
                             for(StockHolderDetailDTO holderDetailDTO : sdltgdDetail) {
                                 ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
                                 shareHolderDetail.setHolderId(shareHolder.getId());
-                                shareHolderDetail.setHolderRank(Long.valueOf(holderDetailDTO.getMc()));
+                                shareHolderDetail.setHolderRank(Integer.valueOf(holderDetailDTO.getMc()));
                                 shareHolderDetail.setHolderName(holderDetailDTO.getGdmc());
                                 shareHolderDetail.setHolderType(holderDetailDTO.getGdxz());
                                 shareHolderDetail.setStockType(holderDetailDTO.getGflx());
@@ -132,14 +132,14 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
     }
 
     @Override
-    public List<CompanyShareHolder> getHolderListByStockId(Long stockId) {
+    public List<CompanyShareHolder> getHolderListByStockId(Integer stockId) {
         return companyShareHolderMapper.selectList(new LambdaQueryWrapper<CompanyShareHolder>()
                 .eq(CompanyShareHolder::getCompanyStockId, stockId)
                 .orderByDesc(CompanyShareHolder::getReportTime));
     }
 
     @Override
-    public List<ShareHolderDetail> getHolderDetailListByStockId(Long holderId) {
+    public List<ShareHolderDetail> getHolderDetailListByStockId(Integer holderId) {
         return shareHolderDetailMapper.selectList(new LambdaQueryWrapper<ShareHolderDetail>()
                 .eq(ShareHolderDetail::getHolderId, holderId));
     }

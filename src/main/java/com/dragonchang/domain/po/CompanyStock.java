@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @TableName("t_company_stock")
 public class CompanyStock {
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 天眼查公司id

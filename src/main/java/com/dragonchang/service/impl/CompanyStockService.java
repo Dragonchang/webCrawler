@@ -161,7 +161,7 @@ public class CompanyStockService implements ICompanyStockService {
     }
 
     @Override
-    public CompanyStock getStockById(Long id) {
+    public CompanyStock getStockById(Integer id) {
         CompanyStock companyStock = mapper.selectOne(new LambdaQueryWrapper<CompanyStock>()
                 .eq(CompanyStock::getId, id));
         return companyStock;

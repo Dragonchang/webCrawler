@@ -22,17 +22,17 @@ import java.time.LocalDateTime;
 @TableName("t_share_holder_detail")
 public class ShareHolderDetail {
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * t_company_share_holder主键
      */
-    private Long holderId;
+    private Integer holderId;
 
     /**
      * 股东排名
      */
-    private Long holderRank;
+    private Integer holderRank;
 
     /**
      * 持股人/机构名称

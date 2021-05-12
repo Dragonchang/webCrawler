@@ -23,12 +23,12 @@ import java.time.LocalDateTime;
 public class  ShareStructure {
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 公司信息主键
      */
-    private Long companyId;
+    private Integer companyId;
 
     /**
      * 持有股权公司名称

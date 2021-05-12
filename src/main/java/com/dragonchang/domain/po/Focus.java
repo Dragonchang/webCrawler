@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @TableName("t_focus")
 public class Focus {
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 股份公司id

@@ -268,10 +268,13 @@ $(function () {
     });
 
     $('#addBtn').on('click', function(){
+        var id = parseInt(document.getElementById("stockCompanyId").innerText);
+        var code = document.getElementById("stockCode").innerText;
+        var name = document.getElementById("companyName").innerText;
         var dataValue = {
-            stockCompanyId: parseInt(document.getElementById("stockCompanyId").innerText),
-            stockCode: document.getElementById("stockCode").innerText,
-            companyName: document.getElementById("companyName").innerText,
+            stockCompanyId: id,
+            stockCode: code,
+            companyName: name,
             type: "1"
         };
         $.ajax({

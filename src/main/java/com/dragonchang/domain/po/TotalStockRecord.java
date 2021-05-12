@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @TableName("t_total_stock_record")
 public class TotalStockRecord {
     @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
+    private Integer id;
 
     /**
      * 所有公司股票平均价格

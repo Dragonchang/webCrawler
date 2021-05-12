@@ -32,5 +32,5 @@ public interface ICompanyStockService {
      * @param id
      * @return
      */
-    CompanyStock getStockById(Long id);
+    CompanyStock getStockById(Integer id);
 }

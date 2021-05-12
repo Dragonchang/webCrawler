@@ -38,7 +38,7 @@ public class CompanyStockDetailController {
     private ICompanyShareHolderService companyShareHolderService;
 
     @RequestMapping
-    public String index(Model model, @RequestParam Long companyStockId) {
+    public String index(Model model, @RequestParam Integer companyStockId) {
         CompanyStock stock = companyStockService.getStockById(companyStockId);
         if (stock != null) {
             Map<String, List<ShareHolderDetail>> lTRetMap = new LinkedHashMap<>();
