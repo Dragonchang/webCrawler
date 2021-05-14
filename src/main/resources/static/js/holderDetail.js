@@ -158,7 +158,41 @@ $(function () {
         holderDetailList.fnDraw();
     });
     $('#exportBtn').on('click', function(){
-        //holderDetailList.fnDraw();
+// Data to post
+        var condition_time = document.getElementById("condition_time");
+        var time_select = condition_time.options[condition_time.selectedIndex].value;
+        var condition_report = document.getElementById("condition_report");
+        var report_select = condition_report.options[condition_report.selectedIndex].value;
+
+        data = {
+            name:  document.getElementById("holderName").innerText,
+            companyName: $('#company_name').val(),
+            companyStock: $('#stock_code').val(),
+            count: time_select,
+            reportTime: report_select
+        };
+// Use XMLHttpRequest instead of Jquery $ajax
+        xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            var a;
+            if (xhttp.readyState === 4 && xhttp.status === 201) {
+                // Trick for making downloadable link
+                a = document.createElement('a');
+                a.href = window.URL.createObjectURL(xhttp.response);
+                // Give filename you wish to download
+                a.download = document.getElementById("holderName").innerText+".xls";
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+            }
+        };
+// Post data to URL which handles post request
+        xhttp.open("POST", base_url + '/holderDetail/export');
+        xhttp.setRequestHeader("Content-Type", "application/json");
+// You should set responseType as blob for binary responses
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(data));
+
     });
 
     // filter Time
