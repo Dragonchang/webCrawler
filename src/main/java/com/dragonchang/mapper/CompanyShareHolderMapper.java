@@ -26,4 +26,11 @@ public interface CompanyShareHolderMapper extends BaseMapper<CompanyShareHolder>
      * @return
      */
     IPage<HolderCompanyListDTO> findPage(Page page, @Param("request") HolderDetailRequestDTO request);
+
+    /**
+     * 查询列表
+     * @param request
+     * @return
+     */
+    List<HolderCompanyListDTO> findList(@Param("request") HolderDetailRequestDTO request);
 }

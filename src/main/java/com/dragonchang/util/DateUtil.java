@@ -28,8 +28,12 @@ public class DateUtil {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
+    public static final String DEFAULT_DATE_TIME_FORMAT_SECOND = "yyyyMMddHHmmss";
     private static final ThreadLocal<Map<String, DateFormat>> dateFormatThreadLocal = new ThreadLocal<Map<String, DateFormat>>();
+
+    public static String localDateTimeFormat(LocalDateTime localDateTime,String pattern){
+        return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
+    }
     private static DateFormat getDateFormat(String pattern) {
         if (pattern==null || pattern.trim().length()==0) {
             throw new IllegalArgumentException("pattern cannot be empty.");

@@ -1,15 +1,21 @@
 package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.dragonchang.domain.dto.ExcelData;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.dto.HolderDetailRequestDTO;
 import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.ICompanyShareHolderService;
+import com.dragonchang.util.ExcelUtil;
+import com.dragonchang.util.HttpUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -74,8 +80,17 @@ public class HolderDetailController {
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String name) {
+                                        String name, String companyName, String companyStock,
+                                        int count, String reportTime) {
         HolderDetailRequestDTO pageRequest = new HolderDetailRequestDTO();
+        pageRequest.setCompanyName(companyName);
+        pageRequest.setCompanyStock(companyStock);
+        if(count != 0) {
+            pageRequest.setCount(count);
+        }
+        if(reportTime != null && !reportTime.equals("0")) {
+            pageRequest.setReportTime(reportTime);
+        }
         pageRequest.setName(name);
         if (start == 0) {
             start = 1;
@@ -137,5 +152,13 @@ public class HolderDetailController {
         result.put("reportTime", reportTime);
         result.put("holderCount", holderCount);
         return JsonResult.success(result);
+    }
+
+    @PostMapping(value = "/export")
+    @ApiOperation(value = "导出持有记录")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportFlow(@RequestBody  HolderDetailRequestDTO request) {
+        ExcelData data = companyShareHolderService.exportFlow(request);
+        return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
     }
 }

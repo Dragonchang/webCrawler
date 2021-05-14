@@ -23,9 +23,40 @@
         LEFT JOIN t_company_stock c on b.company_stock_id = c.id
         WHERE 1=1 and b.holder_type='2'
         <if test="request.name != null and request.name != ''">
-            and holder_name = #{request.name}
+            and a.holder_name = #{request.name}
+        </if>
+        <if test="request.companyName != null and request.companyName != ''">
+            and c.name like CONCAT('%', #{request.companyName} , '%')
+        </if>
+        <if test="request.companyStock != null and request.companyStock != ''">
+            and c.stock_code like CONCAT('%', #{request.companyStock} , '%')
+        </if>
+        <if test="request.reportTime != null and request.reportTime != ''">
+            and b.report_time = #{request.reportTime}
         </if>
         ORDER BY c.last_price DESC ,b.report_time DESC
 
+    </select>
+
+    <select id="findList" resultType="com.dragonchang.domain.dto.HolderCompanyListDTO">
+        SELECT c.id as stockCompanyId, c.name, c.stock_code, c.last_price, c.last_circulation,c.total_capitalization, c.last_income,
+        a.holder_rank, a.holder_name, a.hold_count, a.hold_percent,a.zj ,a.change_percent,b.holder_type, a.created_time,
+        b.report_time FROM t_share_holder_detail a
+        LEFT JOIN t_company_share_holder b on a.holder_id = b.id
+        LEFT JOIN t_company_stock c on b.company_stock_id = c.id
+        WHERE 1=1 and b.holder_type='2'
+        <if test="request.name != null and request.name != ''">
+            and a.holder_name = #{request.name}
+        </if>
+        <if test="request.companyName != null and request.companyName != ''">
+            and c.name like CONCAT('%', #{request.companyName} , '%')
+        </if>
+        <if test="request.companyStock != null and request.companyStock != ''">
+            and c.stock_code like CONCAT('%', #{request.companyStock} , '%')
+        </if>
+        <if test="request.reportTime != null and request.reportTime != ''">
+            and b.report_time = #{request.reportTime}
+        </if>
+        ORDER BY c.last_price DESC ,b.report_time DESC
     </select>
 </mapper>

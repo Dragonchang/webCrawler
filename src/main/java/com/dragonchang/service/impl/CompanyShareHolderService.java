@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.crawler.EastMoneyCrawler;
+import com.dragonchang.domain.dto.ExcelData;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.dto.HolderDetailRequestDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderDetailDTO;
@@ -19,10 +20,13 @@ import com.dragonchang.domain.po.ShareHolderDetail;
 import com.dragonchang.mapper.CompanyShareHolderMapper;
 import com.dragonchang.mapper.ShareHolderDetailMapper;
 import com.dragonchang.service.ICompanyShareHolderService;
+import com.dragonchang.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -160,5 +164,56 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
         page.setCurrent(pageRequest.getPage());
         page.setSize(pageRequest.getSize());
         return companyShareHolderMapper.findPage(page, pageRequest);
+    }
+
+    @Override
+    public ExcelData exportFlow(HolderDetailRequestDTO request){
+        List<HolderCompanyListDTO> list = companyShareHolderMapper.findList(request);
+        ExcelData data = new ExcelData();
+        String time = DateUtil.localDateTimeFormat(LocalDateTime.now(),DateUtil.DEFAULT_DATE_TIME_FORMAT_SECOND);
+        String fileName = "holder" + time;
+        data.setSavePath("D:\\");
+        data.setFileName(fileName);
+        data.setSheetName("holder");
+        List<String> titles = new ArrayList();
+        titles.add("公司名称");
+        titles.add("公司股票代码");
+        titles.add("公司最新股价");
+        titles.add("公司最新流通市值");
+        titles.add("公司最新总市值");
+        titles.add("公司最新收益");
+        titles.add("股东排名");
+        titles.add("持股人/机构名称");
+        titles.add("持股数(股)");
+        titles.add("占总流通股本持股比例");
+        titles.add("增减");
+        titles.add("变动比例");
+        titles.add("股东类型");
+        titles.add("创建时间");
+        titles.add("信息发布时间");
+        data.setTitles(titles);
+        List<List<Object>> rows = new ArrayList();
+        for (int i = 0, length = list.size(); i < length; i++) {
+            HolderCompanyListDTO hodler = list.get(i);
+            List<Object> row = new ArrayList();
+            row.add(hodler.getName());
+            row.add(hodler.getStockCode());
+            row.add(hodler.getLastPrice());
+            row.add(hodler.getLastCirculation());
+            row.add(hodler.getTotalCapitalization());
+            row.add(hodler.getLastIncome());
+            row.add(hodler.getHolderRank());
+            row.add(hodler.getHolderName());
+            row.add(hodler.getHoldCount());
+            row.add(hodler.getHoldPercent());
+            row.add(hodler.getZj());
+            row.add(hodler.getChangePercent());
+            row.add(hodler.getHolderType());
+            row.add(hodler.getCreatedTime());
+            row.add(hodler.getReportTime());
+            rows.add(row);
+        }
+        data.setRows(rows);
+        return data;
     }
 }

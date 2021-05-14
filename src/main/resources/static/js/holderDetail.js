@@ -9,7 +9,16 @@ $(function () {
             type:"post",
             data : function ( d ) {
                 var obj = {};
+                var condition_time = document.getElementById("condition_time");
+                var time_select = condition_time.options[condition_time.selectedIndex].value;
+                var condition_report = document.getElementById("condition_report");
+                var report_select = condition_report.options[condition_report.selectedIndex].value;
+
                 obj.name = document.getElementById("holderName").innerText;
+                obj.companyName = $('#company_name').val();
+                obj.companyStock = $('#stock_code').val();
+                obj.count = time_select;
+                obj.reportTime = report_select;
                 obj.start = d.start;
                 obj.length = d.length;
                 return obj;
@@ -147,6 +156,9 @@ $(function () {
     // search btn
     $('#searchBtn').on('click', function(){
         holderDetailList.fnDraw();
+    });
+    $('#exportBtn').on('click', function(){
+        //holderDetailList.fnDraw();
     });
 
     // filter Time

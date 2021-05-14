@@ -1,6 +1,7 @@
 package com.dragonchang.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.dragonchang.domain.dto.ExcelData;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.dto.HolderDetailRequestDTO;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
@@ -48,4 +49,11 @@ public interface ICompanyShareHolderService {
      * @return
      */
     IPage<HolderCompanyListDTO> findPage(HolderDetailRequestDTO pageRequest);
+
+    /**
+     * 导出持有穿透
+     * @param request
+     * @return
+     */
+    ExcelData exportFlow(HolderDetailRequestDTO request);
 }
