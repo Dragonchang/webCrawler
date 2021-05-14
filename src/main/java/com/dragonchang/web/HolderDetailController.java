@@ -158,6 +158,12 @@ public class HolderDetailController {
     @ApiOperation(value = "导出持有记录")
     @ResponseBody
     public ResponseEntity<byte[]> exportFlow(@RequestBody  HolderDetailRequestDTO request) {
+        if(request.getCount() == 0) {
+            request.setCount(null);
+        }
+        if(request.getReportTime() != null && request.getReportTime().equals("0")) {
+            request.setReportTime(null);
+        }
         ExcelData data = companyShareHolderService.exportFlow(request);
         return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
     }
