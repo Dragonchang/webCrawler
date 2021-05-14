@@ -81,12 +81,15 @@ public class HolderDetailController {
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         String name, String companyName, String companyStock,
-                                        int count, String reportTime) {
+                                        int count, String reportTime, String change) {
         HolderDetailRequestDTO pageRequest = new HolderDetailRequestDTO();
         pageRequest.setCompanyName(companyName);
         pageRequest.setCompanyStock(companyStock);
         if(count != 0) {
             pageRequest.setCount(count);
+        }
+        if(change != null && !change.equals("0")) {
+            pageRequest.setChange(change);
         }
         if(reportTime != null && !reportTime.equals("0")) {
             pageRequest.setReportTime(reportTime);
@@ -160,6 +163,9 @@ public class HolderDetailController {
     public ResponseEntity<byte[]> exportFlow(@RequestBody  HolderDetailRequestDTO request) {
         if(request.getCount() == 0) {
             request.setCount(null);
+        }
+        if(request.getChange() != null && request.getChange().equals("0")) {
+            request.setChange(null);
         }
         if(request.getReportTime() != null && request.getReportTime().equals("0")) {
             request.setReportTime(null);

@@ -85,6 +85,17 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">变动比列</span>
+                        <select class="form-control" id="condition_change" >
+                            <option value="0" >${"所有"}</option>
+                            <option value="1" >${"增加"}</option>
+                            <option value="2" >${"减少"}</option>
+                            <option value="3" >${"不变"}</option>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="col-xs-1 pull-right">
                     <button class="btn btn-block btn-info " id="exportBtn">导出</button>

@@ -34,4 +34,11 @@ public class HolderDetailRequestDTO extends PageRequestDTO{
      * 发布时间
      */
     private String reportTime;
+
+    /**
+     * <option value="1" >${"增加"}</option>
+     * <option value="2" >${"减少"}</option>
+     * <option value="3" >${"不变"}</option>
+     */
+    private String change;
 }

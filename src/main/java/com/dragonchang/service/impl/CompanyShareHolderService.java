@@ -22,6 +22,7 @@ import com.dragonchang.mapper.ShareHolderDetailMapper;
 import com.dragonchang.service.ICompanyShareHolderService;
 import com.dragonchang.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -207,7 +208,7 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
             row.add(hodler.getHoldCount());
             row.add(hodler.getHoldPercent());
             row.add(hodler.getZj());
-            row.add(hodler.getChangePercent());
+            row.add(changePercentToNumber(hodler.getChangePercent()));
             row.add(hodler.getHolderType());
             row.add(hodler.getCreatedTime());
             row.add(hodler.getReportTime());
@@ -215,5 +216,16 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
         }
         data.setRows(rows);
         return data;
+    }
+
+    private String changePercentToNumber(String percent) {
+        if(StringUtils.isNotBlank(percent)) {
+           if(percent.equals("--")) {
+               return "0";
+           }
+            percent = percent.substring(0, percent.length() - 1);
+           return percent;
+        }
+        return null;
     }
 }

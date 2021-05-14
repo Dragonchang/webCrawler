@@ -13,11 +13,14 @@ $(function () {
                 var time_select = condition_time.options[condition_time.selectedIndex].value;
                 var condition_report = document.getElementById("condition_report");
                 var report_select = condition_report.options[condition_report.selectedIndex].value;
+                var condition_change = document.getElementById("condition_change");
+                var change_select = condition_change.options[condition_change.selectedIndex].value;
 
                 obj.name = document.getElementById("holderName").innerText;
                 obj.companyName = $('#company_name').val();
                 obj.companyStock = $('#stock_code').val();
                 obj.count = time_select;
+                obj.change = change_select;
                 obj.reportTime = report_select;
                 obj.start = d.start;
                 obj.length = d.length;
@@ -114,8 +117,8 @@ $(function () {
                 "render": function ( data, type, row ) {
                     return function(){
                         // html
-                        tableData['key'+row.id] = row;
-                        var html = '<p id="'+ row.id +'" >'+
+                        tableData['key'+row.stockCompanyId] = row;
+                        var html = '<p id="'+ row.stockCompanyId +'" >'+
                             '<button class="btn btn-warning btn-xs detail" type="button">'+ "公司详情" +'</button>  '+
                             '</p>';
 
@@ -153,6 +156,11 @@ $(function () {
     // table data
     var tableData = {};
 
+    $("#holder_detail_list").on('click', '.detail',function() {
+        var id = $(this).parent('p').attr("id");
+        window.open(base_url + '/stockDetail?companyStockId=' + id, '_self');
+    });
+
     // search btn
     $('#searchBtn').on('click', function(){
         holderDetailList.fnDraw();
@@ -163,13 +171,16 @@ $(function () {
         var time_select = condition_time.options[condition_time.selectedIndex].value;
         var condition_report = document.getElementById("condition_report");
         var report_select = condition_report.options[condition_report.selectedIndex].value;
+        var condition_change = document.getElementById("condition_change");
+        var change_select = condition_change.options[condition_change.selectedIndex].value;
 
         data = {
             name:  document.getElementById("holderName").innerText,
             companyName: $('#company_name').val(),
             companyStock: $('#stock_code').val(),
             count: time_select,
-            reportTime: report_select
+            reportTime: report_select,
+            change: change_select
         };
 // Use XMLHttpRequest instead of Jquery $ajax
         xhttp = new XMLHttpRequest();

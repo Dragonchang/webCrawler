@@ -34,13 +34,22 @@
         <if test="request.reportTime != null and request.reportTime != ''">
             and b.report_time = #{request.reportTime}
         </if>
+        <if test="request.change != null and request.change == 1">
+            and a.change_percent not like CONCAT('%', '-' , '%')
+        </if>
+        <if test="request.change != null and request.change == 2">
+            and a.change_percent like CONCAT('%', '-' , '%')
+        </if>
+        <if test="request.change != null and request.change == 3">
+            and a.change_percent = '--'
+        </if>
         ORDER BY c.last_price DESC ,b.report_time DESC
 
     </select>
 
     <select id="findList" resultType="com.dragonchang.domain.dto.HolderCompanyListDTO">
         SELECT c.id as stockCompanyId, c.name, c.stock_code, c.last_price, c.last_circulation,c.total_capitalization, c.last_income,
-        a.holder_rank, a.holder_name, a.hold_count, a.hold_percent,a.zj ,a.change_percent,b.holder_type, a.created_time,
+        a.holder_rank, a.holder_name, a.hold_count, a.hold_percent, a.zj, a.change_percent, b.holder_type, a.created_time,
         b.report_time FROM t_share_holder_detail a
         LEFT JOIN t_company_share_holder b on a.holder_id = b.id
         LEFT JOIN t_company_stock c on b.company_stock_id = c.id
@@ -56,6 +65,15 @@
         </if>
         <if test="request.reportTime != null and request.reportTime != ''">
             and b.report_time = #{request.reportTime}
+        </if>
+        <if test="request.change != null and request.change == 1">
+            and a.change_percent not like CONCAT('%', '-' , '%')
+        </if>
+        <if test="request.change != null and request.change == 2">
+            and a.change_percent like CONCAT('%', '-' , '%')
+        </if>
+        <if test="request.change != null and request.change == 3">
+            and a.change_percent = '--'
         </if>
         ORDER BY c.last_price DESC ,b.report_time DESC
     </select>
