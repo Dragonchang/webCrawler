@@ -188,7 +188,7 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
         titles.add("持股数(股)");
         titles.add("占总流通股本持股比例");
         titles.add("增减");
-        titles.add("变动比例");
+        titles.add("变动比例(%)");
         titles.add("股东类型");
         titles.add("创建时间");
         titles.add("信息发布时间");
