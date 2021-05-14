@@ -1,4 +1,154 @@
 $(function () {
+    // init date tables
+    var holderDetailList = $("#holder_detail_list").dataTable({
+        "deferRender": true,
+        "processing" : true,
+        "serverSide": true,
+        "ajax": {
+            url: base_url + "/holderDetail/pageList",
+            type:"post",
+            data : function ( d ) {
+                var obj = {};
+                obj.name = document.getElementById("holderName").innerText;
+                obj.start = d.start;
+                obj.length = d.length;
+                return obj;
+            }
+        },
+        "searching": false,
+        "ordering": false,
+        //"scrollX": true,	// scroll x，close self-adaption
+        "columns": [
+            {
+                "data": 'stockCompanyId',
+                "visible" : false,
+                "width":'1%'
+            },
+            {
+                "data": 'name',
+                "visible" : true,
+                "width":'5%'
+            },
+            {
+                "data": 'stockCode',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'lastPrice',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'lastCirculation',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'totalCapitalization',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'lastIncome',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'holderRank',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'holderName',
+                "visible" : true,
+                "width":'10%'
+            },
+            {
+                "data": 'holdCount',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'holdPercent',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'zj',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'changePercent',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'holderType',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'createdTime',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'reportTime',
+                "visible" : true,
+                "width":'6%'
+            },
+            {
+                "data": 'detail',
+                "width":'6%',
+                "render": function ( data, type, row ) {
+                    return function(){
+                        // html
+                        tableData['key'+row.id] = row;
+                        var html = '<p id="'+ row.id +'" >'+
+                            '<button class="btn btn-warning btn-xs detail" type="button">'+ "公司详情" +'</button>  '+
+                            '</p>';
+
+                        return html;
+                    };
+                }
+            }
+        ],
+        "language" : {
+            "sProcessing" : "处理中..." ,
+            "sLengthMenu" : "每页 _MENU_ 条记录" ,
+            "sZeroRecords" : "没有匹配结果" ,
+            "sInfo" : "第 _PAGE_ 页 ( 总共 _PAGES_ 页，_TOTAL_ 条记录 )" ,
+            "sInfoEmpty" : "无记录" ,
+            "sInfoFiltered" : "(由 _MAX_ 项结果过滤)" ,
+            "sInfoPostFix" : "",
+            "sSearch" : "搜索" ,
+            "sUrl" : "",
+            "sEmptyTable" : "表中数据为空" ,
+            "sLoadingRecords" : "载入中..." ,
+            "sInfoThousands" : ",",
+            "oPaginate" : {
+                "sFirst" : "首页" ,
+                "sPrevious" : "上页" ,
+                "sNext" : "下页" ,
+                "sLast" : "末页"
+            },
+            "oAria" : {
+                "sSortAscending" : "以升序排列此列" ,
+                "sSortDescending" : "以降序排列此列"
+            }
+        }
+    });
+
+    // table data
+    var tableData = {};
+
+    // search btn
+    $('#searchBtn').on('click', function(){
+        holderDetailList.fnDraw();
+    });
+
     // filter Time
     var rangesConf = {};
     rangesConf["最近一周"] = [moment().subtract(1, 'weeks').startOf('day'), moment().endOf('day')];
@@ -43,7 +193,7 @@ $(function () {
     function freshChartDate(startDate, endDate,  name) {
         $.ajax({
             type : 'POST',
-            url : base_url + '/stockDetail/countChartInfo',
+            url : base_url + '/holderDetail/countChartInfo',
             data : {
                 'startDate':startDate.format('YYYY-MM-DD HH:mm:ss'),
                 'endDate':endDate.format('YYYY-MM-DD HH:mm:ss'),

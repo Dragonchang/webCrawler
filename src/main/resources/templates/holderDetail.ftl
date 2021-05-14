@@ -49,13 +49,60 @@
             </div>
 
             <div class="row">
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">名称</span>
+                        <input type="text" class="form-control" id="company_name" autocomplete="on" >
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">公司股票代码</span>
+                        <input type="text" class="form-control" id="stock_code" autocomplete="on" >
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">持有次数</span>
+                        <select class="form-control" id="condition_time" >
+                            <option value="0" >${"所有"}</option>
+                            <option value="1" >${"1次"}</option>
+                            <option value="2" >${"2次"}</option>
+                            <option value="3" >${"3次"}</option>
+                            <option value="3" >${"4次"}</option>
+                            <option value="3" >${"4次以上"}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">季度</span>
+                        <select class="form-control" id="condition_report" >
+                            <option value="0" >${"所有"}</option>
+                            <#list reportTime as time>
+                                <option value=${time!} >${time!}</option>
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-xs-1 pull-right">
+                    <button class="btn btn-block btn-info " id="searchBtn">导出</button>
+                </div>
+                <div class="col-xs-1 pull-right">
+                    <button class="btn btn-block btn-info " id="searchBtn">查询</button>
+                </div>
+            </div>
+
+            <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-body" >
-                            <table id="shard_company_list" class="table table-bordered table-striped" width="100%" >
+                            <table id="holder_detail_list" class="table table-bordered table-striped" width="100%" >
                                 <thead>
                                 <tr>
-                                    <th width="70" name="name" >公司名称</th>
+                                    <th name="stockCompanyId" >id</th>
+                                    <th name="name" >公司名称</th>
                                     <th name="stockCode" >公司股票代码</th>
                                     <th name="lastPrice" >公司最新股价</th>
                                     <th name="lastCirculation" >公司最新流通市值</th>
@@ -70,28 +117,10 @@
                                     <th name="holderType" >股东类型</th>
                                     <th name="createdTime" >创建时间</th>
                                     <th name="reportTime" >信息发布时间</th>
+                                    <th name="detail" >详情</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <#list holderList as holder>
-                                    <tr>
-                                        <td>${holder.name}</td>
-                                        <td>${holder.stockCode}</td>
-                                        <td>${holder.lastPrice!}</td>
-                                        <td>${holder.lastCirculation!}</td>
-                                        <td>${holder.totalCapitalization!}</td>
-                                        <td>${holder.lastIncome!}</td>
-                                        <td>${holder.holderRank!}</td>
-                                        <td>${holder.holderName!}</td>
-                                        <td>${holder.holdCount!}</td>
-                                        <td>${holder.holdPercent!}</td>
-                                        <td>${holder.zj!}</td>
-                                        <td>${holder.changePercent!}</td>
-                                        <td>${holder.holderType!}</td>
-                                        <td>${holder.createdTime!}</td>
-                                        <td>${holder.reportTime!}</td>
-                                    </tr>
-                                </#list>
                                 </tbody>
                             </table>
                         </div>
@@ -109,6 +138,9 @@
 <script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
 <#-- echarts -->
 <script src="${request.contextPath}/js/plugins/echarts/echarts.common.min.js"></script>
+
+<script src="${request.contextPath}/js/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="${request.contextPath}/js/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="${request.contextPath}/js/holderDetail.js"></script>
 </body>
 </html>

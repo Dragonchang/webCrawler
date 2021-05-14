@@ -1,15 +1,20 @@
 package com.dragonchang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.crawler.EastMoneyCrawler;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
+import com.dragonchang.domain.dto.HolderDetailRequestDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderDetailDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderRecordDTO;
 import com.dragonchang.domain.dto.eastmoney.StockHolderRecordListDTO;
+import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.enums.HolderTypeEnum;
 import com.dragonchang.domain.po.CompanyShareHolder;
 import com.dragonchang.domain.po.CompanyStock;
+import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.po.ShareHolderDetail;
 import com.dragonchang.mapper.CompanyShareHolderMapper;
 import com.dragonchang.mapper.ShareHolderDetailMapper;
@@ -147,5 +152,13 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
     @Override
     public List<HolderCompanyListDTO> getHolderListByName(String name) {
         return companyShareHolderMapper.getHolderListByName(name);
+    }
+
+    @Override
+    public IPage<HolderCompanyListDTO> findPage(HolderDetailRequestDTO pageRequest) {
+        Page page = new Page();
+        page.setCurrent(pageRequest.getPage());
+        page.setSize(pageRequest.getSize());
+        return companyShareHolderMapper.findPage(page, pageRequest);
     }
 }

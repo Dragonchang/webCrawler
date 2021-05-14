@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
  **/
 @Data
 public class HolderCompanyListDTO {
+    private Integer stockCompanyId;
     /**
      * 公司名称
      */

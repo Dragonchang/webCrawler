@@ -40,7 +40,7 @@
                         <input type="text" class="form-control" id="stock_code" autocomplete="on" >
                     </div>
                 </div>
-                <div class="col-xs-1">
+                <div class="col-xs-1 pull-right">
                     <button class="btn btn-block btn-info" id="searchBtn">查询</button>
                 </div>
             </div>

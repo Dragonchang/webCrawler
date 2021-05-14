@@ -1,8 +1,12 @@
 package com.dragonchang.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
+import com.dragonchang.domain.dto.HolderDetailRequestDTO;
+import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.po.CompanyShareHolder;
 import com.dragonchang.domain.po.CompanyStock;
+import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.po.ShareHolderDetail;
 
 import java.util.List;
@@ -37,4 +41,11 @@ public interface ICompanyShareHolderService {
      * @return
      */
     List<HolderCompanyListDTO> getHolderListByName(String name);
+
+    /**
+     * 分页查询关注公司信息
+     * @param pageRequest
+     * @return
+     */
+    IPage<HolderCompanyListDTO> findPage(HolderDetailRequestDTO pageRequest);
 }

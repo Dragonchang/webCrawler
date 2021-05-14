@@ -264,7 +264,7 @@ $(function () {
 
     $(".holder_name").on('click',function() {
         var name = $(this).text();
-        window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
+        window.open(base_url + '/holderDetail/getDetail?name=' + name, '_self');
     });
 
     $('#addBtn').on('click', function(){

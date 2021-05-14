@@ -114,9 +114,9 @@ $(function() {
         if(type == "股份公司") {
             window.open(base_url + '/stockDetail?companyStockId=' + companyStockId, '_self');
         } else if(type == "机构"){
-            window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
+            window.open(base_url + '/holderDetail/getDetail?name=' + name, '_self');
         } else if(type == "个人") {
-            window.open(base_url + '/stockDetail/getDetail?name=' + name, '_self');
+            window.open(base_url + '/holderDetail/getDetail?name=' + name, '_self');
         } else {
             alert("未知关注类型"+$(this).parent('p').attr("type"))
         }
