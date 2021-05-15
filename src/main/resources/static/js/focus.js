@@ -46,7 +46,12 @@ $(function() {
             {
                 "data": 'type',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
+            },
+            {
+                "data": 'focusPrice',
+                "visible" : true,
+                "width":'10%'
             },
             {
                 "data": 'createdTime',

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -38,6 +39,11 @@ public class Focus {
      * 公司名称
      */
     private String companyName;
+
+    /**
+     * 关注时候的价格
+     */
+    private BigDecimal focusPrice;
 
     /**
      * 关注类型 1.股份公司 2.机构 3.个人

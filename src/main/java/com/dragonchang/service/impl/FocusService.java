@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.domain.dto.FocusAddRequestDTO;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
+import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.vo.JsonResult;
+import com.dragonchang.mapper.CompanyStockMapper;
 import com.dragonchang.mapper.FocusMapper;
 import com.dragonchang.service.IFocusService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -30,6 +33,9 @@ public class FocusService implements IFocusService {
 
     @Autowired
     private FocusMapper mapper;
+
+    @Autowired
+    private CompanyStockMapper companyStockMapper;
 
     @Override
     public IPage<Focus> findPage(CompanyRequestDTO pageRequest) {
@@ -58,8 +64,16 @@ public class FocusService implements IFocusService {
         if(focusList != null && focusList.size() >0) {
             return JsonResult.failure("已经被关注");
         }
+
+
         Focus focus = new Focus();
         BeanUtils.copyProperties(addRequestDTO, focus);
+        if(addRequestDTO.getStockCompanyId() != null) {
+            CompanyStock stock = companyStockMapper.selectById(addRequestDTO.getStockCompanyId());
+            focus.setFocusPrice(stock.getLastPrice());
+        } else {
+            focus.setFocusPrice(new BigDecimal(0));
+        }
         mapper.insert(focus);
         return JsonResult.success();
     }

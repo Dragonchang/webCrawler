@@ -36,14 +36,19 @@
         </if>
         <if test="request.change != null and request.change == 1">
             and a.change_percent not like CONCAT('%', '-' , '%')
+            ORDER BY a.change_percent DESC
         </if>
         <if test="request.change != null and request.change == 2">
             and a.change_percent like CONCAT('%', '-' , '%')
+            ORDER BY a.change_percent DESC
         </if>
         <if test="request.change != null and request.change == 3">
             and a.change_percent = '--'
+            ORDER BY a.change_percent DESC
         </if>
+        <if test="request.change == null or request.change == ''">
         ORDER BY c.last_price DESC ,b.report_time DESC
+        </if>
 
     </select>
 
