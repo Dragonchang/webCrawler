@@ -205,10 +205,10 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
             row.add(hodler.getLastIncome());
             row.add(hodler.getHolderRank());
             row.add(hodler.getHolderName());
-            row.add(hodler.getHoldCount());
+            row.add(Long.valueOf(hodler.getHoldCount()));
             row.add(hodler.getHoldPercent());
             row.add(hodler.getZj());
-            row.add(changePercentToNumber(hodler.getChangePercent()));
+            row.add(Double.valueOf(changePercentToNumber(hodler.getChangePercent())));
             row.add(hodler.getHolderType());
             row.add(hodler.getCreatedTime());
             row.add(hodler.getReportTime());

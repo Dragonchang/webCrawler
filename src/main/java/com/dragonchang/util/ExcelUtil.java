@@ -219,7 +219,11 @@ public class ExcelUtil {
 //                        anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_DONT_RESIZE);
 //                        drawing.createPicture(anchor, wb.addPicture(picBytes, XSSFWorkbook.PICTURE_TYPE_JPEG));
 //                    }else{
-                        cell.setCellValue(cellData.toString());
+                        if(isNumeric(cellData.toString())) {
+                            cell.setCellValue(Double.valueOf(cellData.toString()).doubleValue());
+                        } else {
+                            cell.setCellValue(cellData.toString());
+                        }
 //                    }
                 } else {
                     cell.setCellValue("");
@@ -231,6 +235,14 @@ public class ExcelUtil {
             rowIndex++;
         }
         return rowIndex;
+    }
+
+    public final static boolean isNumeric(String s) {
+        if (s != null && !"".equals(s.trim())) {
+            return s.matches("^[0.0-9.0]+$");
+        } else {
+            return false;
+        }
     }
 
     private static void insertPic(XSSFWorkbook wb, Sheet sheet,short col1, int row1,short col2,int row2)throws Exception{
