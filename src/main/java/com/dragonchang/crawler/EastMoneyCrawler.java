@@ -3,10 +3,7 @@ package com.dragonchang.crawler;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.dragonchang.constant.UrlConstant;
-import com.dragonchang.domain.dto.eastmoney.StockDetailDto;
-import com.dragonchang.domain.dto.eastmoney.StockHolderRecordListDTO;
-import com.dragonchang.domain.dto.eastmoney.StockInfoDto;
-import com.dragonchang.domain.dto.eastmoney.StockInfoListDto;
+import com.dragonchang.domain.dto.eastmoney.*;
 import com.dragonchang.domain.dto.tyc.ShareCompanyListDto;
 import com.dragonchang.domain.vo.TycResult;
 import com.dragonchang.tianyancha.HeaderUtils;
@@ -100,13 +97,40 @@ public class EastMoneyCrawler {
         return eastMoneyResult;
     }
 
+    private static  String klineFields = "f1,f2,f3,f4,f5,f6";
+    private static  String klineFields2 = "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61";
+    public KlineDetailDTO getKlineData(String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        params.put("ut", "fa5fd1943c7b386f172d6893dbfba10b");
+        params.put("klt", "101");
+        params.put("fqt", "1");
+        params.put("beg", "0");
+        params.put("end", "20500000");
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            params.put("secid", "0." + stockCode);
+        } else if(stockCode.startsWith("6")) {
+            params.put("secid", "1." + stockCode);
+        }
+        params.put("fields1", klineFields);
+        params.put("fields2", klineFields2);
+        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Kline_Info_URL,
+                HeaderUtils.getEastMoneyWebHeaders(), params);
+        System.out.println(result);
+        TycResult<KlineDetailDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<KlineDetailDTO>>() {
+        });
+        if(eastMoneyResult == null) {
+            return null;
+        }
+        return eastMoneyResult.getData();
+    }
+
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         //List<StockInfoDto> list = tycCrawler.getStockList();
 
        // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
 
-        StockHolderRecordListDTO dto = tycCrawler.getStockHodlerInfoByCode("603893");
+        KlineDetailDTO dto = tycCrawler.getKlineData("603893");
         log.info("test");
     }
 }

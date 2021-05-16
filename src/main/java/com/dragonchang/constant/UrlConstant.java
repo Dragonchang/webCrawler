@@ -43,4 +43,9 @@ public class UrlConstant {
      * 东方财富获取公司持股股东信息
      */
     public static final String Stock_Holder_Info_URL = "http://f10.eastmoney.com/ShareholderResearch/ShareholderResearchAjax";
+
+    /**
+     * 东方财富获取k线数据
+     */
+    public static final String Stock_Kline_Info_URL = "http://push2his.eastmoney.com/api/qt/stock/kline/get";
 }

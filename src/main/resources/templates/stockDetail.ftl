@@ -49,21 +49,17 @@
                     <button class="btn btn-block btn-info" id="addBtn">加关注</button>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-lg-12">
                     <div class="box">
                         <div class="box-header with-border">
-                            <h3 class="box-title">股价统计</h3>
-                            <div class="pull-right box-tools">
-                                <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" id="filterTime_avg" >
-                                    <i class="fa fa-calendar"></i>
-                                </button>
-                            </div>
+                            <h3 class="box-title">公司K线</h3>
                         </div>
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <div id="price_lineChart" style="height: 250px;"></div>
+                                    <div id="price_lineChart" style="height: 700px;"></div>
                                 </div>
                             </div>
                         </div>
@@ -71,27 +67,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="box">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">市值统计信息</h3>
-                            <div class="pull-right box-tools">
-                                <button type="button" class="btn btn-primary btn-sm daterange pull-right" data-toggle="tooltip" id="filterTime_total" >
-                                    <i class="fa fa-calendar"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div id="total_lineChart" style="height: 250px;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-lg-12">
@@ -288,10 +263,13 @@
 <!-- daterangepicker -->
 <script src="${request.contextPath}/js/adminlte/bower_components/moment/moment.min.js"></script>
 <script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<#-- echarts -->
-<script src="${request.contextPath}/js/plugins/echarts/echarts.common.min.js"></script>
+
 <script src="${request.contextPath}/js/iscroll/iscroll.js"></script>
 <script src="${request.contextPath}/layui/dist/layui.js"></script>
+
+<#-- echarts -->
+<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="${request.contextPath}/js/Kecharts.js"></script>
 <script src="${request.contextPath}/js/stockDetail.js"></script>
 
 <script>
