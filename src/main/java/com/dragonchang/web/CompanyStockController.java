@@ -5,6 +5,7 @@ import com.dragonchang.domain.dto.CompanyStockRequestDTO;
 import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.vo.JsonResult;
+import com.dragonchang.service.ICompanyPriceRecordService;
 import com.dragonchang.service.ICompanyStockService;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,8 @@ import java.util.Map;
 public class CompanyStockController {
     @Autowired
     ICompanyStockService companyStockService;
+    @Autowired
+    ICompanyPriceRecordService companyPriceRecordService;
 
     @RequestMapping
     public String index(Model model) {
@@ -42,7 +45,7 @@ public class CompanyStockController {
     @GetMapping(value = "/syncStock")
     @ApiOperation(value = "同步公司股票列表信息")
     @ResponseBody
-    public JsonResult<IPage<Focus>> syncCompanyStock() {
+    public JsonResult syncCompanyStock() {
         companyStockService.syncStockListInfo();
         return JsonResult.success();
     }
@@ -50,8 +53,16 @@ public class CompanyStockController {
     @GetMapping(value = "/syncShareHolder")
     @ApiOperation(value = "同步公司流通股东列表信息")
     @ResponseBody
-    public JsonResult<IPage<Focus>> syncCompanyShareHolderStock() {
+    public JsonResult syncCompanyShareHolderStock() {
         companyStockService.syncAllStockShareHolder();
+        return JsonResult.success();
+    }
+
+    @GetMapping(value = "/syncAllPrice")
+    @ApiOperation(value = "同步公司所有股价")
+    @ResponseBody
+    public JsonResult syncCompanyPrice() {
+        companyPriceRecordService.syncCompanyPrice();
         return JsonResult.success();
     }
 

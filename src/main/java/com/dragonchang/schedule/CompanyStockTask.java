@@ -1,5 +1,6 @@
 package com.dragonchang.schedule;
 
+import com.dragonchang.service.ICompanyPriceRecordService;
 import com.dragonchang.service.ICompanyStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class CompanyStockTask {
 
     @Autowired
     ICompanyStockService companyStockService;
+
+    @Autowired
+    ICompanyPriceRecordService companyPriceRecordService;
     /**
      * 每天下午3点执行
      */
@@ -33,5 +37,6 @@ public class CompanyStockTask {
     public void tempMigrateWithMerchantTask() {
         companyStockService.syncStockListInfo();
         companyStockService.syncAllStockShareHolder();
+        companyPriceRecordService.syncCompanyPrice();
     }
 }
