@@ -124,13 +124,37 @@ public class EastMoneyCrawler {
         return eastMoneyResult.getData();
     }
 
+    public TodayPriceDTO getTodayPrice(String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        params.put("ut", "fa5fd1943c7b386f172d6893dbfba10b");
+        params.put("fltt", "2");
+        params.put("invt", "2");
+        params.put("volt", "2");
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            params.put("secid", "0." + stockCode);
+        } else if(stockCode.startsWith("6")) {
+            params.put("secid", "1." + stockCode);
+        }
+        params.put("fields", detailFields);
+        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Detail_Info_URL,
+                HeaderUtils.getEastMoneyWebHeaders(), params);
+        System.out.println(result);
+        TycResult<TodayPriceDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<TodayPriceDTO>>() {
+        });
+        if(eastMoneyResult == null) {
+            return null;
+        }
+
+        return eastMoneyResult.getData();
+    }
+
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         //List<StockInfoDto> list = tycCrawler.getStockList();
 
        // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
 
-        KlineDetailDTO dto = tycCrawler.getKlineData("603893");
+        TodayPriceDTO dto = tycCrawler.getTodayPrice("605016");
         log.info("test");
     }
 }

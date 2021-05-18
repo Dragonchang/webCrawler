@@ -37,6 +37,6 @@ public class CompanyStockTask {
     public void tempMigrateWithMerchantTask() {
         companyStockService.syncStockListInfo();
         companyStockService.syncAllStockShareHolder();
-        companyPriceRecordService.syncCompanyPrice();
+        companyPriceRecordService.syncCompanyTodayPrice();
     }
 }
