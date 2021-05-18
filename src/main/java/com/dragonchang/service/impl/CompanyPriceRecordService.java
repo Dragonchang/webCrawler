@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,5 +61,23 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
                 }
             }
         }
+    }
+
+    @Override
+    public List<List<String>> getPriceRecordByCompany(Integer companyStockId) {
+        List<List<String>> ret = new ArrayList<>();
+        List<CompanyPriceRecord> priceRecords = companyPriceRecordMapper.selectList(new LambdaQueryWrapper<CompanyPriceRecord>()
+                            .eq(CompanyPriceRecord::getCompanyStockId, companyStockId));
+        for(CompanyPriceRecord record : priceRecords) {
+            List<String> strRecords = new ArrayList<>();
+            strRecords.add(record.getReportTime());
+            strRecords.add(record.getOpenPrice());
+            strRecords.add(record.getClosePrice());
+            strRecords.add(record.getLowestPrice());
+            strRecords.add(record.getHighestPrice());
+            ret.add(strRecords);
+        }
+
+        return ret;
     }
 }
