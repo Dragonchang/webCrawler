@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.dragonchang.constant.UrlConstant;
 import com.dragonchang.domain.dto.eastmoney.*;
-import com.dragonchang.domain.dto.tyc.ShareCompanyListDto;
 import com.dragonchang.domain.vo.TycResult;
 import com.dragonchang.tianyancha.HeaderUtils;
 import com.dragonchang.tianyancha.HttpClientUtils;
@@ -43,7 +42,6 @@ public class EastMoneyCrawler {
         params.put("fields", "f2,f12,f14,f18,f26");
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Info_URL,
                 HeaderUtils.getEastMoneyWebHeaders(), params);
-        System.out.println(result);
         TycResult<StockInfoListDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockInfoListDto>>() {
         });
         return eastMoneyResult.getData().getDiff();
@@ -68,7 +66,6 @@ public class EastMoneyCrawler {
         params.put("fields", detailFields);
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Detail_Info_URL,
                 HeaderUtils.getEastMoneyWebHeaders(), params);
-        System.out.println(result);
         TycResult<StockDetailDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockDetailDto>>() {
         });
         if(eastMoneyResult == null) {
@@ -92,11 +89,13 @@ public class EastMoneyCrawler {
         params.put("code", stockCode);
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
                 HeaderUtils.getEastMoneyHolderHeaders(stockCode), params);
-        System.out.println(result);
         StockHolderRecordListDTO eastMoneyResult = JSONObject.parseObject(result, StockHolderRecordListDTO.class);
         return eastMoneyResult;
     }
 
+    /**
+     * 获取历史股价的k线
+     */
     private static  String klineFields = "f1,f2,f3,f4,f5,f6";
     private static  String klineFields2 = "f51,f52,f53,f54,f55,f56,f57,f58,f59,f60,f61";
     public KlineDetailDTO getKlineData(String stockCode) {
@@ -115,7 +114,6 @@ public class EastMoneyCrawler {
         params.put("fields2", klineFields2);
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Kline_Info_URL,
                 HeaderUtils.getEastMoneyWebHeaders(), params);
-        System.out.println(result);
         TycResult<KlineDetailDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<KlineDetailDTO>>() {
         });
         if(eastMoneyResult == null) {
@@ -124,6 +122,11 @@ public class EastMoneyCrawler {
         return eastMoneyResult.getData();
     }
 
+    /**
+     * 获取公司当天的股价
+     * @param stockCode
+     * @return
+     */
     public TodayPriceDTO getTodayPrice(String stockCode) {
         Map<String, String> params = new HashMap<>();
         params.put("ut", "fa5fd1943c7b386f172d6893dbfba10b");
@@ -138,7 +141,6 @@ public class EastMoneyCrawler {
         params.put("fields", detailFields);
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Detail_Info_URL,
                 HeaderUtils.getEastMoneyWebHeaders(), params);
-        System.out.println(result);
         TycResult<TodayPriceDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<TodayPriceDTO>>() {
         });
         if(eastMoneyResult == null) {
@@ -148,13 +150,69 @@ public class EastMoneyCrawler {
         return eastMoneyResult.getData();
     }
 
+    /**
+     * 获取财报发布时间表
+     * @param stockCode
+     */
+    public List<FinanceReportTimeDTO> getFinanceReport(String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            stockCode = "SZ"+stockCode;
+        } else if(stockCode.startsWith("6")) {
+            stockCode = "SH"+stockCode;
+        }
+
+        params.put("companyType", "4");
+        params.put("reportDateType", "0");
+        params.put("code", stockCode);
+        String result = HttpClientUtils.doGetForString(UrlConstant.Finance_Analysis_Time_URL,
+               null, params);
+        TycResult<List<FinanceReportTimeDTO>> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<List<FinanceReportTimeDTO>>>() {
+        });
+        if(eastMoneyResult == null) {
+            return null;
+        }
+        return eastMoneyResult.getData();
+    }
+
+
+    /**
+     * 获取财报发布详细信息
+     * @param stockCode
+     */
+    public List<FinanceAnalysisDataDTO> getFinanceAnalysisData(String dates, String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            stockCode = "SZ"+stockCode;
+        } else if(stockCode.startsWith("6")) {
+            stockCode = "SH"+stockCode;
+        }
+
+        params.put("companyType", "4");
+        params.put("reportDateType", "0");
+        params.put("reportType", "1");
+        params.put("dates", dates);
+        params.put("code", stockCode);
+        String result = HttpClientUtils.doGetForString(UrlConstant.Finance_Analysis_Result_URL,
+                null, params);
+        TycResult<List<FinanceAnalysisDataDTO>> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<List<FinanceAnalysisDataDTO>>>() {
+        });
+        if(eastMoneyResult == null) {
+            return null;
+        }
+        return eastMoneyResult.getData();
+    }
+
+
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         //List<StockInfoDto> list = tycCrawler.getStockList();
 
        // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
 
-        TodayPriceDTO dto = tycCrawler.getTodayPrice("605016");
+        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300940");
+
+        //List<FinanceAnalysisDataDTO> data = tycCrawler.getFinanceAnalysisData("2021-03-31,2020-12-31,2020-09-30,2020-06-30,2020-03-31","603456");
         log.info("test");
     }
 }

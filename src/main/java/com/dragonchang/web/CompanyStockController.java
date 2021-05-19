@@ -2,7 +2,6 @@ package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
-import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.ICompanyPriceRecordService;
@@ -55,6 +54,14 @@ public class CompanyStockController {
     @ResponseBody
     public JsonResult syncCompanyShareHolderStock() {
         companyStockService.syncAllStockShareHolder();
+        return JsonResult.success();
+    }
+
+    @GetMapping(value = "/syncFinance")
+    @ApiOperation(value = "同步公司财务信息")
+    @ResponseBody
+    public JsonResult syncCompanyFinance() {
+        companyPriceRecordService.syncAllCompanyFinance();
         return JsonResult.success();
     }
 

@@ -36,7 +36,17 @@ public class CompanyStockTask {
     @Transactional
     public void tempMigrateWithMerchantTask() {
         companyStockService.syncStockListInfo();
-        companyStockService.syncAllStockShareHolder();
         companyPriceRecordService.syncCompanyTodayPrice();
+        companyStockService.syncAllStockShareHolder();
+    }
+
+    /**
+     * 每天下午11点执行
+     */
+    @Async
+    @Scheduled(cron = "0 0 23 * * ? ")
+    @Transactional
+    public void syncFinance() {
+        companyPriceRecordService.syncAllCompanyFinance();
     }
 }

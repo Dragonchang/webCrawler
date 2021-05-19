@@ -20,4 +20,9 @@ public interface ICompanyPriceRecordService {
      */
     List<List<String>> getPriceRecordByCompany(Integer companyStockId);
 
+    /**
+     * 同步所有公司的财务信息
+     */
+    void syncAllCompanyFinance();
+
 }

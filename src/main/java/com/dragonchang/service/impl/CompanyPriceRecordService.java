@@ -1,13 +1,19 @@
 package com.dragonchang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.dragonchang.crawler.EastMoneyCrawler;
+import com.dragonchang.domain.dto.eastmoney.FinanceAnalysisDataDTO;
+import com.dragonchang.domain.dto.eastmoney.FinanceReportTimeDTO;
 import com.dragonchang.domain.dto.eastmoney.KlineDetailDTO;
 import com.dragonchang.domain.dto.eastmoney.TodayPriceDTO;
+import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyPriceRecord;
 import com.dragonchang.domain.po.CompanyStock;
+import com.dragonchang.domain.po.FinanceAnalysis;
 import com.dragonchang.mapper.CompanyPriceRecordMapper;
 import com.dragonchang.mapper.CompanyStockMapper;
+import com.dragonchang.mapper.FinanceAnalysisMapper;
 import com.dragonchang.service.ICompanyPriceRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +21,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,8 +43,11 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     @Autowired
     private CompanyPriceRecordMapper companyPriceRecordMapper;
     @Autowired
+    private FinanceAnalysisMapper financeAnalysisMapper;
+    @Autowired
     private EastMoneyCrawler eastMoneyCrawler;
 
+    private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     @Override
     public void syncCompanyPrice() {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
@@ -110,5 +122,57 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
         }
 
         return ret;
+    }
+
+    @Override
+    public void syncAllCompanyFinance() {
+        List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
+        for(CompanyStock stock : companyStockList) {
+            List<FinanceReportTimeDTO> reportTimeDTOS = eastMoneyCrawler.getFinanceReport(stock.getStockCode());
+            if(CollectionUtils.isNotEmpty(reportTimeDTOS)) {
+                String dates = "";
+                for (FinanceReportTimeDTO dto : reportTimeDTOS) {
+                    dates = dates +"," +dto.getREPORT_DATE().split(" ")[0];
+                }
+                dates = dates.substring(1, dates.length());
+                if(StringUtils.isNotBlank(dates)) {
+                    List<FinanceAnalysisDataDTO> financeAnalysisDataDTOS = eastMoneyCrawler.getFinanceAnalysisData(dates, stock.getStockCode());
+                    if(CollectionUtils.isNotEmpty(financeAnalysisDataDTOS)) {
+                        for (FinanceAnalysisDataDTO dataDTO : financeAnalysisDataDTOS) {
+                            String reportTime = dataDTO.getREPORT_DATE().split(" ")[0];
+                            FinanceAnalysis query = financeAnalysisMapper.selectOne(new LambdaQueryWrapper<FinanceAnalysis>()
+                                    .eq(FinanceAnalysis::getStockCompanyId, stock.getId())
+                                    .eq(FinanceAnalysis::getReportTime, reportTime));
+                            if(query != null) {
+                                continue;
+                            }
+
+                            FinanceAnalysis financeAnalysis = new FinanceAnalysis();
+                            financeAnalysis.setStockCompanyId(stock.getId());
+                            financeAnalysis.setTotalIncome(new BigDecimal(dataDTO.getTOTAL_OPERATE_INCOME()));
+                            financeAnalysis.setNetProfit(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()));
+                            financeAnalysis.setReportTime(reportTime);
+                            if(dataDTO.getREPORT_TYPE() != null) {
+                                if(FinanceReportTypeEnum.firstQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                                    financeAnalysis.setReportType(FinanceReportTypeEnum.firstQuarter.getCode());
+                                }
+                                if(FinanceReportTypeEnum.secondQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                                    financeAnalysis.setReportType(FinanceReportTypeEnum.secondQuarter.getCode());
+                                }
+                                if(FinanceReportTypeEnum.thirdQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                                    financeAnalysis.setReportType(FinanceReportTypeEnum.thirdQuarter.getCode());
+                                }
+                                if(FinanceReportTypeEnum.annualQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                                    financeAnalysis.setReportType(FinanceReportTypeEnum.annualQuarter.getCode());
+                                }
+                            }
+
+                            financeAnalysis.setUpdatedTime(LocalDateTime.parse(dataDTO.getUPDATE_DATE(),df));
+                            financeAnalysisMapper.insert(financeAnalysis);
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -48,4 +48,16 @@ public class UrlConstant {
      * 东方财富获取k线数据
      */
     public static final String Stock_Kline_Info_URL = "http://push2his.eastmoney.com/api/qt/stock/kline/get";
+
+    /**
+     * 东方财富获取财报发布日期
+     */
+    public static final String Finance_Analysis_Time_URL = "http://f10.eastmoney.com/NewFinanceAnalysis/lrbDateAjaxNew";
+
+    /**
+     * 东方财富获取财报发布详细信息
+     */
+    public static final String Finance_Analysis_Result_URL = "http://f10.eastmoney.com/NewFinanceAnalysis/lrbAjaxNew";
+
+
 }
