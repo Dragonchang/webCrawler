@@ -17,7 +17,6 @@ import com.dragonchang.mapper.FinanceAnalysisMapper;
 import com.dragonchang.service.ICompanyPriceRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,16 +47,20 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     private EastMoneyCrawler eastMoneyCrawler;
 
     private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
     @Override
-    public void syncCompanyPrice() {
+    public void syncCompanyPrice(Integer companyStockId) {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
-        for(CompanyStock stock : companyStockList) {
+        for (CompanyStock stock : companyStockList) {
+            if (companyStockId != null && stock.getId() < companyStockId) {
+                continue;
+            }
             KlineDetailDTO dto = eastMoneyCrawler.getKlineData(stock.getStockCode());
-            if(dto != null) {
+            if (dto != null) {
                 for (String kline : dto.getKlines()) {
-                    if(StringUtils.isNotBlank(kline)) {
-                        String [] line = kline.split(",");
-                        if(line != null && line.length >1) {
+                    if (StringUtils.isNotBlank(kline)) {
+                        String[] line = kline.split(",");
+                        if (line != null && line.length > 1) {
                             CompanyPriceRecord record = new CompanyPriceRecord();
                             record.setCompanyStockId(stock.getId());
                             record.setOpenPrice(line[1]);
@@ -66,9 +69,9 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
                             record.setLowestPrice(line[4]);
                             record.setReportTime(line[0]);
                             CompanyPriceRecord query = companyPriceRecordMapper.selectOne(new LambdaQueryWrapper<CompanyPriceRecord>()
-                            .eq(CompanyPriceRecord::getCompanyStockId, stock.getId())
-                            .eq(CompanyPriceRecord::getReportTime, line[0]));
-                            if(query != null) {
+                                    .eq(CompanyPriceRecord::getCompanyStockId, stock.getId())
+                                    .eq(CompanyPriceRecord::getReportTime, line[0]));
+                            if (query != null) {
                                 continue;
                             }
                             companyPriceRecordMapper.insert(record);
@@ -87,7 +90,7 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
         String currentTime = sdf.format(d);
         System.out.println("格式化后的日期：" + currentTime);
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
-        for(CompanyStock stock : companyStockList) {
+        for (CompanyStock stock : companyStockList) {
             TodayPriceDTO priceDTO = eastMoneyCrawler.getTodayPrice(stock.getStockCode());
             CompanyPriceRecord record = new CompanyPriceRecord();
             record.setOpenPrice(priceDTO.getF46());
@@ -99,7 +102,7 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
             CompanyPriceRecord query = companyPriceRecordMapper.selectOne(new LambdaQueryWrapper<CompanyPriceRecord>()
                     .eq(CompanyPriceRecord::getCompanyStockId, stock.getId())
                     .eq(CompanyPriceRecord::getReportTime, currentTime));
-            if(query != null) {
+            if (query != null) {
                 continue;
             }
             companyPriceRecordMapper.insert(record);
@@ -110,8 +113,8 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     public List<List<String>> getPriceRecordByCompany(Integer companyStockId) {
         List<List<String>> ret = new ArrayList<>();
         List<CompanyPriceRecord> priceRecords = companyPriceRecordMapper.selectList(new LambdaQueryWrapper<CompanyPriceRecord>()
-                            .eq(CompanyPriceRecord::getCompanyStockId, companyStockId));
-        for(CompanyPriceRecord record : priceRecords) {
+                .eq(CompanyPriceRecord::getCompanyStockId, companyStockId));
+        for (CompanyPriceRecord record : priceRecords) {
             List<String> strRecords = new ArrayList<>();
             strRecords.add(record.getReportTime());
             strRecords.add(record.getOpenPrice());
@@ -127,52 +130,134 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     @Override
     public void syncAllCompanyFinance() {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
-        for(CompanyStock stock : companyStockList) {
+        for (CompanyStock stock : companyStockList) {
             List<FinanceReportTimeDTO> reportTimeDTOS = eastMoneyCrawler.getFinanceReport(stock.getStockCode());
-            if(CollectionUtils.isNotEmpty(reportTimeDTOS)) {
+            if (CollectionUtils.isNotEmpty(reportTimeDTOS)) {
+                int index = 0;
                 String dates = "";
                 for (FinanceReportTimeDTO dto : reportTimeDTOS) {
-                    dates = dates +"," +dto.getREPORT_DATE().split(" ")[0];
-                }
-                dates = dates.substring(1, dates.length());
-                if(StringUtils.isNotBlank(dates)) {
-                    List<FinanceAnalysisDataDTO> financeAnalysisDataDTOS = eastMoneyCrawler.getFinanceAnalysisData(dates, stock.getStockCode());
-                    if(CollectionUtils.isNotEmpty(financeAnalysisDataDTOS)) {
-                        for (FinanceAnalysisDataDTO dataDTO : financeAnalysisDataDTOS) {
-                            String reportTime = dataDTO.getREPORT_DATE().split(" ")[0];
-                            FinanceAnalysis query = financeAnalysisMapper.selectOne(new LambdaQueryWrapper<FinanceAnalysis>()
-                                    .eq(FinanceAnalysis::getStockCompanyId, stock.getId())
-                                    .eq(FinanceAnalysis::getReportTime, reportTime));
-                            if(query != null) {
-                                continue;
-                            }
-
-                            FinanceAnalysis financeAnalysis = new FinanceAnalysis();
-                            financeAnalysis.setStockCompanyId(stock.getId());
-                            financeAnalysis.setTotalIncome(new BigDecimal(dataDTO.getTOTAL_OPERATE_INCOME()));
-                            financeAnalysis.setNetProfit(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()));
-                            financeAnalysis.setReportTime(reportTime);
-                            if(dataDTO.getREPORT_TYPE() != null) {
-                                if(FinanceReportTypeEnum.firstQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
-                                    financeAnalysis.setReportType(FinanceReportTypeEnum.firstQuarter.getCode());
-                                }
-                                if(FinanceReportTypeEnum.secondQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
-                                    financeAnalysis.setReportType(FinanceReportTypeEnum.secondQuarter.getCode());
-                                }
-                                if(FinanceReportTypeEnum.thirdQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
-                                    financeAnalysis.setReportType(FinanceReportTypeEnum.thirdQuarter.getCode());
-                                }
-                                if(FinanceReportTypeEnum.annualQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
-                                    financeAnalysis.setReportType(FinanceReportTypeEnum.annualQuarter.getCode());
-                                }
-                            }
-
-                            financeAnalysis.setUpdatedTime(LocalDateTime.parse(dataDTO.getUPDATE_DATE(),df));
-                            financeAnalysisMapper.insert(financeAnalysis);
-                        }
+                    index++;
+                    dates = dates + "," + dto.getREPORT_DATE().split(" ")[0];
+                    if (index % 5 == 0) {
+                        sync(dates, stock);
+                        dates = "";
+                    }
+                    if (index == reportTimeDTOS.size()) {
+                        sync(dates, stock);
                     }
                 }
             }
         }
+    }
+
+    private void sync(String dates, CompanyStock stock) {
+        if (StringUtils.isNotBlank(dates)) {
+            dates = dates.substring(1, dates.length());
+            List<FinanceAnalysisDataDTO> financeAnalysisDataDTOS = eastMoneyCrawler.getFinanceAnalysisData(dates, stock.getStockCode());
+            if (CollectionUtils.isNotEmpty(financeAnalysisDataDTOS)) {
+                for (FinanceAnalysisDataDTO dataDTO : financeAnalysisDataDTOS) {
+                    String reportTime = dataDTO.getREPORT_DATE().split(" ")[0];
+                    FinanceAnalysis query = financeAnalysisMapper.selectOne(new LambdaQueryWrapper<FinanceAnalysis>()
+                            .eq(FinanceAnalysis::getStockCompanyId, stock.getId())
+                            .eq(FinanceAnalysis::getReportTime, reportTime));
+                    if (query != null) {
+                        continue;
+                    }
+
+                    FinanceAnalysis financeAnalysis = new FinanceAnalysis();
+                    financeAnalysis.setStockCompanyId(stock.getId());
+                    if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getTOTAL_OPERATE_INCOME())) {
+                        financeAnalysis.setTotalIncome(new BigDecimal(dataDTO.getTOTAL_OPERATE_INCOME()));
+                        financeAnalysis.setTotalAddPercent(getAddPercent(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()),
+                                getBeforeTotalQuarter(dataDTO, financeAnalysisDataDTOS)));
+                    }
+                    if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getDEDUCT_PARENT_NETPROFIT())) {
+                        financeAnalysis.setNetProfit(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()));
+                        financeAnalysis.setNetProfitPercent(getAddPercent(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()),
+                                getBeforeProfitQuarter(dataDTO, financeAnalysisDataDTOS)));
+                    }
+
+                    financeAnalysis.setReportTime(reportTime);
+                    if (dataDTO.getREPORT_TYPE() != null) {
+                        if (FinanceReportTypeEnum.firstQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.firstQuarter.getCode());
+                        }
+                        if (FinanceReportTypeEnum.secondQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.secondQuarter.getCode());
+                        }
+                        if (FinanceReportTypeEnum.thirdQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.thirdQuarter.getCode());
+                        }
+                        if (FinanceReportTypeEnum.annualQuarter.getName().equals(dataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.annualQuarter.getCode());
+                        }
+                    }
+                    if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getUPDATE_DATE())) {
+                        financeAnalysis.setUpdatedTime(LocalDateTime.parse(dataDTO.getUPDATE_DATE(), df));
+                    }
+                    financeAnalysisMapper.insert(financeAnalysis);
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取上一年同季度总营收
+     *
+     * @param now
+     * @param list
+     * @return
+     */
+    private BigDecimal getBeforeTotalQuarter(FinanceAnalysisDataDTO now, List<FinanceAnalysisDataDTO> list) {
+        Integer beforeYear = Integer.valueOf(now.getREPORT_DATE().substring(0, 4)) - 1;
+        String beforeQuarter = beforeYear + now.getREPORT_DATE().substring(4, 10);
+        FinanceAnalysisDataDTO before = null;
+        for (FinanceAnalysisDataDTO dataDTO : list) {
+            if (dataDTO.getREPORT_DATE().startsWith(beforeQuarter)) {
+                before = dataDTO;
+                break;
+            }
+        }
+        if (before == null || StringUtils.isBlank(before.getTOTAL_OPERATE_INCOME())) {
+            return null;
+        }
+        return new BigDecimal(before.getTOTAL_OPERATE_INCOME());
+    }
+
+    /**
+     * 获取上一年同季度扣非
+     *
+     * @param now
+     * @param list
+     * @return
+     */
+    private BigDecimal getBeforeProfitQuarter(FinanceAnalysisDataDTO now, List<FinanceAnalysisDataDTO> list) {
+        Integer beforeYear = Integer.valueOf(now.getREPORT_DATE().substring(0, 4)) - 1;
+        String beforeQuarter = beforeYear + now.getREPORT_DATE().substring(4, 10);
+        FinanceAnalysisDataDTO before = null;
+        for (FinanceAnalysisDataDTO dataDTO : list) {
+            if (dataDTO.getREPORT_DATE().startsWith(beforeQuarter)) {
+                before = dataDTO;
+                break;
+            }
+        }
+        if (before == null || StringUtils.isBlank(before.getDEDUCT_PARENT_NETPROFIT())) {
+            return null;
+        }
+        return new BigDecimal(before.getDEDUCT_PARENT_NETPROFIT());
+    }
+
+    /**
+     * 获取同期的同比增加
+     *
+     * @param now
+     * @param before
+     * @return
+     */
+    private BigDecimal getAddPercent(BigDecimal now, BigDecimal before) {
+        if (now == null || before == null) {
+            return new BigDecimal(0);
+        }
+        return (now.divide(before).subtract(new BigDecimal(1))).multiply(new BigDecimal(100));
     }
 }

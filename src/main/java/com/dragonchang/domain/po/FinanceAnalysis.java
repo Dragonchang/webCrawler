@@ -37,9 +37,19 @@ public class FinanceAnalysis {
     private BigDecimal totalIncome;
 
     /**
+     * 总营收同比增长
+     */
+    private BigDecimal totalAddPercent;
+
+    /**
      * 扣非利润
      */
     private BigDecimal netProfit;
+
+    /**
+     * 扣非同比增长
+     */
+    private BigDecimal netProfitPercent;
 
     /**
      * 财务信息发布季度

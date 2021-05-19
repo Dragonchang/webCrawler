@@ -167,6 +167,7 @@ public class EastMoneyCrawler {
         params.put("code", stockCode);
         String result = HttpClientUtils.doGetForString(UrlConstant.Finance_Analysis_Time_URL,
                null, params);
+        System.out.println(result);
         TycResult<List<FinanceReportTimeDTO>> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<List<FinanceReportTimeDTO>>>() {
         });
         if(eastMoneyResult == null) {
@@ -195,6 +196,7 @@ public class EastMoneyCrawler {
         params.put("code", stockCode);
         String result = HttpClientUtils.doGetForString(UrlConstant.Finance_Analysis_Result_URL,
                 null, params);
+        System.out.println(result);
         TycResult<List<FinanceAnalysisDataDTO>> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<List<FinanceAnalysisDataDTO>>>() {
         });
         if(eastMoneyResult == null) {
@@ -210,9 +212,9 @@ public class EastMoneyCrawler {
 
        // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
 
-        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300940");
+        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");
 
-        //List<FinanceAnalysisDataDTO> data = tycCrawler.getFinanceAnalysisData("2021-03-31,2020-12-31,2020-09-30,2020-06-30,2020-03-31","603456");
+        List<FinanceAnalysisDataDTO> data = tycCrawler.getFinanceAnalysisData("2021-03-31,2020-12-31,2020-09-30,2020-06-30,2020-03-31,2019-12-31","300716");
         log.info("test");
     }
 }

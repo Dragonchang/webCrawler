@@ -6,7 +6,7 @@ public interface ICompanyPriceRecordService {
     /**
      * 同步所有公司的历史股价
      */
-    void syncCompanyPrice();
+    void syncCompanyPrice(Integer companyStockId);
 
     /**
      * 同步所有公司的当天股价

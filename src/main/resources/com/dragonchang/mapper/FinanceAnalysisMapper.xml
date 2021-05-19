@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragonchang.mapper.FinanceAnalysisMapper">
+    <resultMap id="BaseResultMap" type="com.dragonchang.domain.po.FinanceAnalysis">
+        <id column="id" property="id"/>
+        <result column="stock_company_id" property="stockCompanyId"/>
+        <result column="total_income" property="totalIncome"/>
+        <result column="total_add_percent" property="totalAddPercent"/>
+        <result column="net_profit" property="netProfit"/>
+        <result column="net_profit_percent" property="netProfitPercent"/>
+        <result column="report_time" property="reportTime"/>
+        <result column="report_type" property="reportType"/>
+        <result column="deleted" property="deleted"/>
+        <result column="last_income" property="createdTime"/>
+        <result column="market_time" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+    <select id="getReportTimeList" resultType="java.lang.String">
+        select report_time from  t_finance_analysis group by report_time having count(report_time) > 1 ORDER BY report_time DESC
+    </select>
+</mapper>
