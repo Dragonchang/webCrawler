@@ -1,7 +1,9 @@
 package com.dragonchang.service.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
+import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
 import com.dragonchang.domain.po.FinanceAnalysis;
 import com.dragonchang.mapper.FinanceAnalysisMapper;
 import com.dragonchang.service.ICompanyFinanceAnalysisService;
@@ -30,7 +32,10 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
     }
 
     @Override
-    public IPage<FinanceAnalysis> findPage(FinanceAnalysisRequestDTO pageRequest) {
-        return null;
+    public IPage<FinanceAnalysisResponseDTO> findPage(FinanceAnalysisRequestDTO pageRequest) {
+        Page page = new Page();
+        page.setCurrent(pageRequest.getPage());
+        page.setSize(pageRequest.getSize());
+        return financeAnalysisMapper.findPage(page, pageRequest);
     }
 }

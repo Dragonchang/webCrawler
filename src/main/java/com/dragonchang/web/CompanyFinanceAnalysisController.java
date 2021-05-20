@@ -3,6 +3,7 @@ package com.dragonchang.web;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
 import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
+import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.FinanceAnalysis;
 import com.dragonchang.service.ICompanyFinanceAnalysisService;
@@ -37,7 +38,7 @@ public class CompanyFinanceAnalysisController {
     public String index(Model model) {
         //上报年度列表
         List<String> reportTime = companyFinanceAnalysisService.getTotalReportTimeList();
-        model.addAttribute("totalReportTime", reportTime);
+        model.addAttribute("reportTime", reportTime);
         return "financeAnalysis";
     }
 
@@ -66,11 +67,11 @@ public class CompanyFinanceAnalysisController {
         pageRequest.setPage(start);
         pageRequest.setSize(length);
 
-        IPage<FinanceAnalysis> companyPage = companyFinanceAnalysisService.findPage(pageRequest);
+        IPage<FinanceAnalysisResponseDTO> companyPage = companyFinanceAnalysisService.findPage(pageRequest);
         if (companyPage.getTotal() > 0) {
             companyPage.setTotal(companyPage.getTotal() - 1);
         }
-        List<FinanceAnalysis> list = companyPage.getRecords();
+        List<FinanceAnalysisResponseDTO> list = companyPage.getRecords();
         int list_count = (int) companyPage.getTotal() + 1;
 
         // package result
