@@ -212,7 +212,7 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
                             financeAnalysis.setReportType(FinanceReportTypeEnum.annualQuarter.getCode());
                         }
                     }
-                    if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getUPDATE_DATE())) {
+                    if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getUPDATE_DATE()) && !dataDTO.getUPDATE_DATE().startsWith("1900-01-01")) {
                         financeAnalysis.setUpdatedTime(LocalDateTime.parse(dataDTO.getUPDATE_DATE(), df));
                     }
                     financeAnalysisMapper.insert(financeAnalysis);
@@ -278,6 +278,9 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     private BigDecimal getAddPercent(BigDecimal now, BigDecimal before) {
         if (now == null || before == null) {
             return new BigDecimal(0);
+        }
+        if(before.compareTo(new BigDecimal(0))==0) {
+            return new BigDecimal(100);
         }
         BigDecimal precent = now.divide(before, 4, RoundingMode.HALF_UP);
         BigDecimal addprecent =  precent.subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
