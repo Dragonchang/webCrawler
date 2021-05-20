@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -135,22 +136,31 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
             if (CollectionUtils.isNotEmpty(reportTimeDTOS)) {
                 int index = 0;
                 String dates = "";
+                List<FinanceAnalysis> tempFinanceAnalysisDataDTOS = new ArrayList<>();
                 for (FinanceReportTimeDTO dto : reportTimeDTOS) {
                     index++;
                     dates = dates + "," + dto.getREPORT_DATE().split(" ")[0];
                     if (index % 5 == 0) {
-                        sync(dates, stock);
+                        sync(dates, stock, tempFinanceAnalysisDataDTOS);
                         dates = "";
                     }
                     if (index == reportTimeDTOS.size()) {
-                        sync(dates, stock);
+                        sync(dates, stock, tempFinanceAnalysisDataDTOS);
                     }
+                }
+
+                for(FinanceAnalysis financeAnalysis : tempFinanceAnalysisDataDTOS) {
+                    financeAnalysis.setTotalAddPercent(getAddPercent(financeAnalysis.getTotalIncome(),
+                            getBeforeTotalQuarter(financeAnalysis, tempFinanceAnalysisDataDTOS)));
+                    financeAnalysis.setNetProfitPercent(getAddPercent(financeAnalysis.getNetProfit(),
+                            getBeforeProfitQuarter(financeAnalysis, tempFinanceAnalysisDataDTOS)));
+                    financeAnalysisMapper.updateById(financeAnalysis);
                 }
             }
         }
     }
 
-    private void sync(String dates, CompanyStock stock) {
+    private void sync(String dates, CompanyStock stock, List<FinanceAnalysis> list) {
         if (StringUtils.isNotBlank(dates)) {
             dates = dates.substring(1, dates.length());
             List<FinanceAnalysisDataDTO> financeAnalysisDataDTOS = eastMoneyCrawler.getFinanceAnalysisData(dates, stock.getStockCode());
@@ -168,13 +178,23 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
                     financeAnalysis.setStockCompanyId(stock.getId());
                     if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getTOTAL_OPERATE_INCOME())) {
                         financeAnalysis.setTotalIncome(new BigDecimal(dataDTO.getTOTAL_OPERATE_INCOME()));
-                        financeAnalysis.setTotalAddPercent(getAddPercent(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()),
-                                getBeforeTotalQuarter(dataDTO, financeAnalysisDataDTOS)));
+
                     }
                     if (dataDTO != null && StringUtils.isNotBlank(dataDTO.getDEDUCT_PARENT_NETPROFIT())) {
                         financeAnalysis.setNetProfit(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()));
-                        financeAnalysis.setNetProfitPercent(getAddPercent(new BigDecimal(dataDTO.getDEDUCT_PARENT_NETPROFIT()),
-                                getBeforeProfitQuarter(dataDTO, financeAnalysisDataDTOS)));
+                    }
+                    BigDecimal netProfit = financeAnalysis.getNetProfit();
+                    BigDecimal total = financeAnalysis.getTotalIncome();
+                    if(total != null && netProfit != null) {
+                        if(netProfit.compareTo(new BigDecimal(0)) > 0  && total.compareTo(new BigDecimal(0)) > 0) {
+                            BigDecimal percent = netProfit.divide(total,4, RoundingMode.HALF_UP);
+                            financeAnalysis.setProfitTotalPercent(percent.multiply(new BigDecimal(100)));
+                        } else {
+                            financeAnalysis.setProfitTotalPercent(new BigDecimal(0));
+                        }
+
+                    } else {
+                        financeAnalysis.setProfitTotalPercent(new BigDecimal(0));
                     }
 
                     financeAnalysis.setReportTime(reportTime);
@@ -196,6 +216,7 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
                         financeAnalysis.setUpdatedTime(LocalDateTime.parse(dataDTO.getUPDATE_DATE(), df));
                     }
                     financeAnalysisMapper.insert(financeAnalysis);
+                    list.add(financeAnalysis);
                 }
             }
         }
@@ -208,20 +229,20 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
      * @param list
      * @return
      */
-    private BigDecimal getBeforeTotalQuarter(FinanceAnalysisDataDTO now, List<FinanceAnalysisDataDTO> list) {
-        Integer beforeYear = Integer.valueOf(now.getREPORT_DATE().substring(0, 4)) - 1;
-        String beforeQuarter = beforeYear + now.getREPORT_DATE().substring(4, 10);
-        FinanceAnalysisDataDTO before = null;
-        for (FinanceAnalysisDataDTO dataDTO : list) {
-            if (dataDTO.getREPORT_DATE().startsWith(beforeQuarter)) {
+    private BigDecimal getBeforeTotalQuarter(FinanceAnalysis now, List<FinanceAnalysis> list) {
+        Integer beforeYear = Integer.valueOf(now.getReportTime().substring(0, 4)) - 1;
+        String beforeQuarter = beforeYear + now.getReportTime().substring(4, 10);
+        FinanceAnalysis before = null;
+        for (FinanceAnalysis dataDTO : list) {
+            if (dataDTO.getReportTime().startsWith(beforeQuarter)) {
                 before = dataDTO;
                 break;
             }
         }
-        if (before == null || StringUtils.isBlank(before.getTOTAL_OPERATE_INCOME())) {
+        if (before == null || before.getTotalIncome() == null) {
             return null;
         }
-        return new BigDecimal(before.getTOTAL_OPERATE_INCOME());
+        return before.getTotalIncome();
     }
 
     /**
@@ -231,20 +252,20 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
      * @param list
      * @return
      */
-    private BigDecimal getBeforeProfitQuarter(FinanceAnalysisDataDTO now, List<FinanceAnalysisDataDTO> list) {
-        Integer beforeYear = Integer.valueOf(now.getREPORT_DATE().substring(0, 4)) - 1;
-        String beforeQuarter = beforeYear + now.getREPORT_DATE().substring(4, 10);
-        FinanceAnalysisDataDTO before = null;
-        for (FinanceAnalysisDataDTO dataDTO : list) {
-            if (dataDTO.getREPORT_DATE().startsWith(beforeQuarter)) {
+    private BigDecimal getBeforeProfitQuarter(FinanceAnalysis now, List<FinanceAnalysis> list) {
+        Integer beforeYear = Integer.valueOf(now.getReportTime().substring(0, 4)) - 1;
+        String beforeQuarter = beforeYear + now.getReportTime().substring(4, 10);
+        FinanceAnalysis before = null;
+        for (FinanceAnalysis dataDTO : list) {
+            if (dataDTO.getReportTime().startsWith(beforeQuarter)) {
                 before = dataDTO;
                 break;
             }
         }
-        if (before == null || StringUtils.isBlank(before.getDEDUCT_PARENT_NETPROFIT())) {
+        if (before == null || before.getNetProfit() == null) {
             return null;
         }
-        return new BigDecimal(before.getDEDUCT_PARENT_NETPROFIT());
+        return before.getNetProfit();
     }
 
     /**
@@ -258,6 +279,8 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
         if (now == null || before == null) {
             return new BigDecimal(0);
         }
-        return (now.divide(before).subtract(new BigDecimal(1))).multiply(new BigDecimal(100));
+        BigDecimal precent = now.divide(before, 4, RoundingMode.HALF_UP);
+        BigDecimal addprecent =  precent.subtract(new BigDecimal(1)).multiply(new BigDecimal(100));
+        return addprecent;
     }
 }

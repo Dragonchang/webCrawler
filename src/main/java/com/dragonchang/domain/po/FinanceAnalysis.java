@@ -52,6 +52,11 @@ public class FinanceAnalysis {
     private BigDecimal netProfitPercent;
 
     /**
+     * 扣非营收百分比
+     */
+    private BigDecimal profitTotalPercent;
+
+    /**
      * 财务信息发布季度
      */
     private String reportTime;

@@ -26,6 +26,7 @@ CREATE TABLE `t_finance_analysis` (
                             `total_add_percent` decimal(10,2) DEFAULT NULL COMMENT '总营收同比增长',
                             `net_profit` decimal(40,5) DEFAULT NULL COMMENT '扣非利润',
                             `net_profit_percent` decimal(10,2) DEFAULT NULL COMMENT '扣非同比增长',
+                            `profit_total_percent` decimal(10,2) DEFAULT NULL COMMENT '扣非营收百分比',
                             `report_time` varchar(32) CHARACTER SET utf8mb4 NOT NULL COMMENT '财务信息发布时间',
                             `report_type` varchar(36) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT '报告类型1一季度报，2中报，3三季度报，4 年报',
                             `deleted` char(1) CHARACTER SET utf8mb4 NOT NULL DEFAULT '0' COMMENT '是否删除(0-否，1-是)',
