@@ -1,6 +1,7 @@
 package com.dragonchang.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,6 +12,7 @@ import java.time.LocalDateTime;
  * @author: zhangfl
  * @create: 2021-05-20 14:35
  **/
+@Data
 public class FinanceAnalysisResponseDTO {
 
     private Integer id;

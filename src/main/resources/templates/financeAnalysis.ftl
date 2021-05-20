@@ -33,12 +33,12 @@
                     <div class="input-group">
                         <span class="input-group-addon">排序方式</span>
                         <select class="form-control" id="condition_order" >
-                            <option value="0" >${"营收额"}</option>
-                            <option value="1" >${"扣非额"}</option>
-                            <option value="2" >${"营收同比增幅"}</option>
-                            <option value="3" >${"扣非同比增幅"}</option>
-                            <option value="4" >${"扣非营收百分比"}</option>
-                            <option value="5" >${"更新时间"}</option>
+                            <option value="1" >${"营收额"}</option>
+                            <option value="2" >${"扣非额"}</option>
+                            <option value="3" >${"营收同比增幅"}</option>
+                            <option value="4" >${"扣非同比增幅"}</option>
+                            <option value="5" >${"扣非营收百分比"}</option>
+                            <option value="6" >${"更新时间"}</option>
                         </select>
                     </div>
                 </div>
@@ -71,7 +71,6 @@
                                 <tr>
                                     <th name="stockCompanyId" >id</th>
                                     <th name="name" >公司名称</th>
-                                    <th name="stockCode" >公司股票代码</th>
                                     <th name="lastPrice" >公司最新股价</th>
                                     <th name="totalIncome" >总营收(亿)</th>
                                     <th name="totalAddPercent" >营收同比增长(%)</th>
@@ -100,8 +99,6 @@
 <!-- daterangepicker -->
 <script src="${request.contextPath}/js/adminlte/bower_components/moment/moment.min.js"></script>
 <script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap datepicker -->
-<script src="${request.contextPath}/js/adminlte/bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
 
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="${request.contextPath}/js/adminlte/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
