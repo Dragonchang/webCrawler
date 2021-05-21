@@ -23,6 +23,11 @@ public class FinanceAnalysisResponseDTO {
     private Integer stockCompanyId;
 
     /**
+     * 公司股票代码
+     */
+    private String stockCode;
+
+    /**
      * 公司名称
      */
     private String name;

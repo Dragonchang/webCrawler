@@ -70,6 +70,7 @@
                                 <thead>
                                 <tr>
                                     <th name="stockCompanyId" >id</th>
+                                    <th name="stockCode" >股票代码</th>
                                     <th name="name" >公司名称</th>
                                     <th name="lastPrice" >公司最新股价</th>
                                     <th name="totalIncome" >总营收(亿)</th>

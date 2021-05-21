@@ -22,4 +22,11 @@ public interface FinanceAnalysisMapper extends BaseMapper<FinanceAnalysis> {
      * @return
      */
     IPage<FinanceAnalysisResponseDTO> findPage(Page page, @Param("request") FinanceAnalysisRequestDTO request);
+
+    /**
+     * 查询列表
+     * @param request
+     * @return
+     */
+    List<FinanceAnalysisResponseDTO> findList(@Param("request") FinanceAnalysisRequestDTO request);
 }

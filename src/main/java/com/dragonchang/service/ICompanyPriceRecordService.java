@@ -23,6 +23,6 @@ public interface ICompanyPriceRecordService {
     /**
      * 同步所有公司的财务信息
      */
-    void syncAllCompanyFinance();
+    void syncAllCompanyFinance(Integer companyStockId);
 
 }

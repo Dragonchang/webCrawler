@@ -129,9 +129,12 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     }
 
     @Override
-    public void syncAllCompanyFinance() {
+    public void syncAllCompanyFinance(Integer companyStockId) {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
         for (CompanyStock stock : companyStockList) {
+            if (companyStockId != null && stock.getId() < companyStockId) {
+                continue;
+            }
             List<FinanceReportTimeDTO> reportTimeDTOS = eastMoneyCrawler.getFinanceReport(stock.getStockCode());
             if (CollectionUtils.isNotEmpty(reportTimeDTOS)) {
                 int index = 0;

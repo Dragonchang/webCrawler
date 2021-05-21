@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
@@ -314,5 +315,12 @@ public class ExcelUtil {
         style.setBorderColor(BorderSide.LEFT, color);
         style.setBorderColor(BorderSide.RIGHT, color);
         style.setBorderColor(BorderSide.BOTTOM, color);
+    }
+
+    public static BigDecimal convertToBillion(BigDecimal amount) {
+        if(amount == null) {
+            return null;
+        }
+        return amount.divide(new BigDecimal(100000000), 3, BigDecimal.ROUND_HALF_UP);
     }
 }

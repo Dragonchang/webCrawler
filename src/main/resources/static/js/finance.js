@@ -34,6 +34,11 @@ $(function () {
                 "width": '1%'
             },
             {
+                "data": 'stockCode',
+                "visible" : true,
+                "width":'5%'
+            },
+            {
                 "data": 'name',
                 "visible": true,
                 "width": '5%'
@@ -66,7 +71,7 @@ $(function () {
             {
                 "data": 'profitTotalPercent',
                 "visible": true,
-                "width": '10%'
+                "width": '6%'
             },
             {
                 "data": 'reportTime',
@@ -137,4 +142,61 @@ $(function () {
         financeDetailList.fnDraw();
     });
 
+    $('#exportBtn').on('click', function(){
+        var condition_report = document.getElementById("condition_report");
+        var time_select = condition_report.options[condition_report.selectedIndex].value;
+        var condition_order = document.getElementById("condition_order");
+        var order_select = condition_order.options[condition_order.selectedIndex].value;
+        data = {
+            name:  document.getElementById("company_name").innerText,
+            stockCode: $('#stock_code').val(),
+            companyStock: $('#stock_code').val(),
+            order: order_select,
+            reportTime: time_select
+        };
+// Use XMLHttpRequest instead of Jquery $ajax
+        xhttp = new XMLHttpRequest();
+        var myDate = new Date();
+        var myYear = myDate.getFullYear(); //获取完整的年份(4位,1970-????)
+        var myMonth = myDate.getMonth() + 1; //获取当前月份(0-11,0代表1月)
+        var myToday = myDate.getDate(); //获取当前日(1-31)
+        var myHour = myDate.getHours(); //获取当前小时数(0-23)
+        var myMinute = myDate.getMinutes(); //获取当前分钟数(0-59)
+        var mySecond = myDate.getSeconds(); //获取当前秒数(0-59)
+        var nowTime;
+
+        nowTime = myYear+ fillZero(myMonth)+ fillZero(myToday)+ fillZero(myHour)+
+            fillZero(myMinute) + fillZero(mySecond);
+
+        xhttp.onreadystatechange = function() {
+            var a;
+            if (xhttp.readyState === 4 && xhttp.status === 201) {
+                // Trick for making downloadable link
+                a = document.createElement('a');
+                a.href = window.URL.createObjectURL(xhttp.response);
+                // Give filename you wish to download
+                a.download = "Finance_"+nowTime+".xls";
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+            }
+        };
+// Post data to URL which handles post request
+        xhttp.open("POST", base_url + '/financeAnalysis/export');
+        xhttp.setRequestHeader("Content-Type", "application/json");
+// You should set responseType as blob for binary responses
+        xhttp.responseType = 'blob';
+        xhttp.send(JSON.stringify(data));
+
+    });
+
+    function fillZero(str) {
+        var realNum;
+        if (str < 10) {
+            realNum = '0' + str;
+        } else {
+            realNum = str;
+        }
+        return realNum;
+    }
 });

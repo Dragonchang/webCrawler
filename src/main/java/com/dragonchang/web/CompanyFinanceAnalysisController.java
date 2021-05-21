@@ -2,16 +2,24 @@ package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
+import com.dragonchang.domain.dto.ExcelData;
 import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
 import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
+import com.dragonchang.domain.dto.HolderDetailRequestDTO;
+import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.FinanceAnalysis;
 import com.dragonchang.service.ICompanyFinanceAnalysisService;
+import com.dragonchang.util.ExcelUtil;
+import com.dragonchang.util.HttpUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -72,6 +80,11 @@ public class CompanyFinanceAnalysisController {
             companyPage.setTotal(companyPage.getTotal() - 1);
         }
         List<FinanceAnalysisResponseDTO> list = companyPage.getRecords();
+        for(FinanceAnalysisResponseDTO dto : list) {
+            dto.setReportType(FinanceReportTypeEnum.getNameByCode(dto.getReportType()));
+            dto.setTotalIncome(ExcelUtil.convertToBillion(dto.getTotalIncome()));
+            dto.setNetProfit(ExcelUtil.convertToBillion(dto.getNetProfit()));
+        }
         int list_count = (int) companyPage.getTotal() + 1;
 
         // package result
@@ -82,4 +95,11 @@ public class CompanyFinanceAnalysisController {
         return maps;
     }
 
+    @PostMapping(value = "/export")
+    @ApiOperation(value = "导出财务信息")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportFlow(@RequestBody FinanceAnalysisRequestDTO request) {
+        ExcelData data = companyFinanceAnalysisService.exportFlow(request);
+        return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
+    }
 }

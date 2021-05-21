@@ -60,8 +60,8 @@ public class CompanyStockController {
     @GetMapping(value = "/syncFinance")
     @ApiOperation(value = "同步公司财务信息")
     @ResponseBody
-    public JsonResult syncCompanyFinance() {
-        companyPriceRecordService.syncAllCompanyFinance();
+    public JsonResult syncCompanyFinance(@RequestParam(required = false) Integer companyStockId) {
+        companyPriceRecordService.syncAllCompanyFinance(companyStockId);
         return JsonResult.success();
     }
 

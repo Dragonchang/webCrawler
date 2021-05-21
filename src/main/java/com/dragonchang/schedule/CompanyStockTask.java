@@ -47,6 +47,6 @@ public class CompanyStockTask {
     @Scheduled(cron = "0 0 23 * * ? ")
     @Transactional
     public void syncFinance() {
-        companyPriceRecordService.syncAllCompanyFinance();
+        companyPriceRecordService.syncAllCompanyFinance(null);
     }
 }

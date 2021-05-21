@@ -21,7 +21,7 @@
     </select>
 
     <select id="findPage" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.name,  b.last_price, a.total_income, a.total_add_percent, a.net_profit,
+        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, a.total_income, a.total_add_percent, a.net_profit,
         a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type
         FROM t_finance_analysis a
         LEFT JOIN t_company_stock b on a.stock_company_id = b.id
@@ -54,5 +54,39 @@
             ORDER BY a.updated_time DESC
         </if>
 
+    </select>
+    <select id="findList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
+        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, a.total_income, a.total_add_percent, a.net_profit,
+        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type
+        FROM t_finance_analysis a
+        LEFT JOIN t_company_stock b on a.stock_company_id = b.id
+        WHERE 1=1
+        <if test="request.name != null and request.name != ''">
+            and b.name = #{request.name}
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+        <if test="request.reportTime != null and request.reportTime != ''">
+            and a.report_time = #{request.reportTime}
+        </if>
+        <if test="request.order != null and request.order == 1">
+            ORDER BY a.total_income DESC
+        </if>
+        <if test="request.order != null and request.order == 2">
+            ORDER BY a.net_profit DESC
+        </if>
+        <if test="request.order != null and request.order == 3">
+            ORDER BY a.total_add_percent DESC
+        </if>
+        <if test="request.order != null and request.order == 4">
+            ORDER BY a.net_profit_percent DESC
+        </if>
+        <if test="request.order != null and request.order == 5">
+            ORDER BY a.profit_total_percent DESC
+        </if>
+        <if test="request.order != null and request.order == 6">
+            ORDER BY a.updated_time DESC
+        </if>
     </select>
 </mapper>
