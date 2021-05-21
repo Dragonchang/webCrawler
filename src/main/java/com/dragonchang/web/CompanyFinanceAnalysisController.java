@@ -57,7 +57,9 @@ public class CompanyFinanceAnalysisController {
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         String order, String name, String stockCode, String reportTime) {
 
-
+        if(StringUtils.isNotBlank(stockCode) || StringUtils.isNotBlank(name)) {
+            reportTime = null;
+        }
         FinanceAnalysisRequestDTO pageRequest = new FinanceAnalysisRequestDTO();
         pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
