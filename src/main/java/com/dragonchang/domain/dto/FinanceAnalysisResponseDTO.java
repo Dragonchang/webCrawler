@@ -38,6 +38,11 @@ public class FinanceAnalysisResponseDTO {
     private BigDecimal lastPrice;
 
     /**
+     * 公司最新总市值
+     */
+    private BigDecimal totalCapitalization;
+
+    /**
      * 季度总营收
      */
     private BigDecimal totalIncome;

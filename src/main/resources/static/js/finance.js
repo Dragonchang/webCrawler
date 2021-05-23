@@ -49,6 +49,11 @@ $(function () {
                 "width": '6%'
             },
             {
+                "data": 'totalCapitalization',
+                "visible": true,
+                "width": '6%'
+            },
+            {
                 "data": 'totalIncome',
                 "visible": true,
                 "width": '6%'
@@ -175,7 +180,7 @@ $(function () {
                 a = document.createElement('a');
                 a.href = window.URL.createObjectURL(xhttp.response);
                 // Give filename you wish to download
-                a.download = "Finance_"+nowTime+".xls";
+                a.download = "Finance_"+time_select+"_"+nowTime+".xls";
                 a.style.display = 'none';
                 document.body.appendChild(a);
                 a.click();

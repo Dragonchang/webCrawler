@@ -31,6 +31,12 @@ public class DateUtil {
     public static final String DEFAULT_DATE_TIME_FORMAT_SECOND = "yyyyMMddHHmmss";
     private static final ThreadLocal<Map<String, DateFormat>> dateFormatThreadLocal = new ThreadLocal<Map<String, DateFormat>>();
 
+    public static int getCurrentQuarter() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        return calendar.get(Calendar.MONTH) / 3 + 1;
+    }
+
     public static String localDateTimeFormat(LocalDateTime localDateTime,String pattern){
         return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
     }
@@ -219,6 +225,7 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
+        int tet = getCurrentQuarter();
         LocalDateTime str = DateUtil.strToLocalDateTime("20201203");
         System.out.println(">>>"+str.toString());
     }

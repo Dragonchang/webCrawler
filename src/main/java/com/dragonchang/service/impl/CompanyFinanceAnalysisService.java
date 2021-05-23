@@ -59,6 +59,7 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
         titles.add("股票代码");
         titles.add("公司名称");
         titles.add("公司最新股价");
+        titles.add("公司总市值(亿)");
         titles.add("总营收(亿)");
         titles.add("营收同比增长(%)");
         titles.add("扣非利润(亿)");
@@ -75,6 +76,7 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
             row.add(finance.getStockCode());
             row.add(finance.getName());
             row.add(finance.getLastPrice());
+            row.add(finance.getTotalCapitalization());
             row.add(ExcelUtil.convertToBillion(finance.getTotalIncome()));
             row.add(finance.getTotalAddPercent());
             row.add(ExcelUtil.convertToBillion(finance.getNetProfit()));

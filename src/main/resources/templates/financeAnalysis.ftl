@@ -73,6 +73,7 @@
                                     <th name="stockCode" >股票代码</th>
                                     <th name="name" >公司名称</th>
                                     <th name="lastPrice" >公司最新股价</th>
+                                    <th name="totalCapitalization" >总市值(亿)</th>
                                     <th name="totalIncome" >总营收(亿)</th>
                                     <th name="totalAddPercent" >营收同比增长(%)</th>
                                     <th name="netProfit" >扣非利润(亿)</th>

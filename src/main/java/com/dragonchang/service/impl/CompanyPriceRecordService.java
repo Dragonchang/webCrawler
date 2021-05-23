@@ -93,6 +93,9 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
         for (CompanyStock stock : companyStockList) {
             TodayPriceDTO priceDTO = eastMoneyCrawler.getTodayPrice(stock.getStockCode());
+            if(priceDTO == null) {
+                continue;
+            }
             CompanyPriceRecord record = new CompanyPriceRecord();
             record.setOpenPrice(priceDTO.getF46());
             record.setClosePrice(priceDTO.getF43());

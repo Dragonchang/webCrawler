@@ -1,5 +1,7 @@
 package com.dragonchang.service;
 
+import java.util.Map;
+
 public interface IRecommendService {
-    void recommend();
+    Map<String, Object> recommend();
 }

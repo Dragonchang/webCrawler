@@ -21,8 +21,8 @@
     </select>
 
     <select id="findPage" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, a.total_income, a.total_add_percent, a.net_profit,
-        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type
+        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,  b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
+        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time
         FROM t_finance_analysis a
         LEFT JOIN t_company_stock b on a.stock_company_id = b.id
         WHERE 1=1
@@ -56,8 +56,8 @@
 
     </select>
     <select id="findList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, a.total_income, a.total_add_percent, a.net_profit,
-        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type
+        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
+        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time
         FROM t_finance_analysis a
         LEFT JOIN t_company_stock b on a.stock_company_id = b.id
         WHERE 1=1
@@ -88,5 +88,9 @@
         <if test="request.order != null and request.order == 6">
             ORDER BY a.updated_time DESC
         </if>
+    </select>
+
+    <select id="findRecommendList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
+
     </select>
 </mapper>

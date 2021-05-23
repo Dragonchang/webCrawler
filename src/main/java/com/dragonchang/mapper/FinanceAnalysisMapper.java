@@ -3,10 +3,7 @@ package com.dragonchang.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
-import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
-import com.dragonchang.domain.dto.HolderCompanyListDTO;
-import com.dragonchang.domain.dto.HolderDetailRequestDTO;
+import com.dragonchang.domain.dto.*;
 import com.dragonchang.domain.po.FinanceAnalysis;
 import org.apache.ibatis.annotations.Param;
 
@@ -29,4 +26,11 @@ public interface FinanceAnalysisMapper extends BaseMapper<FinanceAnalysis> {
      * @return
      */
     List<FinanceAnalysisResponseDTO> findList(@Param("request") FinanceAnalysisRequestDTO request);
+
+    /**
+     * 查询列表
+     * @param request
+     * @return
+     */
+    List<FinanceAnalysisResponseDTO> findRecommendList(@Param("request") RecommendAnalysisDTO request);
 }

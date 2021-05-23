@@ -89,7 +89,7 @@ public class ExcelUtil {
                 SXSSFWorkbook wb = generateExcel(data);
                 data.clear();
                 wb.write(bout);
-                wb=null;
+                wb = null;
             }
             bytes = bout.toByteArray();
             bout.close();
@@ -124,7 +124,7 @@ public class ExcelUtil {
      * @param data
      * @return
      */
-    private static int writeExcel(SXSSFWorkbook wb, Sheet sheet, ExcelData data) throws Exception{
+    private static int writeExcel(SXSSFWorkbook wb, Sheet sheet, ExcelData data) throws Exception {
         int rowIndex = 0;
         rowIndex = writeTitlesToExcel(wb, sheet, data.getTitles());
         rowIndex = writeRowsToExcel(wb, sheet, data.getRows(), rowIndex);
@@ -200,9 +200,9 @@ public class ExcelUtil {
 //        setBorder(dataStyle, BorderStyle.THIN, new XSSFColor(new Color(0, 0, 0)));
         //声明一个画图的顶级管理器
 //        Drawing drawing=(SXSSFDrawing) sheet.createDrawingPatriarch();
-        Row dataRow ;
-        Cell cell ;
-        URL url ;
+        Row dataRow;
+        Cell cell;
+        URL url;
         for (List<Object> rowData : rows) {
             dataRow = sheet.createRow(rowIndex);
             dataRow.setHeightInPoints(25);
@@ -220,18 +220,18 @@ public class ExcelUtil {
 //                        anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_DONT_RESIZE);
 //                        drawing.createPicture(anchor, wb.addPicture(picBytes, XSSFWorkbook.PICTURE_TYPE_JPEG));
 //                    }else{
-                        if(isNumeric(cellData.toString())) {
-                            cell.setCellValue(Double.valueOf(cellData.toString()).doubleValue());
-                        } else {
-                            cell.setCellValue(cellData.toString());
-                        }
+                    if (isNumeric(cellData.toString())) {
+                        cell.setCellValue(Double.valueOf(cellData.toString()).doubleValue());
+                    } else {
+                        cell.setCellValue(cellData.toString());
+                    }
 //                    }
                 } else {
                     cell.setCellValue("");
                 }
 //                cell.setCellStyle(dataStyle);
                 colIndex++;
-                cell =null;
+                cell = null;
             }
             rowIndex++;
         }
@@ -240,26 +240,29 @@ public class ExcelUtil {
 
     public final static boolean isNumeric(String s) {
         if (s != null && !"".equals(s.trim())) {
+            if (s.startsWith("-")) {
+                s = s.substring(1, s.length());
+            }
             return s.matches("^[0.0-9.0]+$");
         } else {
             return false;
         }
     }
 
-    private static void insertPic(XSSFWorkbook wb, Sheet sheet,short col1, int row1,short col2,int row2)throws Exception{
+    private static void insertPic(XSSFWorkbook wb, Sheet sheet, short col1, int row1, short col2, int row2) throws Exception {
         XSSFDrawing patriarch = (XSSFDrawing) sheet.createDrawingPatriarch();
         /**
-        * 创建一个新的客户端锚点，附加到excel工作表，并设置左上角和右下角
-        *
-        * @param realX1  图片的左上角在开始单元格（col1,row1）中的横坐标
-        * @param realY1  图片的左上角在开始单元格（col1,row1）中的纵坐标
-        * @param realX2  图片的右下角在结束单元格（col2,row2）中的横坐标
-        * @param realY2  图片的右下角在结束单元格（col2,row2）中的纵坐标
-        * @param col1  开始单元格所处的列号, base 0, 图片左上角在开始单元格内
-        * @param row1  开始单元格所处的行号, base 0, 图片左上角在开始单元格内
-        * @param col2  结束单元格所处的列号, base 0, 图片右下角在结束单元格内
-        * @param row2  结束单元格所处的行号, base 0, 图片右下角在结束单元格内
-        * */
+         * 创建一个新的客户端锚点，附加到excel工作表，并设置左上角和右下角
+         *
+         * @param realX1  图片的左上角在开始单元格（col1,row1）中的横坐标
+         * @param realY1  图片的左上角在开始单元格（col1,row1）中的纵坐标
+         * @param realX2  图片的右下角在结束单元格（col2,row2）中的横坐标
+         * @param realY2  图片的右下角在结束单元格（col2,row2）中的纵坐标
+         * @param col1  开始单元格所处的列号, base 0, 图片左上角在开始单元格内
+         * @param row1  开始单元格所处的行号, base 0, 图片左上角在开始单元格内
+         * @param col2  结束单元格所处的列号, base 0, 图片右下角在结束单元格内
+         * @param row2  结束单元格所处的行号, base 0, 图片右下角在结束单元格内
+         * */
         HSSFClientAnchor anchor = new HSSFClientAnchor(0, 0, 100, 100, col1, row1, col2, row2);
         // 图片字节流
         ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
@@ -274,6 +277,7 @@ public class ExcelUtil {
         // 创建图片
         patriarch.createPicture(anchor, puctureIndex);
     }
+
     /**
      * 自动调整列宽
      *
@@ -318,7 +322,7 @@ public class ExcelUtil {
     }
 
     public static BigDecimal convertToBillion(BigDecimal amount) {
-        if(amount == null) {
+        if (amount == null) {
             return null;
         }
         return amount.divide(new BigDecimal(100000000), 3, BigDecimal.ROUND_HALF_UP);
