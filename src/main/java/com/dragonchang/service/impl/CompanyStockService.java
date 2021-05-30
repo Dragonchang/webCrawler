@@ -6,14 +6,18 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.crawler.EastMoneyCrawler;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
+import com.dragonchang.domain.dto.ExcelData;
+import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
 import com.dragonchang.domain.dto.eastmoney.StockDetailDto;
 import com.dragonchang.domain.dto.eastmoney.StockInfoDto;
+import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.TotalStockRecord;
 import com.dragonchang.mapper.CompanyStockMapper;
 import com.dragonchang.mapper.TotalStockRecordMapper;
 import com.dragonchang.service.ICompanyStockService;
 import com.dragonchang.util.DateUtil;
+import com.dragonchang.util.ExcelUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -165,5 +170,42 @@ public class CompanyStockService implements ICompanyStockService {
         CompanyStock companyStock = mapper.selectOne(new LambdaQueryWrapper<CompanyStock>()
                 .eq(CompanyStock::getId, id));
         return companyStock;
+    }
+
+    @Override
+    public ExcelData exportFlow(CompanyStockRequestDTO request) {
+        List<CompanyStock> list = mapper.findList(request);
+        ExcelData data = new ExcelData();
+        String time = DateUtil.localDateTimeFormat(LocalDateTime.now(),DateUtil.DEFAULT_DATE_TIME_FORMAT_SECOND);
+        String fileName = "company" + time;
+        data.setSavePath("D:\\");
+        data.setFileName(fileName);
+        data.setSheetName("company");
+        List<String> titles = new ArrayList();
+        titles.add("公司名称");
+        titles.add("股票代码");
+        titles.add("股票最新股价");
+        titles.add("股票最新总市值(亿)");
+        titles.add("股票最新流通市值(亿)");
+        titles.add("股票最新收益");
+        titles.add("上市时间");
+        titles.add("更新时间");
+        data.setTitles(titles);
+        List<List<Object>> rows = new ArrayList();
+        for (int i = 0, length = list.size(); i < length; i++) {
+            CompanyStock companyStock = list.get(i);
+            List<Object> row = new ArrayList();
+            row.add(companyStock.getName());
+            row.add(companyStock.getStockCode());
+            row.add(companyStock.getLastPrice());
+            row.add(companyStock.getTotalCapitalization());
+            row.add(ExcelUtil.convertToBillion(companyStock.getLastCirculation()));
+            row.add(companyStock.getLastIncome());
+            row.add(companyStock.getMarketTime());
+            row.add(companyStock.getUpdatedTime());
+            rows.add(row);
+        }
+        data.setRows(rows);
+        return data;
     }
 }

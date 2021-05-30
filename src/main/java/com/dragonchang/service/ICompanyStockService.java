@@ -2,6 +2,8 @@ package com.dragonchang.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
+import com.dragonchang.domain.dto.ExcelData;
+import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
 import com.dragonchang.domain.po.CompanyStock;
 
 /**
@@ -33,4 +35,12 @@ public interface ICompanyStockService {
      * @return
      */
     CompanyStock getStockById(Integer id);
+
+    /**
+     * 导出公司信息
+     * @param request
+     * @return
+     */
+    ExcelData exportFlow(CompanyStockRequestDTO request);
+
 }

@@ -49,4 +49,35 @@
         </if>
 
     </select>
+    <select id="findList" resultType="com.dragonchang.domain.po.CompanyStock">
+        select * from t_company_stock
+        where deleted=0
+        <if test="request.name != null and request.name != ''">
+            and name like CONCAT('%', #{request.name} , '%')
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+        <if test="request.startTime != null">
+            and market_time &gt;= #{request.startTime}
+        </if>
+        <if test="request.endTime != null">
+            and market_time &lt;= #{request.endTime}
+        </if>
+        <if test="request.order != null and request.order != ''">
+            <if test='request.order == "1"'>
+                order by last_circulation desc
+            </if>
+            <if test='request.order == "2"'>
+                order by last_income desc
+            </if>
+            <if test='request.order == "3"'>
+                order by market_time desc
+            </if>
+            <if test='request.order == "4"'>
+                order by last_price desc
+            </if>
+        </if>
+
+    </select>
 </mapper>

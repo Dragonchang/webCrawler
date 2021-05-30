@@ -2,19 +2,21 @@ package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
+import com.dragonchang.domain.dto.ExcelData;
+import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.ICompanyPriceRecordService;
 import com.dragonchang.service.ICompanyStockService;
+import com.dragonchang.util.ExcelUtil;
+import com.dragonchang.util.HttpUtil;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -127,5 +129,13 @@ public class CompanyStockController {
         endTime = endTime.substring(7, endTime.length()) +"-"+ endTime.substring(1,3)+"-"+endTime.substring(4,6);
         endTime = endTime+" 24:00:00";
         return LocalDateTime.parse(endTime, DateTimeFormatter.ofPattern(DATE_TIME_FORMAT));
+    }
+
+    @PostMapping(value = "/export")
+    @ApiOperation(value = "导出公司信息")
+    @ResponseBody
+    public ResponseEntity<byte[]> exportFlow(@RequestBody CompanyStockRequestDTO pageRequest) {
+        ExcelData data = companyStockService.exportFlow(pageRequest);
+        return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
     }
 }
