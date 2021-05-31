@@ -182,8 +182,8 @@ public class CompanyStockService implements ICompanyStockService {
         data.setFileName(fileName);
         data.setSheetName("company");
         List<String> titles = new ArrayList();
-        titles.add("公司名称");
         titles.add("股票代码");
+        titles.add("公司名称");
         titles.add("股票最新股价");
         titles.add("股票最新总市值(亿)");
         titles.add("股票最新流通市值(亿)");
@@ -195,11 +195,11 @@ public class CompanyStockService implements ICompanyStockService {
         for (int i = 0, length = list.size(); i < length; i++) {
             CompanyStock companyStock = list.get(i);
             List<Object> row = new ArrayList();
-            row.add(companyStock.getName());
             row.add(companyStock.getStockCode());
+            row.add(companyStock.getName());
             row.add(companyStock.getLastPrice());
             row.add(companyStock.getTotalCapitalization());
-            row.add(ExcelUtil.convertToBillion(companyStock.getLastCirculation()));
+            row.add(companyStock.getLastCirculation());
             row.add(companyStock.getLastIncome());
             row.add(companyStock.getMarketTime());
             row.add(companyStock.getUpdatedTime());

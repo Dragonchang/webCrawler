@@ -17,5 +17,5 @@ public class CompanyStockRequestDTO extends PageRequestDTO{
     String order;
     LocalDateTime startTime;
     LocalDateTime endTime;
-
+    String marketTime;
 }

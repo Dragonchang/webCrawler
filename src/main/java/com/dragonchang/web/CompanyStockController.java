@@ -135,6 +135,10 @@ public class CompanyStockController {
     @ApiOperation(value = "导出公司信息")
     @ResponseBody
     public ResponseEntity<byte[]> exportFlow(@RequestBody CompanyStockRequestDTO pageRequest) {
+        if(!StringUtils.isEmpty(pageRequest.getMarketTime())) {
+            pageRequest.setStartTime(getStartTime(pageRequest.getMarketTime()));
+            pageRequest.setEndTime(getEndTime(pageRequest.getMarketTime()));
+        }
         ExcelData data = companyStockService.exportFlow(pageRequest);
         return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
     }
