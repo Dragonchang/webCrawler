@@ -36,6 +36,11 @@ public class FocusDTO {
     private BigDecimal lastPrice;
 
     /**
+     * 差价
+     */
+    private BigDecimal diffPrice;
+
+    /**
      * 关注类型 1.股份公司 2.机构 3.个人
      */
     private String type;

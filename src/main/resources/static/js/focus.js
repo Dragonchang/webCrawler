@@ -41,7 +41,7 @@ $(function() {
             {
                 "data": 'companyName',
                 "visible" : true,
-                "width":'20%'
+                "width":'10%'
             },
             {
                 "data": 'type',
@@ -55,6 +55,11 @@ $(function() {
             },
             {
                 "data": 'lastPrice',
+                "visible" : true,
+                "width":'10%'
+            },
+            {
+                "data": 'diffPrice',
                 "visible" : true,
                 "width":'10%'
             },

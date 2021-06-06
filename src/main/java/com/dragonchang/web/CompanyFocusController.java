@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,13 @@ public class CompanyFocusController {
         List<FocusDTO> list = companyPage.getRecords();
         for(FocusDTO focus: list) {
             focus.setType(FocusTypeEnum.getNameByCode(focus.getType()));
+            if(focus.getLastPrice() != null && focus.getFocusPrice() != null) {
+                focus.setDiffPrice(focus.getLastPrice().subtract(focus.getFocusPrice()));
+            } else {
+                focus.setFocusPrice(new BigDecimal(0));
+                focus.setLastPrice(new BigDecimal(0));
+                focus.setDiffPrice(new BigDecimal(0));
+            }
         }
         int list_count = (int) companyPage.getTotal() + 1;
 

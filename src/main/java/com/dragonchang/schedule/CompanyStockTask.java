@@ -32,8 +32,7 @@ public class CompanyStockTask {
      * 每天下午3点执行
      */
     @Async
-    @Scheduled(cron = "0 0 15 * * ? ")
-    @Transactional
+    @Scheduled(cron = "0 0 15 ? * MON-FRI")
     public void tempMigrateWithMerchantTask() {
         companyStockService.syncStockListInfo();
         companyPriceRecordService.syncCompanyTodayPrice();
@@ -45,7 +44,6 @@ public class CompanyStockTask {
      */
     @Async
     @Scheduled(cron = "0 0 23 * * ? ")
-    @Transactional
     public void syncFinance() {
         //companyPriceRecordService.syncAllCompanyFinance(null);
     }

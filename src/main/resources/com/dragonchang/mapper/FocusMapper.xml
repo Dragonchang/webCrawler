@@ -25,5 +25,6 @@
         <if test="request.stockCode != null and request.stockCode != ''">
             and f.stock_code like CONCAT('%', #{request.stockCode} , '%')
         </if>
+        ORDER BY f.created_time DESC
     </select>
 </mapper>
