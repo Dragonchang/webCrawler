@@ -15,8 +15,11 @@ $(function () {
                 var condition_order = document.getElementById("condition_order");
                 var order_select = condition_order.options[condition_order.selectedIndex].value;
 
-                obj.name = document.getElementById("company_name").innerText;
+                obj.name = $('#company_name').val();
                 obj.stockCode = $('#stock_code').val();
+                obj.totalCapitalization = $('#totalCapitalization').val();
+                obj.totalAddPercent = $('#totalAddPercent').val();
+                obj.netProfitPercent = $('#netProfitPercent').val();
                 obj.order = order_select;
                 obj.reportTime = time_select;
                 obj.start = d.start;
@@ -156,6 +159,9 @@ $(function () {
             name:  document.getElementById("company_name").innerText,
             stockCode: $('#stock_code').val(),
             companyStock: $('#stock_code').val(),
+            totalCapitalization: $('#totalCapitalization').val(),
+            totalAddPercent: $('#totalAddPercent').val(),
+            netProfitPercent: $('#netProfitPercent').val(),
             order: order_select,
             reportTime: time_select
         };

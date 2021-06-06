@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,8 @@ public class CompanyFinanceAnalysisController {
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String order, String name, String stockCode, String reportTime) {
+                                        String order, String name, String stockCode, String reportTime,
+                                        BigDecimal totalCapitalization, BigDecimal totalAddPercent, BigDecimal netProfitPercent) {
 
         if(StringUtils.isNotBlank(stockCode) || StringUtils.isNotBlank(name)) {
             reportTime = null;
@@ -64,6 +66,9 @@ public class CompanyFinanceAnalysisController {
         pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
         pageRequest.setOrder(order);
+        pageRequest.setTotalCapitalization(totalCapitalization);
+        pageRequest.setTotalAddPercent(totalAddPercent);
+        pageRequest.setNetProfitPercent(netProfitPercent);
         if(!StringUtils.isEmpty(reportTime)) {
             pageRequest.setReportTime(reportTime);
         }

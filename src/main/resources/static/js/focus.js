@@ -54,6 +54,11 @@ $(function() {
                 "width":'10%'
             },
             {
+                "data": 'lastPrice',
+                "visible" : true,
+                "width":'10%'
+            },
+            {
                 "data": 'createdTime',
                 "visible" : true,
                 "width":'10%'

@@ -2,6 +2,8 @@ package com.dragonchang.domain.dto;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @program: webcrawler
  * @description:
@@ -14,4 +16,19 @@ public class FinanceAnalysisRequestDTO extends PageRequestDTO{
     String stockCode;
     String order;
     String reportTime;
+
+    /**
+     * 公司最新总市值
+     */
+    BigDecimal totalCapitalization;
+
+    /**
+     * 总营收同比增长
+     */
+    BigDecimal totalAddPercent;
+
+    /**
+     * 扣非同比增长
+     */
+    BigDecimal netProfitPercent;
 }

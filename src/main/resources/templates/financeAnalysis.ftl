@@ -54,6 +54,27 @@
                         <input type="text" class="form-control" id="stock_code" autocomplete="on" >
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">公司市值(大于亿)</span>
+                        <input type="text" class="form-control" id="totalCapitalization" autocomplete="on" >
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">营业额增长率(大于%)</span>
+                        <input type="text" class="form-control" id="totalAddPercent" autocomplete="on" >
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">扣非增长率(大于%)</span>
+                        <input type="text" class="form-control" id="netProfitPercent" autocomplete="on" >
+                    </div>
+                </div>
+
                 <div class="col-xs-1 pull-right">
                     <button class="btn btn-block btn-info " id="exportBtn">导出</button>
                 </div>
@@ -61,6 +82,7 @@
                     <button class="btn btn-block btn-info " id="searchBtn">查询</button>
                 </div>
             </div>
+
 
             <div class="row">
                 <div class="col-xs-12">

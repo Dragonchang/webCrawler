@@ -2,6 +2,7 @@ package com.dragonchang.web;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.FocusAddRequestDTO;
+import com.dragonchang.domain.dto.FocusDTO;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.enums.FocusTypeEnum;
 import com.dragonchang.domain.po.Focus;
@@ -62,12 +63,12 @@ public class CompanyFocusController {
         pageRequest.setPage(start);
         pageRequest.setSize(length);
 
-        IPage<Focus> companyPage = focusService.findPage(pageRequest);
+        IPage<FocusDTO> companyPage = focusService.findPage(pageRequest);
         if (companyPage.getTotal() > 0) {
             companyPage.setTotal(companyPage.getTotal() - 1);
         }
-        List<Focus> list = companyPage.getRecords();
-        for(Focus focus: list) {
+        List<FocusDTO> list = companyPage.getRecords();
+        for(FocusDTO focus: list) {
             focus.setType(FocusTypeEnum.getNameByCode(focus.getType()));
         }
         int list_count = (int) companyPage.getTotal() + 1;

@@ -12,9 +12,10 @@
         <result column="created_by" property="createdBy"/>
     </resultMap>
 
-    <select id="findPage" resultMap="BaseResultMap">
-        select * from t_focus f
-        where deleted=0
+    <select id="findPage" resultType="com.dragonchang.domain.dto.FocusDTO">
+        select * , b.last_price from t_focus f
+        LEFT JOIN t_company_stock b on f.stock_company_id = b.id
+        where f.deleted=0
         <if test="request.type != null and request.type != ''">
             and f.type = #{request.type}
         </if>

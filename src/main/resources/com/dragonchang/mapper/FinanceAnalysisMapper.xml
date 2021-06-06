@@ -35,6 +35,15 @@
         <if test="request.reportTime != null and request.reportTime != ''">
             and a.report_time = #{request.reportTime}
         </if>
+        <if test="request.totalCapitalization != null">
+            and b.total_capitalization >= #{request.totalCapitalization}
+        </if>
+        <if test="request.totalAddPercent != null">
+            and a.total_add_percent >= #{request.totalAddPercent}
+        </if>
+        <if test="request.netProfitPercent != null">
+            and a.net_profit_percent >= #{request.netProfitPercent}
+        </if>
         <if test="request.order != null and request.order == 1">
             ORDER BY a.total_income DESC
         </if>
@@ -69,6 +78,15 @@
         </if>
         <if test="request.reportTime != null and request.reportTime != ''">
             and a.report_time = #{request.reportTime}
+        </if>
+        <if test="request.totalCapitalization != null">
+            and b.total_capitalization >= #{request.totalCapitalization}
+        </if>
+        <if test="request.totalAddPercent != null">
+            and a.total_add_percent >= #{request.totalAddPercent}
+        </if>
+        <if test="request.netProfitPercent != null">
+            and a.net_profit_percent >= #{request.netProfitPercent}
         </if>
         <if test="request.order != null and request.order == 1">
             ORDER BY a.total_income DESC

@@ -57,6 +57,7 @@
                                     <th name="companyName" >关注名称</th>
                                     <th name="type" >类型</th>
                                     <th name="focusPrice" >关注价格</th>
+                                    <th name="lastPrice" >最新价格</th>
                                     <th name="createdTime" >创建时间</th>
                                     <th name="detail" >详情</th>
                                 </tr>

@@ -2,6 +2,7 @@ package com.dragonchang.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.FocusAddRequestDTO;
+import com.dragonchang.domain.dto.FocusDTO;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.po.Focus;
 import com.dragonchang.domain.vo.JsonResult;
@@ -18,7 +19,7 @@ public interface IFocusService {
      * @param pageRequest
      * @return
      */
-    IPage<Focus> findPage(CompanyRequestDTO pageRequest);
+    IPage<FocusDTO> findPage(CompanyRequestDTO pageRequest);
 
     /**
      * 删除关注
