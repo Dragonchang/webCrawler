@@ -46,11 +46,19 @@ public class UpwardTrendService implements IUpwardTrendService {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
         //遍历所有公司
         for (CompanyStock stock : companyStockList) {
-            BigDecimal ten = calculateMA(today, stock, 10);
-            BigDecimal twenty = calculateMA(today, stock, 20);
-            BigDecimal thirty = calculateMA(today, stock, 30);
-            if (ten != null && twenty != null && thirty != null) {
-                if (ten.compareTo(twenty) >= 0 && twenty.compareTo(thirty) >= 0) {
+            if(stock.getName().contains("ST")) {
+                continue;
+            }
+            List<CompanyPriceRecord> priceRecords = companyPriceRecordMapper.selectListByCondition(stock.getId(), today, 60);
+            if(priceRecords.size() < 60) {
+                continue;
+            }
+            BigDecimal ten = calculateMA(10, priceRecords.subList(0, 10));
+            BigDecimal twenty = calculateMA(20, priceRecords.subList(0, 20));
+            BigDecimal thirty = calculateMA(30, priceRecords.subList(0, 30));
+            BigDecimal liushi = calculateMA(60, priceRecords.subList(0, 60));
+            if (ten != null && twenty != null && thirty != null && liushi != null) {
+                if (ten.compareTo(twenty) > 0 && twenty.compareTo(thirty) > 0 && thirty.compareTo(liushi) >0) {
                     UpwardTrend upwardTrend = new UpwardTrend();
                     upwardTrend.setCompanyStockId(stock.getId());
                     upwardTrend.setReportTime(today);
@@ -63,47 +71,42 @@ public class UpwardTrendService implements IUpwardTrendService {
     /**
      * 算出公司公司股票在dayCount中的均价
      *
-     * @param stock
      * @param dayCount
      * @return
      */
-    private BigDecimal calculateMA(String today, CompanyStock stock, Integer dayCount) {
-        if (StringUtils.isBlank(today)) {
-            return null;
-        }
-        Date dateToday = DateUtil.parseDate(today);
-        Date backDay = DateUtil.getDateBefore(dateToday, dayCount);
-        String back = DateUtil.formatDate(backDay);
-        List<CompanyPriceRecord> priceRecords = companyPriceRecordMapper.selectList(new LambdaQueryWrapper<CompanyPriceRecord>()
-                .eq(CompanyPriceRecord::getCompanyStockId, stock.getId())
-                .le(CompanyPriceRecord::getReportTime, today)
-                .ge(CompanyPriceRecord::getReportTime, back)
-        );
+    private BigDecimal calculateMA(Integer dayCount, List<CompanyPriceRecord> priceRecords) {
         if (CollectionUtils.isNotEmpty(priceRecords)) {
+            if(priceRecords.size() < dayCount) {
+                return null;
+            }
             BigDecimal total = null;
+            int count = 0;
             for (CompanyPriceRecord record : priceRecords) {
                 if (record == null || record.getClosePrice() == null || !isNumeric(record.getClosePrice())) {
-                    return null;
+                    continue;
                 }
                 if (total != null) {
                     total = total.add(new BigDecimal(record.getClosePrice()));
                 } else {
                     total = new BigDecimal(record.getClosePrice());
                 }
+                count ++;
             }
             if (total != null) {
-                return total.divide(new BigDecimal(dayCount), 4, RoundingMode.HALF_UP);
+                return total.divide(new BigDecimal(count), 4, RoundingMode.HALF_UP);
             }
         }
         return null;
     }
 
-    private static boolean isNumeric(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            if (!Character.isDigit(str.charAt(i))) {
-                return false;
+    public final static boolean isNumeric(String s) {
+        if (s != null && !"".equals(s.trim())) {
+            if (s.startsWith("-")) {
+                s = s.substring(1, s.length());
             }
+            return s.matches("^[0.0-9.0]+$");
+        } else {
+            return false;
         }
-        return true;
     }
 }
