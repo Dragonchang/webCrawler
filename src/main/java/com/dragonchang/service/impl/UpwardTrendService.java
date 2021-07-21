@@ -60,7 +60,7 @@ public class UpwardTrendService implements IUpwardTrendService {
             BigDecimal jiushi = calculateMA(90, priceRecords.subList(0, 90));
             if (ten != null && twenty != null && thirty != null && liushi != null && jiushi != null) {
                 if (ten.compareTo(twenty) > 0 && twenty.compareTo(thirty) > 0
-                        && thirty.compareTo(liushi) >0 && liushi.compareTo(jiushi)>0) {
+                        && thirty.compareTo(liushi) >0 && liushi.compareTo(jiushi)<0) {
                     UpwardTrend upwardTrend = new UpwardTrend();
                     upwardTrend.setCompanyStockId(stock.getId());
                     upwardTrend.setReportTime(today);
