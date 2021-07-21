@@ -40,6 +40,9 @@ public class UpwardTrendService implements IUpwardTrendService {
 
     @Override
     public void generateUpwardTrendListByToday(String today) {
+        if(StringUtils.isBlank(today)) {
+            return;
+        }
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
         //遍历所有公司
         for (CompanyStock stock : companyStockList) {
