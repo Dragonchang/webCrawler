@@ -5,8 +5,10 @@ import com.dragonchang.domain.dto.RecommendAnalysisDTO;
 import com.dragonchang.mapper.FinanceAnalysisMapper;
 import com.dragonchang.service.IRecommendService;
 import com.dragonchang.util.DateUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,6 +19,8 @@ import java.util.*;
  * @author: zhangfl
  * @create: 2021-05-21 21:31
  **/
+@Slf4j
+@Service
 public class RecommendService implements IRecommendService {
 
     @Autowired

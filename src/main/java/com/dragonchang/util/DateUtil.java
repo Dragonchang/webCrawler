@@ -223,6 +223,12 @@ public class DateUtil {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return LocalDateTime.parse(builder.toString(), df);
     }
+    public static Date getDateBefore(Date d,int day){
+        Calendar now =Calendar.getInstance();
+        now.setTime(d);
+        now.set(Calendar.DATE,now.get(Calendar.DATE)-day);
+        return now.getTime();
+    }
 
     public static void main(String[] args) {
         int tet = getCurrentQuarter();

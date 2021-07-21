@@ -2,6 +2,8 @@ package com.dragonchang.schedule;
 
 import com.dragonchang.service.ICompanyPriceRecordService;
 import com.dragonchang.service.ICompanyStockService;
+import com.dragonchang.service.IUpwardTrendService;
+import com.dragonchang.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 /**
  * @program: webcrawler
@@ -28,6 +32,10 @@ public class CompanyStockTask {
 
     @Autowired
     ICompanyPriceRecordService companyPriceRecordService;
+
+    @Autowired
+    IUpwardTrendService upwardTrendService;
+
     /**
      * 每天下午3点执行
      */
@@ -43,8 +51,18 @@ public class CompanyStockTask {
      * 每天下午11点执行
      */
     @Async
-    @Scheduled(cron = "0 0 23 * * ? ")
+    @Scheduled(cron = "0 0 23 ? * MON-FRI")
     public void syncFinance() {
         //companyPriceRecordService.syncAllCompanyFinance(null);
+    }
+
+    /**
+     * 每天下午6点执行
+     */
+    @Async
+    @Scheduled(cron = "0 0 18 ? * MON-FRI")
+    public void createUpwardTrendRecord() {
+        String today = DateUtil.formatDate(new Date());
+        upwardTrendService.generateUpwardTrendListByToday(today);
     }
 }
