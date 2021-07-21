@@ -40,17 +40,17 @@ public class UpwardTrendService implements IUpwardTrendService {
 
     @Override
     public void generateUpwardTrendListByToday(String today) {
-        if(StringUtils.isBlank(today)) {
+        if (StringUtils.isBlank(today)) {
             return;
         }
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
         //遍历所有公司
         for (CompanyStock stock : companyStockList) {
             BigDecimal ten = calculateMA(today, stock, 10);
-            BigDecimal twenty  = calculateMA(today, stock, 20);
-            BigDecimal thirty  = calculateMA(today, stock, 30);
-            if(ten!= null &&  twenty != null && thirty!= null) {
-                if(ten.compareTo(twenty) >=0 && twenty.compareTo(thirty)>=0) {
+            BigDecimal twenty = calculateMA(today, stock, 20);
+            BigDecimal thirty = calculateMA(today, stock, 30);
+            if (ten != null && twenty != null && thirty != null) {
+                if (ten.compareTo(twenty) >= 0 && twenty.compareTo(thirty) >= 0) {
                     UpwardTrend upwardTrend = new UpwardTrend();
                     upwardTrend.setCompanyStockId(stock.getId());
                     upwardTrend.setReportTime(today);
@@ -62,12 +62,13 @@ public class UpwardTrendService implements IUpwardTrendService {
 
     /**
      * 算出公司公司股票在dayCount中的均价
+     *
      * @param stock
      * @param dayCount
      * @return
      */
-    private BigDecimal calculateMA(String today, CompanyStock stock ,Integer dayCount) {
-        if(StringUtils.isBlank(today)) {
+    private BigDecimal calculateMA(String today, CompanyStock stock, Integer dayCount) {
+        if (StringUtils.isBlank(today)) {
             return null;
         }
         Date dateToday = DateUtil.parseDate(today);
@@ -78,22 +79,31 @@ public class UpwardTrendService implements IUpwardTrendService {
                 .le(CompanyPriceRecord::getReportTime, today)
                 .ge(CompanyPriceRecord::getReportTime, back)
         );
-        if(CollectionUtils.isNotEmpty(priceRecords)) {
+        if (CollectionUtils.isNotEmpty(priceRecords)) {
             BigDecimal total = null;
             for (CompanyPriceRecord record : priceRecords) {
-                if(record == null || record.getClosePrice() == null) {
+                if (record == null || record.getClosePrice() == null || !isNumeric(record.getClosePrice())) {
                     return null;
                 }
-                if(total != null) {
+                if (total != null) {
                     total = total.add(new BigDecimal(record.getClosePrice()));
                 } else {
                     total = new BigDecimal(record.getClosePrice());
                 }
             }
-            if(total != null) {
+            if (total != null) {
                 return total.divide(new BigDecimal(dayCount), 4, RoundingMode.HALF_UP);
             }
         }
         return null;
+    }
+
+    private static boolean isNumeric(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }
