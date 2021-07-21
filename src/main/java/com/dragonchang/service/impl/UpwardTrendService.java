@@ -81,6 +81,9 @@ public class UpwardTrendService implements IUpwardTrendService {
         if(CollectionUtils.isNotEmpty(priceRecords)) {
             BigDecimal total = null;
             for (CompanyPriceRecord record : priceRecords) {
+                if(record == null || record.getClosePrice() == null) {
+                    return null;
+                }
                 if(total != null) {
                     total = total.add(new BigDecimal(record.getClosePrice()));
                 } else {
