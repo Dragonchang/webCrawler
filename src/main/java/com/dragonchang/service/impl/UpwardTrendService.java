@@ -49,16 +49,18 @@ public class UpwardTrendService implements IUpwardTrendService {
             if(stock.getName().contains("ST")) {
                 continue;
             }
-            List<CompanyPriceRecord> priceRecords = companyPriceRecordMapper.selectListByCondition(stock.getId(), today, 60);
-            if(priceRecords.size() < 60) {
+            List<CompanyPriceRecord> priceRecords = companyPriceRecordMapper.selectListByCondition(stock.getId(), today, 90);
+            if(priceRecords.size() < 90) {
                 continue;
             }
             BigDecimal ten = calculateMA(10, priceRecords.subList(0, 10));
             BigDecimal twenty = calculateMA(20, priceRecords.subList(0, 20));
             BigDecimal thirty = calculateMA(30, priceRecords.subList(0, 30));
             BigDecimal liushi = calculateMA(60, priceRecords.subList(0, 60));
-            if (ten != null && twenty != null && thirty != null && liushi != null) {
-                if (ten.compareTo(twenty) > 0 && twenty.compareTo(thirty) > 0 && thirty.compareTo(liushi) >0) {
+            BigDecimal jiushi = calculateMA(90, priceRecords.subList(0, 90));
+            if (ten != null && twenty != null && thirty != null && liushi != null && jiushi != null) {
+                if (ten.compareTo(twenty) > 0 && twenty.compareTo(thirty) > 0
+                        && thirty.compareTo(liushi) >0 && liushi.compareTo(jiushi)>0) {
                     UpwardTrend upwardTrend = new UpwardTrend();
                     upwardTrend.setCompanyStockId(stock.getId());
                     upwardTrend.setReportTime(today);
