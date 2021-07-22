@@ -65,7 +65,10 @@ public class UpwardTrendService implements IUpwardTrendService {
             BigDecimal avgTwenty = calculateMA(20, priceRecords.subList(0, 20));
             BigDecimal avgThirty = calculateMA(30, priceRecords.subList(0, 30));
             BigDecimal avgSixty = calculateMA(60, priceRecords.subList(0, 60));
-            BigDecimal avgNinety = calculateMA(90, priceRecords.subList(0, 90));
+            BigDecimal avgNinety = null;
+            if(priceRecords.size() >= 90) {
+                avgNinety = calculateMA(90, priceRecords.subList(0, 90));
+            }
             if (avgTen != null && avgTwenty != null && avgThirty != null && avgSixty != null) {
                 if (avgTen.compareTo(avgTwenty) > 0 && avgTwenty.compareTo(avgThirty) > 0
                         && avgThirty.compareTo(avgSixty) >0) {
