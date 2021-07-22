@@ -60,7 +60,7 @@ public class CompanyStockTask {
      * 每天下午6点执行
      */
     @Async
-    @Scheduled(cron = "0 0 20 ? * MON-FRI")
+    @Scheduled(cron = "0 0 18 ? * MON-FRI")
     public void createUpwardTrendRecord() {
         String today = DateUtil.formatDate(new Date());
         upwardTrendService.generateUpwardTrendListByToday(today);
