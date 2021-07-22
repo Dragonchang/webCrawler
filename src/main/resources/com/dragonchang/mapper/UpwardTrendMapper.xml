@@ -7,7 +7,7 @@
         LEFT JOIN t_company_stock b on a.company_stock_id = b.id
         where 1=1
         <if test="request.today != null and request.today != ''">
-            and a.report_time &lt;= #{request.today}
+            and a.report_time = #{request.today}
         </if>
         <if test="request.name != null and request.name != ''">
             and b.name like CONCAT('%', #{request.name} , '%')
@@ -21,7 +21,7 @@
         LEFT JOIN t_company_stock b on a.company_stock_id = b.id
         where 1=1
         <if test="request.today != null and request.today != ''">
-            and a.report_time &lt;= #{request.today}
+            and a.report_time = #{request.today}
         </if>
         <if test="request.name != null and request.name != ''">
             and b.name like CONCAT('%', #{request.name} , '%')
