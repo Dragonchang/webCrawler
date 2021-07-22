@@ -54,37 +54,37 @@ $(function() {
             {
                 "data": 'avgFive',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'avgTen',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'avgTwenty',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'avgThirty',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'avgSixty',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'avgNinety',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'avgHundtwenty',
                 "visible" : true,
-                "width":'10%'
+                "width":'5%'
             },
             {
                 "data": 'reportTime',
