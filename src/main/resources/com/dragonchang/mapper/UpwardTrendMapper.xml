@@ -62,10 +62,10 @@
             </if>
         </if>
         <if test="request.isHeight != null and request.isHeight != ''">
-            <if test="request.filter == 2">
+            <if test="request.isHeight == 2">
                 and b.last_price &gt;= a.avg_five
             </if>
-            <if test="request.filter == 3">
+            <if test="request.isHeight == 3">
                 and b.last_price &lt; a.avg_five
             </if>
         </if>
