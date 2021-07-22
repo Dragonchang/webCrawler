@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragonchang.mapper.UpwardTrendMapper">
+
+    <select id="findPage" resultType="com.dragonchang.domain.dto.UpwardTrendDTO">
+        select a.*, b.name, b.stock_code, b.last_price from t_upward_trend a
+        LEFT JOIN t_company_stock b on a.company_stock_id = b.id
+        where 1=1
+        <if test="request.today != null and request.today != ''">
+            and a.report_time &lt;= #{request.today}
+        </if>
+        <if test="request.name != null and request.name != ''">
+            and b.name like CONCAT('%', #{request.name} , '%')
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+    </select>
+    <select id="findList" resultType="com.dragonchang.domain.dto.UpwardTrendDTO">
+        select a.*, b.name, b.stock_code, b.last_price from t_upward_trend a
+        LEFT JOIN t_company_stock b on a.company_stock_id = b.id
+        where 1=1
+        <if test="request.today != null and request.today != ''">
+            and a.report_time &lt;= #{request.today}
+        </if>
+        <if test="request.name != null and request.name != ''">
+            and b.name like CONCAT('%', #{request.name} , '%')
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+    </select>
+</mapper>

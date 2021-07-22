@@ -8,3 +8,12 @@ CREATE TABLE `t_upward_trend` (
                             PRIMARY KEY (`id`) USING BTREE,
                             KEY `index_company_stock_id` (`company_stock_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='上涨态势公司记录';
+
+ALTER TABLE `t_upward_trend`
+ADD COLUMN `avg_five` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "五日均价" AFTER `company_stock_id`,
+ADD COLUMN `avg_ten` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "十日均价" AFTER `avg_five`,
+ADD COLUMN `avg_twenty` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "20日均价" AFTER `avg_ten`,
+ADD COLUMN `avg_thirty` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "30日均价" AFTER `avg_twenty`,
+ADD COLUMN `avg_sixty` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "60日均价" AFTER `avg_thirty`,
+ADD COLUMN `avg_ninety` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "90日均价" AFTER `avg_sixty`,
+ADD COLUMN `avg_hundtwenty` VARCHAR(32) CHARACTER SET utf8mb4 DEFAULT NULL COMMENT "120日均价" AFTER `avg_ninety`;

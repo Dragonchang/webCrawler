@@ -26,6 +26,13 @@ public class UpwardTrend {
      */
     private Integer companyStockId;
 
+    private String avgFive;
+    private String avgTen;
+    private String avgTwenty;
+    private String avgThirty;
+    private String avgSixty;
+    private String avgNinety;
+    private String avgHundtwenty;
     /**
      * 上涨态势生成时间
      */
