@@ -8,7 +8,13 @@ $(function() {
             url: base_url + "/recommend/pageList",
             type:"post",
             data : function ( d ) {
+                var condition1 = document.getElementById("condition1");
+                var select1 = condition1.options[condition1.selectedIndex].value;
+                var condition2 = document.getElementById("condition2");
+                var select2 = condition2.options[condition2.selectedIndex].value;
                 var obj = {};
+                obj.filter = select1;
+                obj.isHeight = select2;
                 obj.name = $('#name').val();
                 obj.stockCode = $('#stock_code').val();
                 obj.start = d.start;
@@ -138,7 +144,13 @@ $(function() {
     });
 
     $('#exportBtn').on('click', function(){
+        var condition1 = document.getElementById("condition1");
+        var select1 = condition1.options[condition1.selectedIndex].value;
+        var condition2 = document.getElementById("condition2");
+        var select2 = condition2.options[condition2.selectedIndex].value;
         data = {
+            filter: select1,
+            isHeight: select2,
             name: $('#name').val(),
             stockCode: $('#stock_code').val()
         };

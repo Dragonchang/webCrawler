@@ -13,4 +13,6 @@ public class UpwardTrendPageRequestDTO extends PageRequestDTO{
     String today;
     String name;
     String stockCode;
+    String filter;
+    String isHeight;
 }

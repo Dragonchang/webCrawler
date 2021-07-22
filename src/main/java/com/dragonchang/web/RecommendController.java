@@ -60,7 +60,8 @@ public class RecommendController {
     @ApiOperation(value = "分页获当日趋势信息")
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
-                                        @RequestParam(required = false, defaultValue = "10") int length,String name, String stockCode) {
+                                        @RequestParam(required = false, defaultValue = "10") int length,
+                                        String name, String stockCode, String filter, String isHeight) {
         UpwardTrendPageRequestDTO pageRequest = new UpwardTrendPageRequestDTO();
         if (start == 0) {
             start = 1;
@@ -73,6 +74,12 @@ public class RecommendController {
         pageRequest.setToday(today);
         pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
+        if(StringUtils.isNotBlank(filter) && !filter.equals("1")) {
+            pageRequest.setFilter(filter);
+        }
+        if(StringUtils.isNotBlank(isHeight) && !isHeight.equals("1")) {
+            pageRequest.setIsHeight(isHeight);
+        }
         pageRequest.setPage(start);
         pageRequest.setSize(length);
 
@@ -97,6 +104,12 @@ public class RecommendController {
     public ResponseEntity<byte[]> exportFlow(@RequestBody UpwardTrendPageRequestDTO pageRequest) {
         String today = DateUtil.formatDate(new Date());
         pageRequest.setToday(today);
+        if(StringUtils.isBlank(pageRequest.getFilter()) || pageRequest.getFilter().equals("1")) {
+            pageRequest.setFilter(null);
+        }
+        if(StringUtils.isBlank(pageRequest.getIsHeight()) || pageRequest.getIsHeight().equals("1")) {
+            pageRequest.setIsHeight(null);
+        }
         ExcelData data = upwardTrendService.exportFlow(pageRequest);
         return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
     }

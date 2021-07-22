@@ -21,6 +21,27 @@
             <div class="row">
                 <div class="col-xs-2">
                     <div class="input-group">
+                        <span class="input-group-addon">股票类型:</span>
+                        <select class="form-control" id="condition1" >
+                            <option value="1" >${"全部"}</option>
+                            <option value="2" >${"非科创股"}</option>
+                            <option value="3" >${"创业股"}</option>
+                            <option value="4" >${"科创股"}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">是否跌破5日线:</span>
+                        <select class="form-control" id="condition2" >
+                            <option value="1" >${"全部"}</option>
+                            <option value="2" >${"否"}</option>
+                            <option value="3" >${"是"}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="input-group">
                         <span class="input-group-addon">公司名称</span>
                         <input type="text" class="form-control" id="name" autocomplete="on" >
                     </div>
