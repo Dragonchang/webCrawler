@@ -17,6 +17,7 @@ $(function() {
                 obj.isHeight = select2;
                 obj.name = $('#name').val();
                 obj.stockCode = $('#stock_code').val();
+                obj.today = $('#reservation').val();
                 obj.start = d.start;
                 obj.length = d.length;
                 return obj;
@@ -134,7 +135,33 @@ $(function() {
         }
     });
 
+    $('#reservation').daterangepicker({
+            autoUpdateInput: false,
+            autoclose: true,
+            singleDatePicker:true,
+            maxDate: moment(new Date()), //设置最大日期
+            "opens": "center",
+            format: 'YYYY-MM-DD',
+            ranges: {
+                '今天': [moment()],
+                '昨天': [moment().subtract(1, 'days')],
+                '上周': [moment().subtract(6, 'days')],
+                '最近一月': [moment().subtract(1, 'months').startOf('day')],
+                '最近六月': [moment().subtract(6, 'months').startOf('day')],
+                '最近一年月': [moment().subtract(12, 'months').startOf('day')]
+            },
+            locale: {
+                format: "YYYY-MM-DD",
+            }
+        },
+        function (start, end) {
+            $('#reservation').data('daterangepicker').autoUpdateInput=true
+        }
+    )
 
+    $('#clear').on('click', function(){
+        $('#reservation').val('');
+    })
     // table data
     var tableData = {};
 
@@ -152,7 +179,8 @@ $(function() {
             filter: select1,
             isHeight: select2,
             name: $('#name').val(),
-            stockCode: $('#stock_code').val()
+            stockCode: $('#stock_code').val(),
+            today: $('#reservation').val()
         };
 // Use XMLHttpRequest instead of Jquery $ajax
         xhttp = new XMLHttpRequest();

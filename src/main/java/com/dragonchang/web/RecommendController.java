@@ -61,7 +61,7 @@ public class RecommendController {
     @ResponseBody
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
-                                        String name, String stockCode, String filter, String isHeight) {
+                                        String name, String stockCode, String filter, String isHeight, String today) {
         UpwardTrendPageRequestDTO pageRequest = new UpwardTrendPageRequestDTO();
         if (start == 0) {
             start = 1;
@@ -70,7 +70,9 @@ public class RecommendController {
             start = (int) Math.floor(ret);
             start = start + 1;
         }
-        String today = DateUtil.formatDate(new Date());
+        if(StringUtils.isBlank(today)) {
+            today = DateUtil.formatDate(new Date());
+        }
         pageRequest.setToday(today);
         pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
@@ -102,8 +104,10 @@ public class RecommendController {
     @ApiOperation(value = "导出公司信息")
     @ResponseBody
     public ResponseEntity<byte[]> exportFlow(@RequestBody UpwardTrendPageRequestDTO pageRequest) {
-        String today = DateUtil.formatDate(new Date());
-        pageRequest.setToday(today);
+        if(StringUtils.isBlank(pageRequest.getToday())) {
+            String today = DateUtil.formatDate(new Date());
+            pageRequest.setToday(today);
+        }
         if(StringUtils.isBlank(pageRequest.getFilter()) || pageRequest.getFilter().equals("1")) {
             pageRequest.setFilter(null);
         }

@@ -21,7 +21,7 @@
             <div class="row">
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">股票类型:</span>
+                        <span class="input-group-addon">类型:</span>
                         <select class="form-control" id="condition1" >
                             <option value="1" >${"全部"}</option>
                             <option value="2" >${"非科创股"}</option>
@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">是否跌破5日线:</span>
+                        <span class="input-group-addon">跌破5日:</span>
                         <select class="form-control" id="condition2" >
                             <option value="1" >${"全部"}</option>
                             <option value="2" >${"否"}</option>
@@ -42,15 +42,28 @@
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">公司名称</span>
+                        <span class="input-group-addon">名称</span>
                         <input type="text" class="form-control" id="name" autocomplete="on" >
                     </div>
                 </div>
                 <div class="col-xs-2">
                     <div class="input-group">
-                        <span class="input-group-addon">股票代码</span>
+                        <span class="input-group-addon">代码</span>
                         <input type="text" class="form-control" id="stock_code" autocomplete="on" >
                     </div>
+                </div>
+                <!-- Date range -->
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">时间：</span>
+                        <div class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <input type="text" class="form-control pull-right" id="reservation">
+
+                        <div class="input-group-addon clearBtns" id="clear" >x</div>
+                    </div>
+                    <!-- /.input group -->
                 </div>
                 <div class="col-xs-1 pull-right">
                     <button class="btn btn-block btn-info " id="exportBtn">导出</button>
@@ -78,7 +91,7 @@
                                     <th name="avgThirty" >三十日</th>
                                     <th name="avgSixty" >六十日</th>
                                     <th name="avgNinety" >九十日</th>
-                                    <th name="avgHundtwenty" >一百日</th>
+                                    <th name="avgHundtwenty" >一百二十日</th>
                                     <th name="reportTime" >生成时间</th>
                                     <th name="detail" >详情</th>
                                 </tr>
