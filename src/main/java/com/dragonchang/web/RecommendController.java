@@ -3,9 +3,11 @@ package com.dragonchang.web;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
 import com.dragonchang.domain.dto.ExcelData;
+import com.dragonchang.domain.dto.NewUpwardTrendDTO;
 import com.dragonchang.domain.dto.UpwardTrendDTO;
 import com.dragonchang.domain.dto.UpwardTrendPageRequestDTO;
 import com.dragonchang.domain.po.CompanyStock;
+import com.dragonchang.domain.po.NewUpwardTrend;
 import com.dragonchang.domain.vo.JsonResult;
 import com.dragonchang.service.IUpwardTrendService;
 import com.dragonchang.util.DateUtil;
@@ -53,6 +55,14 @@ public class RecommendController {
     @ResponseBody
     public JsonResult syncUpwardTrend(@RequestParam(required = false) String today) {
         upwardTrendService.generateUpwardTrendListByToday(today);
+        return JsonResult.success();
+    }
+
+    @GetMapping(value = "/syncNewUpwardTrend")
+    @ApiOperation(value = "生成上涨趋势公司列表")
+    @ResponseBody
+    public JsonResult syncNewUpwardTrend(@RequestParam(required = false) String today) {
+        upwardTrendService.generateNewUpwardTrendListByToday(today);
         return JsonResult.success();
     }
 
@@ -117,4 +127,70 @@ public class RecommendController {
         ExcelData data = upwardTrendService.exportFlow(pageRequest);
         return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
     }
+
+
+    @RequestMapping("/newPageList")
+    @ApiOperation(value = "分页获当日趋势信息")
+    @ResponseBody
+    public Map<String, Object> newPageList(@RequestParam(required = false, defaultValue = "0") int start,
+                                        @RequestParam(required = false, defaultValue = "10") int length,
+                                        String name, String stockCode, String filter, String isHeight, String today) {
+
+        UpwardTrendPageRequestDTO pageRequest = new UpwardTrendPageRequestDTO();
+        if (start == 0) {
+            start = 1;
+        } else {
+            double ret = start / length;
+            start = (int) Math.floor(ret);
+            start = start + 1;
+        }
+        if(StringUtils.isBlank(today)) {
+            today = DateUtil.formatDate(new Date());
+        }
+        pageRequest.setToday(today);
+        pageRequest.setName(name);
+        pageRequest.setStockCode(stockCode);
+        if(StringUtils.isNotBlank(filter) && !filter.equals("1")) {
+            pageRequest.setFilter(filter);
+        }
+        if(StringUtils.isNotBlank(isHeight) && !isHeight.equals("1")) {
+            pageRequest.setIsHeight(isHeight);
+        }
+        pageRequest.setPage(start);
+        pageRequest.setSize(length);
+
+        IPage<NewUpwardTrendDTO> upwardTrendPage = upwardTrendService.newFindPage(pageRequest);
+        if (upwardTrendPage.getTotal() > 0) {
+            upwardTrendPage.setTotal(upwardTrendPage.getTotal() - 1);
+        }
+        List<NewUpwardTrendDTO> list = upwardTrendPage.getRecords();
+        int list_count = (int) upwardTrendPage.getTotal() + 1;
+
+        // package result
+        Map<String, Object> maps = new HashMap<String, Object>();
+        maps.put("recordsTotal", list_count);        // 总记录数
+        maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
+        maps.put("data", list);                    // 分页列表
+        return maps;
+
+    }
+
+    @PostMapping(value = "/newExport")
+    @ApiOperation(value = "导出公司信息")
+    @ResponseBody
+    public ResponseEntity<byte[]> newExportFlow(@RequestBody UpwardTrendPageRequestDTO pageRequest) {
+        if(StringUtils.isBlank(pageRequest.getToday())) {
+            String today = DateUtil.formatDate(new Date());
+            pageRequest.setToday(today);
+        }
+        if(StringUtils.isBlank(pageRequest.getFilter()) || pageRequest.getFilter().equals("1")) {
+            pageRequest.setFilter(null);
+        }
+        if(StringUtils.isBlank(pageRequest.getIsHeight()) || pageRequest.getIsHeight().equals("1")) {
+            pageRequest.setIsHeight(null);
+        }
+        ExcelData data = upwardTrendService.newExportFlow(pageRequest);
+        return HttpUtil.generateHttpEntity(ExcelUtil.readDataAsByteArray(data), data.getFileName(), ".xlsx");
+    }
+
 }

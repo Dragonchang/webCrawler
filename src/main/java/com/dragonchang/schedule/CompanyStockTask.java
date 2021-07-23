@@ -64,5 +64,6 @@ public class CompanyStockTask {
     public void createUpwardTrendRecord() {
         String today = DateUtil.formatDate(new Date());
         upwardTrendService.generateUpwardTrendListByToday(today);
+        upwardTrendService.generateNewUpwardTrendListByToday(today);
     }
 }

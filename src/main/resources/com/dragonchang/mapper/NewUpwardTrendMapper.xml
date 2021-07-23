@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragonchang.mapper.NewUpwardTrendMapper">
+
+    <select id="findPage" resultType="com.dragonchang.domain.dto.NewUpwardTrendDTO">
+        select a.*, b.name, b.stock_code, b.last_price from t_new_upward_trend a
+        LEFT JOIN t_company_stock b on a.company_stock_id = b.id
+        where 1=1
+        <if test="request.today != null and request.today != ''">
+            and a.report_time = #{request.today}
+        </if>
+        <if test="request.name != null and request.name != ''">
+            and b.name like CONCAT('%', #{request.name} , '%')
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+        <if test="request.filter != null and request.filter != ''">
+            <if test="request.filter == 2">
+                and b.stock_code not like CONCAT('300' , '%')
+                and b.stock_code not like CONCAT('688' , '%')
+            </if>
+            <if test="request.filter == 3">
+                and b.stock_code like CONCAT('300' , '%')
+            </if>
+            <if test="request.filter == 4">
+                and b.stock_code like CONCAT('688' , '%')
+            </if>
+        </if>
+        <if test="request.isHeight != null and request.isHeight != ''">
+            <if test="request.isHeight == 2">
+                and b.last_price &gt;= a.avg_five
+            </if>
+            <if test="request.isHeight == 3">
+                and b.last_price &lt; a.avg_five
+            </if>
+        </if>
+    </select>
+    <select id="findList" resultType="com.dragonchang.domain.dto.NewUpwardTrendDTO">
+        select a.*, b.name, b.stock_code, b.last_price from t_new_upward_trend a
+        LEFT JOIN t_company_stock b on a.company_stock_id = b.id
+        where 1=1
+        <if test="request.today != null and request.today != ''">
+            and a.report_time = #{request.today}
+        </if>
+        <if test="request.name != null and request.name != ''">
+            and b.name like CONCAT('%', #{request.name} , '%')
+        </if>
+        <if test="request.stockCode != null and request.stockCode != ''">
+            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+        </if>
+        <if test="request.filter != null and request.filter != ''">
+            <if test="request.filter == 2">
+                and b.stock_code not like CONCAT('300' , '%')
+                and b.stock_code not like CONCAT('688' , '%')
+            </if>
+            <if test="request.filter == 3">
+                and b.stock_code like CONCAT('300' , '%')
+            </if>
+            <if test="request.filter == 4">
+                and b.stock_code like CONCAT('688' , '%')
+            </if>
+        </if>
+        <if test="request.isHeight != null and request.isHeight != ''">
+            <if test="request.isHeight == 2">
+                and b.last_price &gt;= a.avg_five
+            </if>
+            <if test="request.isHeight == 3">
+                and b.last_price &lt; a.avg_five
+            </if>
+        </if>
+    </select>
+</mapper>

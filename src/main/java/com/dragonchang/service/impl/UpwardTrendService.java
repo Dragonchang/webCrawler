@@ -5,18 +5,23 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.domain.dto.ExcelData;
+import com.dragonchang.domain.dto.NewUpwardTrendDTO;
 import com.dragonchang.domain.dto.UpwardTrendDTO;
 import com.dragonchang.domain.dto.UpwardTrendPageRequestDTO;
 import com.dragonchang.domain.po.CompanyPriceRecord;
 import com.dragonchang.domain.po.CompanyStock;
+import com.dragonchang.domain.po.NewUpwardTrend;
 import com.dragonchang.domain.po.UpwardTrend;
 import com.dragonchang.mapper.CompanyPriceRecordMapper;
 import com.dragonchang.mapper.CompanyStockMapper;
+import com.dragonchang.mapper.NewUpwardTrendMapper;
 import com.dragonchang.mapper.UpwardTrendMapper;
 import com.dragonchang.service.IUpwardTrendService;
 import com.dragonchang.util.DateUtil;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +49,9 @@ public class UpwardTrendService implements IUpwardTrendService {
 
     @Autowired
     private CompanyPriceRecordMapper companyPriceRecordMapper;
+
+    @Autowired
+    private NewUpwardTrendMapper newUpwardTrendMapper;
 
     @Override
     public void generateUpwardTrendListByToday(String today) {
@@ -100,11 +108,48 @@ public class UpwardTrendService implements IUpwardTrendService {
     }
 
     @Override
+    public void generateNewUpwardTrendListByToday(String today) {
+        List<UpwardTrend> newUpwardTrends =  new ArrayList<>();
+        List<UpwardTrend> todayUpwardTrends = upwardTrendMapper.selectList(new LambdaQueryWrapper<UpwardTrend>()
+                .eq(UpwardTrend::getReportTime, today));
+        String beforeDay = DateUtil.formatDate(DateUtil.getDateBefore(DateUtil.parseDate(today), 1));
+        List<UpwardTrend> beforeUpwardTrends = upwardTrendMapper.selectList(new LambdaQueryWrapper<UpwardTrend>()
+                .eq(UpwardTrend::getReportTime, beforeDay));
+        for(UpwardTrend todayUp : todayUpwardTrends) {
+            Boolean foundAtBefore = false;
+            for( UpwardTrend before : beforeUpwardTrends) {
+                if(before.getCompanyStockId().equals(todayUp.getCompanyStockId())) {
+                    foundAtBefore = true;
+                    break;
+                }
+            }
+            if(foundAtBefore == false) {
+                newUpwardTrends.add(todayUp);
+            }
+        }
+        if(CollectionUtils.isNotEmpty(newUpwardTrends)) {
+            for(UpwardTrend newUp : newUpwardTrends) {
+                NewUpwardTrend newUpwardTrend = new NewUpwardTrend();
+                BeanUtils.copyProperties(newUp, newUpwardTrend);
+                newUpwardTrendMapper.insert(newUpwardTrend);
+            }
+        }
+    }
+
+    @Override
     public IPage<UpwardTrendDTO> findPage(UpwardTrendPageRequestDTO pageRequest) {
         Page page = new Page();
         page.setCurrent(pageRequest.getPage());
         page.setSize(pageRequest.getSize());
         return upwardTrendMapper.findPage(page, pageRequest);
+    }
+
+    @Override
+    public IPage<NewUpwardTrendDTO> newFindPage(UpwardTrendPageRequestDTO pageRequest) {
+        Page page = new Page();
+        page.setCurrent(pageRequest.getPage());
+        page.setSize(pageRequest.getSize());
+        return newUpwardTrendMapper.findPage(page, pageRequest);
     }
 
     @Override
@@ -143,6 +188,35 @@ public class UpwardTrendService implements IUpwardTrendService {
             row.add(upwardTrendDTO.getAvgSixty());
             row.add(upwardTrendDTO.getAvgNinety());
             row.add(upwardTrendDTO.getAvgHundtwenty());
+            row.add(upwardTrendDTO.getReportTime());
+            rows.add(row);
+        }
+        data.setRows(rows);
+        return data;
+    }
+
+    @Override
+    public ExcelData newExportFlow(UpwardTrendPageRequestDTO request) {
+        List<NewUpwardTrendDTO> list = newUpwardTrendMapper.findList(request);
+        ExcelData data = new ExcelData();
+        String time = DateUtil.localDateTimeFormat(LocalDateTime.now(),DateUtil.DEFAULT_DATE_TIME_FORMAT_SECOND);
+        String fileName = "upwardTrend" + time;
+        data.setSavePath("D:\\");
+        data.setFileName(fileName);
+        data.setSheetName("UpwardTrend");
+        List<String> titles = new ArrayList();
+        titles.add("股票代码");
+        titles.add("公司名称");
+        titles.add("股票最新股价");
+        titles.add("生成时间");
+        data.setTitles(titles);
+        List<List<Object>> rows = new ArrayList();
+        for (int i = 0, length = list.size(); i < length; i++) {
+            NewUpwardTrendDTO upwardTrendDTO = list.get(i);
+            List<Object> row = new ArrayList();
+            row.add(upwardTrendDTO.getStockCode());
+            row.add(upwardTrendDTO.getName());
+            row.add(upwardTrendDTO.getLastPrice());
             row.add(upwardTrendDTO.getReportTime());
             rows.add(row);
         }
