@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -112,7 +113,7 @@ public class UpwardTrendService implements IUpwardTrendService {
         List<UpwardTrend> newUpwardTrends =  new ArrayList<>();
         List<UpwardTrend> todayUpwardTrends = upwardTrendMapper.selectList(new LambdaQueryWrapper<UpwardTrend>()
                 .eq(UpwardTrend::getReportTime, today));
-        String beforeDay = DateUtil.formatDate(DateUtil.getDateBefore(DateUtil.parseDate(today), 1));
+        String beforeDay = getBeforeDay(today);
         List<UpwardTrend> beforeUpwardTrends = upwardTrendMapper.selectList(new LambdaQueryWrapper<UpwardTrend>()
                 .eq(UpwardTrend::getReportTime, beforeDay));
         for(UpwardTrend todayUp : todayUpwardTrends) {
@@ -265,4 +266,14 @@ public class UpwardTrendService implements IUpwardTrendService {
             return false;
         }
     }
+
+    private String getBeforeDay(String today) {
+        Date todayDate = DateUtil.parseDate(today);
+        if(DateUtil.isMonday(todayDate)) {
+            return DateUtil.formatDate(DateUtil.getDateBefore(todayDate, 3));
+        } else {
+            return DateUtil.formatDate(DateUtil.getDateBefore(todayDate, 1));
+        }
+    }
 }
+

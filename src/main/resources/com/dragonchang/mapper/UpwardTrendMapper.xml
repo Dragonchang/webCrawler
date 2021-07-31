@@ -35,6 +35,7 @@
                 and b.last_price &lt; a.avg_five
             </if>
         </if>
+        order by last_price desc
     </select>
     <select id="findList" resultType="com.dragonchang.domain.dto.UpwardTrendDTO">
         select a.*, b.name, b.stock_code, b.last_price from t_upward_trend a
@@ -69,5 +70,6 @@
                 and b.last_price &lt; a.avg_five
             </if>
         </if>
+        order by last_price desc
     </select>
 </mapper>

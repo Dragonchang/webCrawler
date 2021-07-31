@@ -230,9 +230,23 @@ public class DateUtil {
         return now.getTime();
     }
 
+    public static boolean isMonday(Date todayDate) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(todayDate);
+        int w = cal.get(Calendar.DAY_OF_WEEK)-1;
+        if(w==0) w=7;
+        if(w == 1) {
+            return true;
+        }
+        return false;
+    }
+
+
     public static void main(String[] args) {
         int tet = getCurrentQuarter();
         LocalDateTime str = DateUtil.strToLocalDateTime("20201203");
         System.out.println(">>>"+str.toString());
+
+        isMonday(new Date());
     }
 }
