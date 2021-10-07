@@ -78,9 +78,10 @@ public class UpwardTrendService implements IUpwardTrendService {
             if(priceRecords.size() >= 90) {
                 avgNinety = calculateMA(90, priceRecords.subList(0, 90));
             }
-            if (avgTen != null && avgTwenty != null && avgThirty != null && avgSixty != null) {
-                if (avgTen.compareTo(avgTwenty) > 0 && avgTwenty.compareTo(avgThirty) > 0
-                        && avgThirty.compareTo(avgSixty) >0) {
+            if (avgFive != null && avgTen != null && avgTwenty != null && avgThirty != null && avgSixty != null) {
+                if (avgFive.compareTo(avgTen) > 0
+                        && avgTen.compareTo(avgTwenty) > 0
+                        && avgTwenty.compareTo(avgThirty) > 0) {
                     UpwardTrend upwardTrend = new UpwardTrend();
                     upwardTrend.setCompanyStockId(stock.getId());
                     if(avgFive != null) {
