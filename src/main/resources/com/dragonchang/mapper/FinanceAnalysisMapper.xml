@@ -22,9 +22,12 @@
 
     <select id="findPage" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
         SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,  b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
-        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time
+        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
+        a.total_income/b.total_capitalization as incomeTotalPercent,
+        c.bk_name as bkInfo
         FROM t_finance_analysis a
         LEFT JOIN t_company_stock b on a.stock_company_id = b.id
+        LEFT JOIN t_bk_stock c on a.stock_company_id = c.company_stock_id
         WHERE 1=1
         <if test="request.name != null and request.name != ''">
             and b.name like CONCAT('%', #{request.name} , '%')
@@ -61,14 +64,20 @@
         </if>
         <if test="request.order != null and request.order == 6">
             ORDER BY a.updated_time DESC
+        </if>
+        <if test="request.order != null and request.order == 7">
+            ORDER BY incomeTotalPercent DESC
         </if>
 
     </select>
     <select id="findList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
         SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
-        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time
+        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
+        a.total_income/b.total_capitalization as incomeTotalPercent,
+        c.bk_name as bkInfo
         FROM t_finance_analysis a
         LEFT JOIN t_company_stock b on a.stock_company_id = b.id
+        LEFT JOIN t_bk_stock c on a.stock_company_id = c.company_stock_id
         WHERE 1=1
         <if test="request.name != null and request.name != ''">
             and b.name like CONCAT('%', #{request.name} , '%')
@@ -106,9 +115,21 @@
         <if test="request.order != null and request.order == 6">
             ORDER BY a.updated_time DESC
         </if>
+        <if test="request.order != null and request.order == 7">
+            ORDER BY incomeTotalPercent DESC
+        </if>
     </select>
 
     <select id="findRecommendList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
 
+    </select>
+
+    <select id="getIncomeAndProfit" resultType="com.dragonchang.domain.dto.IncomeProfitListDTO">
+        select total_income, net_profit, report_time from  t_finance_analysis
+        WHERE 1=1
+        <if test="reportType != null and reportType != ''">
+            and report_type = #{reportType}
+        </if>
+        ORDER BY report_time ASC
     </select>
 </mapper>

@@ -70,4 +70,44 @@ public class HeaderUtils {
         headers.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
         return headers;
     }
+
+    public static Map<String, String> getEastBKWebHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "qgqp_b_id=3159c429a9f9980500703d5341bea318; st_si=62769308102406; st_asi=delete; HAList=ty-0-002643-%u4E07%u6DA6%u80A1%u4EFD%2Cty-90-BK1039-%u7535%u5B50%u5316%u5B66%u54C1%2Cty-90-BK0145-%u4E0A%u6D77%u677F%u5757%2Cty-90-BK0896-%u767D%u9152%2Cty-0-300398-%u98DE%u51EF%u6750%u6599; p_origin=https%3A%2F%2Fpassport2.eastmoney.com; mtp=1; ct=2_jL3QZBMIX6XzDQmk3alBF0hN51hZpf22WpVYFBCzobOP2Xm-VVhkIIuUq7FJZgw8EYvFT7zkZZh4vagfokzSeAh6SX1-EHgIO5TTmFzAKXUW8-AbzINyu2iiQHKL13gDRZ6DXpJfUrOODcpfUtCVuFbL3Xlyp-c0AkXz-KZvI; ut=FobyicMgeV5kZz00Ot3UbweF9-4Uhjwa6xNkABS5WUWGRd5dlSR49ZDFPsYieq4r1sTmIWpizEGBLtINqyn_YcCAw348Nw2n99IEUdQfqVENbz2bthjsDMmjn94cxN8xaZOH-yZ1wxmJe1ljijpNfdqcHuDF0cSkwxCkO3qCNRJpK79XzuW7LuKjtzBwCuw9WCpJEC-WTMax_4Ga6QgT_veWxXUxY-1uPL3r8K7efHwis8E0X0tl36GdNNatyN9OdqWy_MwYSyf57hr5wpfDXg; pi=3914356125019460%3Bu3914356125019460%3B%E8%82%A1%E5%8F%8B189d763T18%3BgjSIQrPC5LukdtUgiWaWop85NsKcpw8voKeP9LcA7xnj4Gs5Dam8admVCQu5W%2B3YqVgtGeTzG%2BwftUIlrfoh1T95Wovkm%2F5%2BZnR08FziZmMQpGYN8pCaDZ53%2F9LpQyfWkW0C8ddn7%2Fl6KM3g7STdOtrwxyDysJXnRA52u1g4mMhgxf62iFra5abP1gQOnAVqnbf4Tn%2Bj%3BEDoCSbjaGaz0H%2B%2BEaY3HuX7zhhUDJ3qajlBuAV6rDegm3RpD%2F%2F8Q%2Fl5nPyOXQFQblmKTJxqi58KbVOBtk4ocTllWUz5L%2FEEAAzvn626F8CYuZ%2Fiz4dMEbPKTEmbU%2FD39jnX%2BHUUkFij9AY27a%2BgZJ8xa6L09pQ%3D%3D; uidal=3914356125019460%e8%82%a1%e5%8f%8b189d763T18; sid=159759623; vtpst=|; st_pvi=68340009970843; st_sp=2023-06-05%2015%3A15%3A46; st_inirUrl=https%3A%2F%2Fwww.google.com%2F; st_sn=19; st_psi=20230828195248734-113200313002-0813850113");
+        headers.put("Host", "5.push2.eastmoney.com");
+        headers.put("Referer", "http://quote.eastmoney.com/center/boardlist.html");
+        //headers.put("Content-Type", "application/json");
+        headers.put("Accept-Encoding", "gzip, deflate");
+        headers.put("Accept", "*/*");
+        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36");
+        headers.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        return headers;
+    }
+
+    public static Map<String, String> getEastBKDetailWebHeaders(String bkcode) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "qgqp_b_id=3159c429a9f9980500703d5341bea318; mtp=1; ct=2_jL3QZBMIX6XzDQmk3alBF0hN51hZpf22WpVYFBCzobOP2Xm-VVhkIIuUq7FJZgw8EYvFT7zkZZh4vagfokzSeAh6SX1-EHgIO5TTmFzAKXUW8-AbzINyu2iiQHKL13gDRZ6DXpJfUrOODcpfUtCVuFbL3Xlyp-c0AkXz-KZvI; ut=FobyicMgeV5kZz00Ot3UbweF9-4Uhjwa6xNkABS5WUWGRd5dlSR49ZDFPsYieq4r1sTmIWpizEGBLtINqyn_YcCAw348Nw2n99IEUdQfqVENbz2bthjsDMmjn94cxN8xaZOH-yZ1wxmJe1ljijpNfdqcHuDF0cSkwxCkO3qCNRJpK79XzuW7LuKjtzBwCuw9WCpJEC-WTMax_4Ga6QgT_veWxXUxY-1uPL3r8K7efHwis8E0X0tl36GdNNatyN9OdqWy_MwYSyf57hr5wpfDXg; pi=3914356125019460%3Bu3914356125019460%3B%E8%82%A1%E5%8F%8B189d763T18%3BgjSIQrPC5LukdtUgiWaWop85NsKcpw8voKeP9LcA7xnj4Gs5Dam8admVCQu5W%2B3YqVgtGeTzG%2BwftUIlrfoh1T95Wovkm%2F5%2BZnR08FziZmMQpGYN8pCaDZ53%2F9LpQyfWkW0C8ddn7%2Fl6KM3g7STdOtrwxyDysJXnRA52u1g4mMhgxf62iFra5abP1gQOnAVqnbf4Tn%2Bj%3BEDoCSbjaGaz0H%2B%2BEaY3HuX7zhhUDJ3qajlBuAV6rDegm3RpD%2F%2F8Q%2Fl5nPyOXQFQblmKTJxqi58KbVOBtk4ocTllWUz5L%2FEEAAzvn626F8CYuZ%2Fiz4dMEbPKTEmbU%2FD39jnX%2BHUUkFij9AY27a%2BgZJ8xa6L09pQ%3D%3D; uidal=3914356125019460%e8%82%a1%e5%8f%8b189d763T18; sid=159759623; vtpst=|; st_si=42038180615794; st_asi=delete; HAList=ty-90-BK1015-%u80FD%u6E90%u91D1%u5C5E%2Cty-90-BK0485-%u65C5%u6E38%u9152%u5E97%2Cty-90-BK1039-%u7535%u5B50%u5316%u5B66%u54C1%2Cty-90-BK0732-%u8D35%u91D1%u5C5E%2Cty-90-BK0475-%u94F6%u884C%2Cty-0-002643-%u4E07%u6DA6%u80A1%u4EFD%2Cty-90-BK0145-%u4E0A%u6D77%u677F%u5757%2Cty-90-BK0896-%u767D%u9152%2Cty-0-300398-%u98DE%u51EF%u6750%u6599; st_pvi=68340009970843; st_sp=2023-06-05%2015%3A15%3A46; st_inirUrl=https%3A%2F%2Fwww.google.com%2F; st_sn=13; st_psi=20231206151135881-113300300992-7647546083");
+        headers.put("Host", "push2.eastmoney.com");
+        headers.put("Referer", "https://data.eastmoney.com/bkzj/"+bkcode+".html");
+        //headers.put("Content-Type", "application/json");
+        headers.put("Accept-Encoding", "gzip, deflate");
+        headers.put("Accept", "*/*");
+        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36");
+        headers.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        return headers;
+    }
+
+
+    public static Map<String, String> getEastConceptWebHeaders() {
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Cookie", "qgqp_b_id=3159c429a9f9980500703d5341bea318; mtp=1; ct=2_jL3QZBMIX6XzDQmk3alBF0hN51hZpf22WpVYFBCzobOP2Xm-VVhkIIuUq7FJZgw8EYvFT7zkZZh4vagfokzSeAh6SX1-EHgIO5TTmFzAKXUW8-AbzINyu2iiQHKL13gDRZ6DXpJfUrOODcpfUtCVuFbL3Xlyp-c0AkXz-KZvI; ut=FobyicMgeV5kZz00Ot3UbweF9-4Uhjwa6xNkABS5WUWGRd5dlSR49ZDFPsYieq4r1sTmIWpizEGBLtINqyn_YcCAw348Nw2n99IEUdQfqVENbz2bthjsDMmjn94cxN8xaZOH-yZ1wxmJe1ljijpNfdqcHuDF0cSkwxCkO3qCNRJpK79XzuW7LuKjtzBwCuw9WCpJEC-WTMax_4Ga6QgT_veWxXUxY-1uPL3r8K7efHwis8E0X0tl36GdNNatyN9OdqWy_MwYSyf57hr5wpfDXg; pi=3914356125019460%3Bu3914356125019460%3B%E8%82%A1%E5%8F%8B189d763T18%3BgjSIQrPC5LukdtUgiWaWop85NsKcpw8voKeP9LcA7xnj4Gs5Dam8admVCQu5W%2B3YqVgtGeTzG%2BwftUIlrfoh1T95Wovkm%2F5%2BZnR08FziZmMQpGYN8pCaDZ53%2F9LpQyfWkW0C8ddn7%2Fl6KM3g7STdOtrwxyDysJXnRA52u1g4mMhgxf62iFra5abP1gQOnAVqnbf4Tn%2Bj%3BEDoCSbjaGaz0H%2B%2BEaY3HuX7zhhUDJ3qajlBuAV6rDegm3RpD%2F%2F8Q%2Fl5nPyOXQFQblmKTJxqi58KbVOBtk4ocTllWUz5L%2FEEAAzvn626F8CYuZ%2Fiz4dMEbPKTEmbU%2FD39jnX%2BHUUkFij9AY27a%2BgZJ8xa6L09pQ%3D%3D; uidal=3914356125019460%e8%82%a1%e5%8f%8b189d763T18; sid=159759623; vtpst=|; st_si=42038180615794; st_asi=delete; HAList=ty-90-BK1134-%u7B97%u529B%u6982%u5FF5%2Cty-90-BK1153-%u591A%u6A21%u6001AI%2Cty-90-BK1015-%u80FD%u6E90%u91D1%u5C5E%2Cty-90-BK0485-%u65C5%u6E38%u9152%u5E97%2Cty-90-BK1039-%u7535%u5B50%u5316%u5B66%u54C1%2Cty-90-BK0732-%u8D35%u91D1%u5C5E%2Cty-90-BK0475-%u94F6%u884C%2Cty-0-002643-%u4E07%u6DA6%u80A1%u4EFD%2Cty-90-BK0145-%u4E0A%u6D77%u677F%u5757%2Cty-90-BK0896-%u767D%u9152; st_pvi=68340009970843; st_sp=2023-06-05%2015%3A15%3A46; st_inirUrl=https%3A%2F%2Fwww.google.com%2F; st_sn=50; st_psi=20231220092537398-113200313002-7000064764");
+        headers.put("Host", "91.push2.eastmoney.com");
+        headers.put("Referer", "http://quote.eastmoney.com/center/boardlist.htm");
+        //headers.put("Content-Type", "application/json");
+        headers.put("Accept-Encoding", "gzip, deflate");
+        headers.put("Accept", "*/*");
+        headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36");
+        headers.put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6");
+        return headers;
+    }
 }

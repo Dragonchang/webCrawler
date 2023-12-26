@@ -205,14 +205,116 @@ public class EastMoneyCrawler {
         return eastMoneyResult.getData();
     }
 
+    /**
+     * http://quote.eastmoney.com/center/boardlist.html#industry_board
+     * @return
+     */
+    public List<BKInfoDTO> getBKList() {
+        Map<String, String> params = new HashMap<>();
+        params.put("pn", "1");
+        params.put("pz", "5000");
+        params.put("po", "1");
+        params.put("np", "1");
+        params.put("ut", "bd1d9ddb04089700cf9c27f6f7426281");
+        params.put("fltt", "2");
+        params.put("invt", "2");
+        params.put("fid", "f3");
+        params.put("fs", "m:90+t:2+f:!50");
+        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f26,f22,f33,f11,f62,f128,f136,f115,f152,f124,f107,f104,f105,f140,f141,f207,f208,f209,f222");
+        String result = HttpClientUtils.doGetForString(UrlConstant.BK_Info_URL,
+                HeaderUtils.getEastBKWebHeaders(), params);
+        TycResult<BKInfoListDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<BKInfoListDTO>>() {
+        });
+        if(eastMoneyResult == null || eastMoneyResult.getData() == null) {
+            return  null;
+        }
+        return eastMoneyResult.getData().getDiff();
+    }
+
+    public List<StockInfoDto> getStockListByBkCode(String bkCode) {
+        Map<String, String> params = new HashMap<>();
+        params.put("fid", "f62");
+        params.put("po", "1");
+        params.put("pz", "5000");
+        params.put("pn", "1");
+        params.put("np", "1");
+        params.put("fltt", "2");
+        params.put("invt", "2");
+        params.put("ut", "b2884a393a59ad64002292a3e90d46a5");
+        params.put("fs", "b:"+bkCode);
+        params.put("fields", "f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124,f1,f13");
+        String result = HttpClientUtils.doGetForString(UrlConstant.BK_Stock_Info_URL,
+                HeaderUtils.getEastBKDetailWebHeaders(bkCode), params);
+        TycResult<StockInfoListDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockInfoListDto>>() {
+        });
+        if(eastMoneyResult == null || eastMoneyResult.getData() == null) {
+            return  null;
+        }
+        return eastMoneyResult.getData().getDiff();
+
+    }
+
+
+
+    /**
+     * http://quote.eastmoney.com/center/boardlist.html#concept_board
+     * @return
+     */
+    public List<BKInfoDTO> getConceptList() {
+        Map<String, String> params = new HashMap<>();
+        params.put("pn", "1");
+        params.put("pz", "5000");
+        params.put("po", "1");
+        params.put("np", "1");
+        params.put("ut", "bd1d9ddb04089700cf9c27f6f7426281");
+        params.put("fltt", "2");
+        params.put("invt", "2");
+        params.put("fid", "f3");
+        params.put("fs", "m:90 t:3 f:!50");
+        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f26,f22,f33,f11,f62,f128,f136,f115,f152,f124,f107,f104,f105,f140,f141,f207,f208,f209,f222");
+        String result = HttpClientUtils.doGetForString(UrlConstant.Concept_Info_URL,
+                HeaderUtils.getEastConceptWebHeaders(), params);
+        TycResult<BKInfoListDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<BKInfoListDTO>>() {
+        });
+        if(eastMoneyResult == null || eastMoneyResult.getData() == null) {
+            return  null;
+        }
+        return eastMoneyResult.getData().getDiff();
+    }
+
+
+    public List<StockInfoDto> getStockListByConceptCode(String conceptCode) {
+        Map<String, String> params = new HashMap<>();
+        params.put("fid", "f62");
+        params.put("po", "1");
+        params.put("pz", "5000");
+        params.put("pn", "1");
+        params.put("np", "1");
+        params.put("fltt", "2");
+        params.put("invt", "2");
+        params.put("ut", "b2884a393a59ad64002292a3e90d46a5");
+        params.put("fs", "b:"+conceptCode);
+        params.put("fields", "f12,f14,f2,f3,f62,f184,f66,f69,f72,f75,f78,f81,f84,f87,f204,f205,f124,f1,f13");
+        String result = HttpClientUtils.doGetForString(UrlConstant.Concept_Stock_Info_URL,
+                HeaderUtils.getEastBKDetailWebHeaders(conceptCode), params);
+        TycResult<StockInfoListDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockInfoListDto>>() {
+        });
+        if(eastMoneyResult == null || eastMoneyResult.getData() == null) {
+            return  null;
+        }
+        return eastMoneyResult.getData().getDiff();
+
+    }
+
+
 
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         //List<StockInfoDto> list = tycCrawler.getStockList();
-
        // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
-
-        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");
+        List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
+        List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
+//        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");
 
         List<FinanceAnalysisDataDTO> data = tycCrawler.getFinanceAnalysisData("2021-03-31,2020-12-31,2020-09-30,2020-06-30,2020-03-31,2019-12-31","300716");
         log.info("test");

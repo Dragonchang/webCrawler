@@ -39,6 +39,7 @@
                             <option value="4" >${"扣非同比增幅"}</option>
                             <option value="5" >${"扣非营收百分比"}</option>
                             <option value="6" >${"更新时间"}</option>
+                            <option value="7" >${"营收市值百分比"}</option>
                         </select>
                     </div>
                 </div>
@@ -74,7 +75,6 @@
                         <input type="text" class="form-control" id="netProfitPercent" autocomplete="on" >
                     </div>
                 </div>
-
                 <div class="col-xs-1 pull-right">
                     <button class="btn btn-block btn-info " id="exportBtn">导出</button>
                 </div>
@@ -97,10 +97,12 @@
                                     <th name="lastPrice" >公司最新股价</th>
                                     <th name="totalCapitalization" >总市值(亿)</th>
                                     <th name="totalIncome" >总营收(亿)</th>
+                                    <th name="incomeTotalPercent" >营收总市值百分比(%)</th>
                                     <th name="totalAddPercent" >营收同比增长(%)</th>
                                     <th name="netProfit" >扣非利润(亿)</th>
                                     <th name="netProfitPercent" >扣非同比增长(%)</th>
                                     <th name="profitTotalPercent" >扣非营收百分比(%)</th>
+                                    <th name="bkInfo" >所属板块</th>
                                     <th name="reportTime" >发布时间</th>
                                     <th name="reportType" >报告类型</th>
                                     <th name="updatedTime" >更新时间</th>

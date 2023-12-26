@@ -33,4 +33,12 @@ public interface FinanceAnalysisMapper extends BaseMapper<FinanceAnalysis> {
      * @return
      */
     List<FinanceAnalysisResponseDTO> findRecommendList(@Param("request") RecommendAnalysisDTO request);
+
+
+    /**
+     * 获取
+     * @param reportType
+     * @return
+     */
+    List<IncomeProfitListDTO> getIncomeAndProfit(String reportType);
 }

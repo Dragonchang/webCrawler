@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,6 +89,12 @@ public class CompanyFinanceAnalysisController {
         }
         List<FinanceAnalysisResponseDTO> list = companyPage.getRecords();
         for(FinanceAnalysisResponseDTO dto : list) {
+            BigDecimal a = dto.getIncomeTotalPercent();
+
+            if(a != null) {
+                BigDecimal b = a.divide(BigDecimal.valueOf(100000000), 2, RoundingMode.HALF_UP);
+                dto.setIncomeTotalPercent(b);
+            }
             dto.setReportType(FinanceReportTypeEnum.getNameByCode(dto.getReportType()));
             dto.setTotalIncome(ExcelUtil.convertToBillion(dto.getTotalIncome()));
             dto.setNetProfit(ExcelUtil.convertToBillion(dto.getNetProfit()));

@@ -48,6 +48,11 @@ public class FinanceAnalysisResponseDTO {
     private BigDecimal totalIncome;
 
     /**
+     * 营收市值百分比
+     */
+    private BigDecimal incomeTotalPercent;
+
+    /**
      * 总营收同比增长
      */
     private BigDecimal totalAddPercent;
@@ -76,6 +81,11 @@ public class FinanceAnalysisResponseDTO {
      * 报告类型(1一季度报，2中报，3三季度报，4 年报)
      */
     private String reportType;
+
+    /**
+     * 公司板块信息
+     */
+    private String bkInfo;
 
     /**
      * 更新时间

@@ -62,6 +62,11 @@ $(function () {
                 "width": '6%'
             },
             {
+                "data": 'incomeTotalPercent',
+                "visible": true,
+                "width": '6%'
+            },
+            {
                 "data": 'totalAddPercent',
                 "visible": true,
                 "width": '6%'
@@ -78,6 +83,11 @@ $(function () {
             },
             {
                 "data": 'profitTotalPercent',
+                "visible": true,
+                "width": '6%'
+            },
+            {
+                "data": 'bkInfo',
                 "visible": true,
                 "width": '6%'
             },

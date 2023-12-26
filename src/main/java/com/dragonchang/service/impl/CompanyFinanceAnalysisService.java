@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +63,7 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
         titles.add("公司最新股价");
         titles.add("公司总市值(亿)");
         titles.add("总营收(亿)");
+        titles.add("营收总市值百分比(%)");
         titles.add("营收同比增长(%)");
         titles.add("扣非利润(亿)");
         titles.add("扣非同比增长(%)");
@@ -68,16 +71,21 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
         titles.add("发布时间");
         titles.add("报告类型");
         titles.add("更新时间");
+        titles.add("板块");
         data.setTitles(titles);
         List<List<Object>> rows = new ArrayList();
         for (int i = 0, length = list.size(); i < length; i++) {
             FinanceAnalysisResponseDTO finance = list.get(i);
             List<Object> row = new ArrayList();
+            BigDecimal income = ExcelUtil.convertToBillion(finance.getTotalIncome());
             row.add(finance.getStockCode());
             row.add(finance.getName());
             row.add(finance.getLastPrice());
             row.add(finance.getTotalCapitalization());
-            row.add(ExcelUtil.convertToBillion(finance.getTotalIncome()));
+            row.add(income);
+            if(finance.getIncomeTotalPercent() != null) {
+                row.add(finance.getIncomeTotalPercent().divide(BigDecimal.valueOf(100000000),2, RoundingMode.HALF_UP));
+            }
             row.add(finance.getTotalAddPercent());
             row.add(ExcelUtil.convertToBillion(finance.getNetProfit()));
             row.add(finance.getNetProfitPercent());
@@ -85,6 +93,7 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
             row.add(finance.getReportTime());
             row.add(FinanceReportTypeEnum.getNameByCode(finance.getReportType()));
             row.add(finance.getUpdatedTime());
+            row.add(finance.getBkInfo());
             rows.add(row);
         }
         data.setRows(rows);

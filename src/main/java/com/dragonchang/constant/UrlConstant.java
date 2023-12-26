@@ -60,4 +60,28 @@ public class UrlConstant {
     public static final String Finance_Analysis_Result_URL = "http://f10.eastmoney.com/NewFinanceAnalysis/lrbAjaxNew";
 
 
+    /**
+     * 东方财富获取所有板块列表
+     * http://quote.eastmoney.com/center/boardlist.html#industry_board
+     */
+    public static final String BK_Info_URL = "https://5.push2.eastmoney.com/api/qt/clist/get";
+
+    /**
+     * 东方财富获取所有板块列表
+     * https://data.eastmoney.com/bkzj/BK1015.html
+     */
+    public static final String BK_Stock_Info_URL = "https://push2.eastmoney.com/api/qt/clist/get";
+
+
+    /**
+     * 东方财富获取所有板块列表
+     * http://quote.eastmoney.com/center/boardlist.html#concept_board
+     */
+    public static final String Concept_Info_URL = "http://91.push2.eastmoney.com/api/qt/clist/get";
+
+    /**
+     * 东方财富获取所有板块列表
+     * https://data.eastmoney.com/bkzj/BK1141.html
+     */
+    public static final String Concept_Stock_Info_URL = "https://push2.eastmoney.com/api/qt/clist/get";
 }

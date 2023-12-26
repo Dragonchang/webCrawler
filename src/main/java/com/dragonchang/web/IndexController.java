@@ -45,4 +45,13 @@ public class IndexController {
         JsonResult<Map<String, Object>> chartInfo = dashboardService.totalChartInfo(startDate, endDate);
         return chartInfo;
     }
+
+    @RequestMapping("/incomeProfit")
+    @ApiOperation(value = "企业营收利润统计信息")
+    @ResponseBody
+    public JsonResult<Map<String, Object>> incomeProfitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startDate,
+                                                          @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endDate) {
+        JsonResult<Map<String, Object>> chartInfo = dashboardService.incomeProfitInfo(startDate, endDate);
+        return chartInfo;
+    }
 }
