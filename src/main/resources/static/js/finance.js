@@ -20,6 +20,7 @@ $(function () {
                 obj.totalCapitalization = $('#totalCapitalization').val();
                 obj.totalAddPercent = $('#totalAddPercent').val();
                 obj.netProfitPercent = $('#netProfitPercent').val();
+                obj.netProfit = $('#netProfit').val();
                 obj.order = order_select;
                 obj.reportTime = time_select;
                 obj.start = d.start;
@@ -90,6 +91,11 @@ $(function () {
                 "data": 'bkInfo',
                 "visible": true,
                 "width": '6%'
+            },
+            {
+                "data": 'conceptInfo',
+                "visible": true,
+                "width": '12%'
             },
             {
                 "data": 'reportTime',

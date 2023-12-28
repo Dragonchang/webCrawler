@@ -1,5 +1,6 @@
 package com.dragonchang.web;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
 import com.dragonchang.domain.dto.ExcelData;
@@ -8,7 +9,9 @@ import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
 import com.dragonchang.domain.dto.HolderDetailRequestDTO;
 import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyStock;
+import com.dragonchang.domain.po.ConceptStock;
 import com.dragonchang.domain.po.FinanceAnalysis;
+import com.dragonchang.mapper.ConceptStockMapper;
 import com.dragonchang.service.ICompanyFinanceAnalysisService;
 import com.dragonchang.util.ExcelUtil;
 import com.dragonchang.util.HttpUtil;
@@ -44,6 +47,9 @@ public class CompanyFinanceAnalysisController {
     @Autowired
     ICompanyFinanceAnalysisService companyFinanceAnalysisService;
 
+    @Autowired
+    ConceptStockMapper conceptStockMapper;
+
     @RequestMapping()
     public String index(Model model) {
         //上报年度列表
@@ -58,7 +64,7 @@ public class CompanyFinanceAnalysisController {
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         String order, String name, String stockCode, String reportTime,
-                                        BigDecimal totalCapitalization, BigDecimal totalAddPercent, BigDecimal netProfitPercent) {
+                                        BigDecimal totalCapitalization, BigDecimal totalAddPercent, BigDecimal netProfitPercent, BigDecimal netProfit) {
 
         if(StringUtils.isNotBlank(stockCode) || StringUtils.isNotBlank(name)) {
             reportTime = null;
@@ -70,6 +76,7 @@ public class CompanyFinanceAnalysisController {
         pageRequest.setTotalCapitalization(totalCapitalization);
         pageRequest.setTotalAddPercent(totalAddPercent);
         pageRequest.setNetProfitPercent(netProfitPercent);
+        pageRequest.setNetProfit(netProfit);
         if(!StringUtils.isEmpty(reportTime)) {
             pageRequest.setReportTime(reportTime);
         }
@@ -98,6 +105,18 @@ public class CompanyFinanceAnalysisController {
             dto.setReportType(FinanceReportTypeEnum.getNameByCode(dto.getReportType()));
             dto.setTotalIncome(ExcelUtil.convertToBillion(dto.getTotalIncome()));
             dto.setNetProfit(ExcelUtil.convertToBillion(dto.getNetProfit()));
+
+            List<ConceptStock> conceptStockList = conceptStockMapper.selectList(new LambdaQueryWrapper<ConceptStock>()
+                    .eq(ConceptStock::getCompanyStockId, dto.getStockCompanyId()));
+
+            if(conceptStockList != null && !conceptStockList.isEmpty()) {
+                String conceptInfo = "";
+                for (ConceptStock stock: conceptStockList
+                     ) {
+                    conceptInfo = conceptInfo + stock.getBkName() + " ";
+                }
+                dto.setConceptInfo(conceptInfo);
+            }
         }
         int list_count = (int) companyPage.getTotal() + 1;
 

@@ -1,5 +1,6 @@
 package com.dragonchang.schedule;
 
+import com.dragonchang.service.IBKInfoService;
 import com.dragonchang.service.ICompanyPriceRecordService;
 import com.dragonchang.service.ICompanyStockService;
 import com.dragonchang.service.IUpwardTrendService;
@@ -36,6 +37,8 @@ public class CompanyStockTask {
     @Autowired
     IUpwardTrendService upwardTrendService;
 
+    @Autowired
+    IBKInfoService bKInfoService;
     /**
      * 每天下午3点执行
      */
@@ -45,6 +48,9 @@ public class CompanyStockTask {
         companyStockService.syncStockListInfo();
         companyPriceRecordService.syncCompanyTodayPrice();
         companyStockService.syncAllStockShareHolder();
+
+        bKInfoService.updateBKInfo();
+        bKInfoService.updateConceptInfo();
     }
 
     /**

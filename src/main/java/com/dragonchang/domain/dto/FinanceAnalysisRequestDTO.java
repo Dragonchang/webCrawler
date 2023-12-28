@@ -31,4 +31,9 @@ public class FinanceAnalysisRequestDTO extends PageRequestDTO{
      * 扣非同比增长
      */
     BigDecimal netProfitPercent;
+
+    /**
+     * 扣非
+     */
+    BigDecimal netProfit;
 }

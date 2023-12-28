@@ -1,5 +1,6 @@
 package com.dragonchang.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.domain.dto.ExcelData;
@@ -7,7 +8,9 @@ import com.dragonchang.domain.dto.FinanceAnalysisRequestDTO;
 import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.enums.FinanceReportTypeEnum;
+import com.dragonchang.domain.po.ConceptStock;
 import com.dragonchang.domain.po.FinanceAnalysis;
+import com.dragonchang.mapper.ConceptStockMapper;
 import com.dragonchang.mapper.FinanceAnalysisMapper;
 import com.dragonchang.service.ICompanyFinanceAnalysisService;
 import com.dragonchang.util.DateUtil;
@@ -34,6 +37,9 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
 
     @Autowired
     private FinanceAnalysisMapper financeAnalysisMapper;
+
+    @Autowired
+    ConceptStockMapper conceptStockMapper;
 
     @Override
     public List<String> getTotalReportTimeList() {
@@ -68,10 +74,11 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
         titles.add("扣非利润(亿)");
         titles.add("扣非同比增长(%)");
         titles.add("扣非营收百分比(%)");
+        titles.add("板块");
+        titles.add("概念");
         titles.add("发布时间");
         titles.add("报告类型");
         titles.add("更新时间");
-        titles.add("板块");
         data.setTitles(titles);
         List<List<Object>> rows = new ArrayList();
         for (int i = 0, length = list.size(); i < length; i++) {
@@ -90,10 +97,24 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
             row.add(ExcelUtil.convertToBillion(finance.getNetProfit()));
             row.add(finance.getNetProfitPercent());
             row.add(finance.getProfitTotalPercent());
+            row.add(finance.getBkInfo());
+
+            List<ConceptStock> conceptStockList = conceptStockMapper.selectList(new LambdaQueryWrapper<ConceptStock>()
+                    .eq(ConceptStock::getCompanyStockId, finance.getStockCompanyId()));
+
+            if(conceptStockList != null && !conceptStockList.isEmpty()) {
+                String conceptInfo = "";
+                for (ConceptStock stock: conceptStockList
+                ) {
+                    conceptInfo = conceptInfo + stock.getBkName() + " ";
+                }
+                row.add(conceptInfo);
+            }
+
             row.add(finance.getReportTime());
             row.add(FinanceReportTypeEnum.getNameByCode(finance.getReportType()));
             row.add(finance.getUpdatedTime());
-            row.add(finance.getBkInfo());
+
             rows.add(row);
         }
         data.setRows(rows);

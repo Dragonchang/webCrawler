@@ -88,6 +88,10 @@ public class FinanceAnalysisResponseDTO {
     private String bkInfo;
 
     /**
+     * 公司概念板块信息
+     */
+    private String conceptInfo;
+    /**
      * 更新时间
      */
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")

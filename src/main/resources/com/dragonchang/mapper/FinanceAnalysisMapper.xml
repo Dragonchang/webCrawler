@@ -47,6 +47,9 @@
         <if test="request.netProfitPercent != null">
             and a.net_profit_percent >= #{request.netProfitPercent}
         </if>
+        <if test="request.netProfit != null">
+            and a.net_profit >= #{request.netProfit}
+        </if>
         <if test="request.order != null and request.order == 1">
             ORDER BY a.total_income DESC
         </if>
@@ -96,6 +99,9 @@
         </if>
         <if test="request.netProfitPercent != null">
             and a.net_profit_percent >= #{request.netProfitPercent}
+        </if>
+        <if test="request.netProfit != null">
+            and a.net_profit >= #{request.netProfit}
         </if>
         <if test="request.order != null and request.order == 1">
             ORDER BY a.total_income DESC
