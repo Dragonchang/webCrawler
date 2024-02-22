@@ -50,6 +50,9 @@
         <if test="request.netProfit != null">
             and a.net_profit >= #{request.netProfit}
         </if>
+        <if test="request.bkinfo != null and request.bkinfo != ''">
+            and c.bk_name = #{request.bkinfo}
+        </if>
         <if test="request.order != null and request.order == 1">
             ORDER BY a.total_income DESC
         </if>
@@ -102,6 +105,9 @@
         </if>
         <if test="request.netProfit != null">
             and a.net_profit >= #{request.netProfit}
+        </if>
+        <if test="request.bkinfo != null and request.bkinfo != ''">
+            and c.bk_name = #{request.bkinfo}
         </if>
         <if test="request.order != null and request.order == 1">
             ORDER BY a.total_income DESC

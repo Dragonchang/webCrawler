@@ -21,6 +21,7 @@ $(function () {
                 obj.totalAddPercent = $('#totalAddPercent').val();
                 obj.netProfitPercent = $('#netProfitPercent').val();
                 obj.netProfit = $('#netProfit').val();
+                obj.bkinfo = $('#bkinfo').val();
                 obj.order = order_select;
                 obj.reportTime = time_select;
                 obj.start = d.start;
@@ -178,6 +179,8 @@ $(function () {
             totalCapitalization: $('#totalCapitalization').val(),
             totalAddPercent: $('#totalAddPercent').val(),
             netProfitPercent: $('#netProfitPercent').val(),
+            netProfit:  $('#netProfit').val(),
+            bkinfo:  $('#bkinfo').val(),
             order: order_select,
             reportTime: time_select
         };

@@ -12,6 +12,5 @@ public interface IDashboardService {
 
     JsonResult<Map<String,Object>> totalChartInfo(Date startDate, Date endDate);
 
-    JsonResult<Map<String, Object>> incomeProfitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startDate,
-                                                            @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endDate);
+    JsonResult<Map<String, Object>> incomeProfitInfo(String timeSelect);
 }

@@ -49,9 +49,8 @@ public class IndexController {
     @RequestMapping("/incomeProfit")
     @ApiOperation(value = "企业营收利润统计信息")
     @ResponseBody
-    public JsonResult<Map<String, Object>> incomeProfitInfo(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date startDate,
-                                                          @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date endDate) {
-        JsonResult<Map<String, Object>> chartInfo = dashboardService.incomeProfitInfo(startDate, endDate);
+    public JsonResult<Map<String, Object>> incomeProfitInfo(String timeSelect) {
+        JsonResult<Map<String, Object>> chartInfo = dashboardService.incomeProfitInfo(timeSelect);
         return chartInfo;
     }
 }

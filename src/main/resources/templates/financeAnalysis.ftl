@@ -81,6 +81,13 @@
                         <input type="text" class="form-control" id="netProfit" autocomplete="on" >
                     </div>
                 </div>
+
+                <div class="col-xs-2">
+                    <div class="input-group">
+                        <span class="input-group-addon">板块</span>
+                        <input type="text" class="form-control" id="bkinfo" autocomplete="on" >
+                    </div>
+                </div>
                 <div class="col-xs-1 pull-right">
                     <button class="btn btn-block btn-info " id="exportBtn">导出</button>
                 </div>

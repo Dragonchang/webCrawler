@@ -31,17 +31,17 @@ public class EastMoneyCrawler {
     public List<StockInfoDto> getStockList() {
         Map<String, String> params = new HashMap<>();
         params.put("pn", "1");
-        params.put("pz", "5000");
+        params.put("pz", "10000");
         params.put("po", "1");
         params.put("np", "1");
         params.put("ut", "bd1d9ddb04089700cf9c27f6f7426281");
         params.put("fltt", "2");
         params.put("invt", "2");
         params.put("fid", "f3");
-        params.put("fs", "m:0+t:6,m:0+t:13,m:0+t:80,m:1+t:2,m:1+t:23");
-        params.put("fields", "f2,f12,f14,f18,f26");
+        params.put("fs", "m:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23,m:0 t:81 s:2048");
+        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152");
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Info_URL,
-                HeaderUtils.getEastMoneyWebHeaders(), params);
+                HeaderUtils.getEastStockListWebHeaders(), params);
         TycResult<StockInfoListDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockInfoListDto>>() {
         });
         return eastMoneyResult.getData().getDiff();
@@ -58,7 +58,7 @@ public class EastMoneyCrawler {
         params.put("fltt", "2");
         params.put("invt", "2");
         params.put("volt", "2");
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("300") || stockCode.startsWith("00") || stockCode.startsWith("8")) {
             params.put("secid", "0." + stockCode);
         } else if(stockCode.startsWith("6")) {
             params.put("secid", "1." + stockCode);
@@ -310,8 +310,8 @@ public class EastMoneyCrawler {
 
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
-        //List<StockInfoDto> list = tycCrawler.getStockList();
-       // StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("603893");
+        List<StockInfoDto> list = tycCrawler.getStockList();
+        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("873593");
         List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
         List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
 //        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");

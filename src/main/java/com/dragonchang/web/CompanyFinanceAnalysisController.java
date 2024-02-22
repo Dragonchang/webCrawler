@@ -64,7 +64,8 @@ public class CompanyFinanceAnalysisController {
     public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
                                         @RequestParam(required = false, defaultValue = "10") int length,
                                         String order, String name, String stockCode, String reportTime,
-                                        BigDecimal totalCapitalization, BigDecimal totalAddPercent, BigDecimal netProfitPercent, BigDecimal netProfit) {
+                                        BigDecimal totalCapitalization, BigDecimal totalAddPercent, BigDecimal netProfitPercent, BigDecimal netProfit,
+                                        String bkinfo) {
 
         if(StringUtils.isNotBlank(stockCode) || StringUtils.isNotBlank(name)) {
             reportTime = null;
@@ -77,6 +78,7 @@ public class CompanyFinanceAnalysisController {
         pageRequest.setTotalAddPercent(totalAddPercent);
         pageRequest.setNetProfitPercent(netProfitPercent);
         pageRequest.setNetProfit(netProfit);
+        pageRequest.setBkinfo(bkinfo);
         if(!StringUtils.isEmpty(reportTime)) {
             pageRequest.setReportTime(reportTime);
         }

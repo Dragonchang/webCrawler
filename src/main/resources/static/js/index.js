@@ -251,6 +251,7 @@ $(function () {
     }
 
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     $('#filterTime_income_profit').daterangepicker({
         autoApply: false,
         singleDatePicker: false,
@@ -278,21 +279,23 @@ $(function () {
         freshIncomeProfitChartDate(start, end);
     });
 
+    $('#queryBtn').on('click', function(){
+        freshIncomeProfitChartDate();
+    });
 
-    freshIncomeProfitChartDate(rangesConf["最近一年"][0], rangesConf["最近一年"][1]);
+    freshIncomeProfitChartDate();
     /**
      * fresh Chart Date
      *
      * @param startDate
      * @param endDate
      */
-    function freshIncomeProfitChartDate(startDate, endDate) {
+    function freshIncomeProfitChartDate() {
         $.ajax({
             type : 'POST',
             url : base_url + '/incomeProfit',
             data : {
-                'startDate':startDate.format('YYYY-MM-DD HH:mm:ss'),
-                'endDate':endDate.format('YYYY-MM-DD HH:mm:ss')
+                'timeSelect':data_select.options[data_select.selectedIndex].value
             },
             dataType : "json",
             success : function(data){
@@ -361,17 +364,17 @@ $(function () {
                     data: data.data.count
                 },
                 {
-                    name:"总营收",
+                    name:"总营收(亿)",
                     type:'line',
                     data: data.data.incomeList
                 },
                 {
-                    name:"总利润",
+                    name:"总利润(亿)",
                     type:'line',
                     data: data.data.profitList
                 }
             ],
-            color:['#c23632', '#F39C12']
+            color:['#c23632', '#F39C12', '#F32288']
         };
 
         var lineChart = echarts.init(document.getElementById('income_profit_lineChart'));

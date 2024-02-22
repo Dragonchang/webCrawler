@@ -1,5 +1,7 @@
 package com.dragonchang.domain.dto;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 
 /**
@@ -8,6 +10,7 @@ import java.math.BigDecimal;
  * @author: zhangfl
  * @create: 2023-11-16 18:02
  **/
+@Data
 public class IncomeProfitListDTO {
 
     /**

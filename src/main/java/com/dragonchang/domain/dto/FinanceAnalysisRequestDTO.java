@@ -36,4 +36,6 @@ public class FinanceAnalysisRequestDTO extends PageRequestDTO{
      * 扣非
      */
     BigDecimal netProfit;
+
+    String bkinfo;
 }
