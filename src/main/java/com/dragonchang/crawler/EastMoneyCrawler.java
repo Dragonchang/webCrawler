@@ -311,7 +311,7 @@ public class EastMoneyCrawler {
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         List<StockInfoDto> list = tycCrawler.getStockList();
-        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("873593");
+        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("300290");
         List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
         List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
 //        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");

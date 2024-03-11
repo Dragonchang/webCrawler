@@ -67,6 +67,12 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
         titles.add("股票代码");
         titles.add("公司名称");
         titles.add("公司最新股价");
+        titles.add("当天涨幅(%)");
+        titles.add("当天成交量（手）");
+        titles.add("当天成交金额（亿）");
+        titles.add("当天换手率(%)");
+        titles.add("量比");
+        titles.add("市盈率(%)");
         titles.add("公司总市值(亿)");
         titles.add("总营收(亿)");
         titles.add("营收总市值百分比(%)");
@@ -88,6 +94,13 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
             row.add(finance.getStockCode());
             row.add(finance.getName());
             row.add(finance.getLastPrice());
+            row.add(finance.getDtzf());
+            row.add(finance.getDtcjl());
+            row.add(ExcelUtil.convertToBillion(finance.getDtcjje()));
+            row.add(finance.getDthsl());
+            row.add(finance.getLb());
+            row.add(finance.getSyl());
+
             row.add(finance.getTotalCapitalization());
             row.add(income);
             if(finance.getIncomeTotalPercent() != null) {

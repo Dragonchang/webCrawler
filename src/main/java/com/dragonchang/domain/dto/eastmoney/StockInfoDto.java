@@ -10,6 +10,7 @@ import lombok.Data;
  **/
 @Data
 public class StockInfoDto {
+
     /**
      * 股票代码
      */
@@ -24,6 +25,31 @@ public class StockInfoDto {
     private String f2;
 
     /**
+     * 当天涨幅
+     */
+    private String f3;
+
+    /**
+     * 当天成交量（手）
+     */
+    private String f5;
+
+    /**
+     * 当天成交金额（元）
+     */
+    private String f6;
+
+    /**
+     * 当天换手率
+     */
+    private String f8;
+
+    /**
+     * 量比
+     */
+    private String f10;
+
+    /**
      * 昨天股价
      */
     private String f18;
@@ -32,4 +58,9 @@ public class StockInfoDto {
      * 上市时间
      */
     private String f26;
+
+    /**
+     * 市盈率
+     */
+    private String f115;
 }

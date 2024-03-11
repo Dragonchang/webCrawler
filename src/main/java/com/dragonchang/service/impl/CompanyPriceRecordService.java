@@ -103,6 +103,14 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
             record.setLowestPrice(priceDTO.getF45());
             record.setCompanyStockId(stock.getId());
             record.setReportTime(currentTime);
+
+            record.setDtzf(stock.getDtzf());
+            record.setDtcjl(stock.getDtcjl());
+            record.setDtcjje(stock.getDtcjje());
+            record.setDthsl(stock.getDthsl());
+            record.setLb(stock.getLb());
+            record.setSyl(stock.getSyl());
+
             CompanyPriceRecord query = companyPriceRecordMapper.selectOne(new LambdaQueryWrapper<CompanyPriceRecord>()
                     .eq(CompanyPriceRecord::getCompanyStockId, stock.getId())
                     .eq(CompanyPriceRecord::getReportTime, currentTime));

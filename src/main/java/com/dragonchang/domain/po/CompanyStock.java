@@ -66,6 +66,38 @@ public class CompanyStock {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     private LocalDateTime marketTime;
 
+
+    /**
+     * 当天涨幅%
+     */
+    private String dtzf;
+
+    /**
+     * 当天成交量（手）
+     */
+    private String dtcjl;
+
+    /**
+     * 当天成交金额（元）
+     */
+    private BigDecimal dtcjje;
+
+    /**
+     * 当天换手率%
+     */
+    private String dthsl;
+
+    /**
+     * 量比
+     */
+    private String lb;
+
+
+    /**
+     * 市盈率%
+     */
+    private String syl;
+
     /**
      * 是否删除，0表示未删除，1表示删除
      */

@@ -108,6 +108,12 @@
                                     <th name="stockCode" >股票代码</th>
                                     <th name="name" >公司名称</th>
                                     <th name="lastPrice" >公司最新股价</th>
+                                    <th name="dtzf" >当天涨幅(%)</th>
+                                    <th name="dtcjl" >当天成交量（手）</th>
+                                    <th name="dtcjje" >当天成交金额（亿）</th>
+                                    <th name="dthsl" >当天换手率(%)</th>
+                                    <th name="lb" >量比</th>
+                                    <th name="syl" >市盈率(%)</th>
                                     <th name="totalCapitalization" >总市值(亿)</th>
                                     <th name="totalIncome" >总营收(亿)</th>
                                     <th name="incomeTotalPercent" >营收总市值百分比(%)</th>

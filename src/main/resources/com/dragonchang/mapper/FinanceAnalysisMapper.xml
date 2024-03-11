@@ -21,7 +21,9 @@
     </select>
 
     <select id="findPage" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,  b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
+        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,
+        b.dtzf, b.dtcjl, b.dtcjje, b.dthsl, b.lb, b.syl,
+        b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
         a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
         a.total_income/b.total_capitalization as incomeTotalPercent,
         c.bk_name as bkInfo
@@ -77,7 +79,9 @@
 
     </select>
     <select id="findList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price, b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
+        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,
+        b.dtzf, b.dtcjl, b.dtcjje, b.dthsl, b.lb, b.syl,
+        b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
         a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
         a.total_income/b.total_capitalization as incomeTotalPercent,
         c.bk_name as bkInfo

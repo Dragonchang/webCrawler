@@ -107,6 +107,7 @@ public class CompanyFinanceAnalysisController {
             dto.setReportType(FinanceReportTypeEnum.getNameByCode(dto.getReportType()));
             dto.setTotalIncome(ExcelUtil.convertToBillion(dto.getTotalIncome()));
             dto.setNetProfit(ExcelUtil.convertToBillion(dto.getNetProfit()));
+            dto.setDtcjje(ExcelUtil.convertToBillion(dto.getDtcjje()));
 
             List<ConceptStock> conceptStockList = conceptStockMapper.selectList(new LambdaQueryWrapper<ConceptStock>()
                     .eq(ConceptStock::getCompanyStockId, dto.getStockCompanyId()));

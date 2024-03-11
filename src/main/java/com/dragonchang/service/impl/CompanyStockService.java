@@ -71,6 +71,24 @@ public class CompanyStockService implements ICompanyStockService {
                     if(StringUtils.isNotEmpty(marketTime)) {
                         companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
                     }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF3())) {
+                        companyStock.setDtzf(stockInfoDto.getF3());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF5())) {
+                        companyStock.setDtcjl(stockInfoDto.getF5());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF6())) {
+                        companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF8())) {
+                        companyStock.setDthsl(stockInfoDto.getF8());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF10())) {
+                        companyStock.setLb(stockInfoDto.getF10());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF115())) {
+                        companyStock.setSyl(stockInfoDto.getF115());
+                    }
                     if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
                         BigDecimal price = new BigDecimal(stockInfoDto.getF2());
                         total_price = total_price.add(price);
@@ -107,6 +125,24 @@ public class CompanyStockService implements ICompanyStockService {
                     companyStock.setName(stockInfoDto.getF14());
                     if(StringUtils.isNotEmpty(marketTime)) {
                         companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF3())) {
+                        companyStock.setDtzf(stockInfoDto.getF3());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF5())) {
+                        companyStock.setDtcjl(stockInfoDto.getF5());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF6())) {
+                        companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF8())) {
+                        companyStock.setDthsl(stockInfoDto.getF8());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF10())) {
+                        companyStock.setLb(stockInfoDto.getF10());
+                    }
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF115())) {
+                        companyStock.setSyl(stockInfoDto.getF115());
                     }
                     if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
                         BigDecimal price = new BigDecimal(stockInfoDto.getF2());
@@ -185,6 +221,12 @@ public class CompanyStockService implements ICompanyStockService {
         titles.add("股票代码");
         titles.add("公司名称");
         titles.add("股票最新股价");
+        titles.add("当天涨幅(%)");
+        titles.add("当天成交量（手）");
+        titles.add("当天成交金额（亿）");
+        titles.add("当天换手率(%)");
+        titles.add("量比");
+        titles.add("市盈率(%)");
         titles.add("股票最新总市值(亿)");
         titles.add("股票最新流通市值(亿)");
         titles.add("股票最新收益");
@@ -198,6 +240,12 @@ public class CompanyStockService implements ICompanyStockService {
             row.add(companyStock.getStockCode());
             row.add(companyStock.getName());
             row.add(companyStock.getLastPrice());
+            row.add(companyStock.getDtzf());
+            row.add(companyStock.getDtcjl());
+            row.add(ExcelUtil.convertToBillion(companyStock.getDtcjje()));
+            row.add(companyStock.getDthsl());
+            row.add(companyStock.getLb());
+            row.add(companyStock.getSyl());
             row.add(companyStock.getTotalCapitalization());
             row.add(companyStock.getLastCirculation());
             row.add(companyStock.getLastIncome());

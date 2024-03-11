@@ -54,6 +54,36 @@ $(function () {
                 "width": '6%'
             },
             {
+                "data": 'dtzf',
+                "visible": true,
+                "width": '1%'
+            },
+            {
+                "data": 'dtcjl',
+                "visible": true,
+                "width": '2%'
+            },
+            {
+                "data": 'dtcjje',
+                "visible": true,
+                "width": '2%'
+            },
+            {
+                "data": 'dthsl',
+                "visible": true,
+                "width": '2%'
+            },
+            {
+                "data": 'lb',
+                "visible": true,
+                "width": '1%'
+            },
+            {
+                "data": 'syl',
+                "visible": true,
+                "width": '1%'
+            },
+            {
                 "data": 'totalCapitalization',
                 "visible": true,
                 "width": '6%'
