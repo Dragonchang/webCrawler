@@ -18,6 +18,7 @@ import com.dragonchang.mapper.TotalStockRecordMapper;
 import com.dragonchang.service.ICompanyStockService;
 import com.dragonchang.util.DateUtil;
 import com.dragonchang.util.ExcelUtil;
+import com.dragonchang.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,7 +78,7 @@ public class CompanyStockService implements ICompanyStockService {
                     if(StringUtils.isNotEmpty(stockInfoDto.getF5())) {
                         companyStock.setDtcjl(stockInfoDto.getF5());
                     }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF6())) {
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF6()) && StringUtil.isNumeric2(stockInfoDto.getF6())) {
                         companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
                     }
                     if(StringUtils.isNotEmpty(stockInfoDto.getF8())) {
@@ -132,7 +133,7 @@ public class CompanyStockService implements ICompanyStockService {
                     if(StringUtils.isNotEmpty(stockInfoDto.getF5())) {
                         companyStock.setDtcjl(stockInfoDto.getF5());
                     }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF6())) {
+                    if(StringUtils.isNotEmpty(stockInfoDto.getF6()) && StringUtil.isNumeric2(stockInfoDto.getF6())) {
                         companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
                     }
                     if(StringUtils.isNotEmpty(stockInfoDto.getF8())) {
