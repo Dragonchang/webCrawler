@@ -1,9 +1,12 @@
 package com.dragonchang.crawler;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.dragonchang.constant.UrlConstant;
 import com.dragonchang.domain.dto.eastmoney.*;
+import com.dragonchang.domain.vo.EastData;
+import com.dragonchang.domain.vo.EastResult;
 import com.dragonchang.domain.vo.TycResult;
 import com.dragonchang.tianyancha.HeaderUtils;
 import com.dragonchang.tianyancha.HttpClientUtils;
@@ -76,15 +79,118 @@ public class EastMoneyCrawler {
 
 
     /**
+     * 获取股东信息时间列表
+     * @param stockCode
+     * @return
+     */
+    public List<StockHolderDataDTO> getHolderData(String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            stockCode = stockCode+".SZ";
+        } else if(stockCode.startsWith("6")) {
+            stockCode = stockCode + ".SH";
+        }
+        params.put("reportName", "RPT_F10_EH_FREEHOLDERSDATE");
+        params.put("columns", "SECUCODE,END_DATE");
+        //params.put("quoteColumns", "");
+        params.put("filter", "(SECUCODE=\""+stockCode+"\")");
+        params.put("pageNumber", "1");
+        //params.put("pageSize", "");
+        params.put("sortTypes", "-1");
+        params.put("sortColumns", "END_DATE");
+        params.put("source", "HSF10");
+        params.put("client", "PC");
+        params.put("v", "04820951397256914");
+        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
+                HeaderUtils.getEastMoneyHolderDataHeaders(), params);
+        EastResult result1 = JSONObject.parseObject(result, EastResult.class);
+        JSONArray jsonArray = (JSONArray)result1.getResult().getData();
+        String str = jsonArray.toJSONString();
+        List<StockHolderDataDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockHolderDataDTO>>() {});
+        return ret;
+    }
+    /**
+     * 获取公司流通股股东细信息
+     * @return
+     */
+    public List<StockFreeHolderRecordDTO> getStockFreeHodlerInfoByCode(String stockCode, String data) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            stockCode = stockCode+".SZ";
+        } else if(stockCode.startsWith("6")) {
+            stockCode = stockCode + ".SH";
+        }
+        params.put("reportName", "RPT_F10_EH_FREEHOLDERS");
+        params.put("columns", "SECUCODE,SECURITY_CODE,END_DATE,HOLDER_RANK,HOLDER_NEW,HOLDER_NAME,HOLDER_TYPE,SHARES_TYPE,HOLD_NUM,FREE_HOLDNUM_RATIO,HOLD_NUM_CHANGE,CHANGE_RATIO");
+        //params.put("quoteColumns", "");
+        params.put("filter", "(SECUCODE=\""+stockCode+"\")"+"(END_DATE=\'" + data + "\')");
+        params.put("pageNumber", "1");
+        //params.put("pageSize", "");
+        params.put("sortTypes", "1");
+        params.put("sortColumns", "HOLDER_RANK");
+        params.put("source", "HSF10");
+        params.put("client", "PC");
+        params.put("v", "006951842539512065");
+        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
+                HeaderUtils.getEastMoneyHolderDataHeaders(), params);
+
+        EastResult result1 = JSONObject.parseObject(result, EastResult.class);
+        JSONArray jsonArray = (JSONArray)result1.getResult().getData();
+        String str = jsonArray.toJSONString();
+        List<StockFreeHolderRecordDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockFreeHolderRecordDTO>>() {});
+        return ret;
+    }
+
+    /**
+     * 获取公司流通股股东细信息
+     * @return
+     */
+    public List<StockNewHolderRecordDTO> getStockNewHodlerInfoByCode(String stockCode, String data) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+            stockCode = stockCode+".SZ";
+        } else if(stockCode.startsWith("6")) {
+            stockCode = stockCode + ".SH";
+        }
+        params.put("reportName", "RPT_F10_EH_HOLDERS");
+        params.put("columns", "SECUCODE,SECURITY_CODE,END_DATE,HOLDER_RANK,HOLDER_NEW,HOLDER_NAME,SHARES_TYPE,HOLD_NUM,HOLD_NUM_RATIO,HOLD_NUM_CHANGE,CHANGE_RATIO");
+        //params.put("quoteColumns", "");
+        params.put("filter", "(SECUCODE=\""+stockCode+"\")"+"(END_DATE=\'" + data + "\')");
+        params.put("pageNumber", "1");
+        //params.put("pageSize", "");
+        params.put("sortTypes", "1");
+        params.put("sortColumns", "HOLDER_RANK");
+        params.put("source", "HSF10");
+        params.put("client", "PC");
+        params.put("v", "006951842539512065");
+        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
+                HeaderUtils.getEastMoneyHolderDataHeaders(), params);
+
+        EastResult result1 = JSONObject.parseObject(result, EastResult.class);
+        if(result1 != null && result1.getResult() != null) {
+            EastData data1 = result1.getResult();
+            if(data1!= null) {
+                if(data1.getData() != null) {
+                    JSONArray jsonArray = (JSONArray)result1.getResult().getData();
+                    String str = jsonArray.toJSONString();
+                    List<StockNewHolderRecordDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockNewHolderRecordDTO>>() {});
+                    return ret;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * 获取公司股股东细信息
      * @return
      */
     public StockHolderRecordListDTO getStockHodlerInfoByCode(String stockCode) {
         Map<String, String> params = new HashMap<>();
         if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
-            stockCode = "sz"+stockCode;
+            stockCode = stockCode+".SZ";
         } else if(stockCode.startsWith("6")) {
-            stockCode = "sh"+stockCode;
+            stockCode = stockCode + ".SH";
         }
         params.put("code", stockCode);
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
@@ -310,13 +416,18 @@ public class EastMoneyCrawler {
 
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
-        List<StockInfoDto> list = tycCrawler.getStockList();
-        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("300290");
-        List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
-        List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
+//        List<StockInfoDto> list = tycCrawler.getStockList();
+//        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("300290");
+//        List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
+//        List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
 //        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");
 
-        List<FinanceAnalysisDataDTO> data = tycCrawler.getFinanceAnalysisData("2021-03-31,2020-12-31,2020-09-30,2020-06-30,2020-03-31,2019-12-31","300716");
-        log.info("test");
+//        List<FinanceAnalysisDataDTO> data = tycCrawler.getFinanceAnalysisData("2021-03-31,2020-12-31,2020-09-30,2020-06-30,2020-03-31,2019-12-31","300716");
+//        log.info("test");
+
+
+        //tycCrawler.getHolderData("000952");
+        tycCrawler.getStockNewHodlerInfoByCode("000952", "2016-06-30");
+
     }
 }

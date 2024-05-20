@@ -246,7 +246,7 @@ $(function () {
         xhttp.setRequestHeader("Content-Type", "application/json");
 // You should set responseType as blob for binary responses
         xhttp.responseType = 'blob';
-        xhttp.timeout = 400000;
+        xhttp.timeout = 4000000;
         xhttp.send(JSON.stringify(data));
 
     });

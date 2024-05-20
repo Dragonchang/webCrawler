@@ -38,11 +38,10 @@ public class UrlConstant {
      */
     public static final String Stock_Detail_Info_URL = "http://push2.eastmoney.com/api/qt/stock/get";
 
-
     /**
-     * 东方财富获取公司持股股东信息
+     * 东方财富获取公司持股股东信息和间列表信息
      */
-    public static final String Stock_Holder_Info_URL = "http://f10.eastmoney.com/ShareholderResearch/ShareholderResearchAjax";
+    public static final String Stock_Holder_Info_URL = "https://datacenter.eastmoney.com/securities/api/data/v1/get";
 
     /**
      * 东方财富获取k线数据

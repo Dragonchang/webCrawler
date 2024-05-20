@@ -8,9 +8,7 @@ import com.dragonchang.crawler.EastMoneyCrawler;
 import com.dragonchang.domain.dto.ExcelData;
 import com.dragonchang.domain.dto.HolderCompanyListDTO;
 import com.dragonchang.domain.dto.HolderDetailRequestDTO;
-import com.dragonchang.domain.dto.eastmoney.StockHolderDetailDTO;
-import com.dragonchang.domain.dto.eastmoney.StockHolderRecordDTO;
-import com.dragonchang.domain.dto.eastmoney.StockHolderRecordListDTO;
+import com.dragonchang.domain.dto.eastmoney.*;
 import com.dragonchang.domain.dto.tyc.CompanyRequestDTO;
 import com.dragonchang.domain.enums.HolderTypeEnum;
 import com.dragonchang.domain.po.CompanyShareHolder;
@@ -55,90 +53,159 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
             log.error("公司信息为空");
             return;
         }
-        StockHolderRecordListDTO stockHodlerInfoByCode = eastMoneyCrawler.getStockHodlerInfoByCode(companyStock.getStockCode());
-        if (stockHodlerInfoByCode != null) {
-            List<StockHolderRecordDTO> sdltgd = stockHodlerInfoByCode.getSdltgd();
-            if (CollectionUtils.isNotEmpty(sdltgd)) {
-                for (StockHolderRecordDTO stockHolderRecordDTO : sdltgd) {
-                    CompanyShareHolder shareHolder = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
-                            .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
-                            .eq(CompanyShareHolder::getReportTime, stockHolderRecordDTO.getRq())
-                            .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.LT.getCode()));
-                    if (shareHolder == null) {
-                        shareHolder = new CompanyShareHolder();
-                        shareHolder.setCompanyStockId(companyStock.getId());
-                        shareHolder.setHolderType(HolderTypeEnum.LT.getCode());
-                        shareHolder.setReportTime(stockHolderRecordDTO.getRq());
-                        companyShareHolderMapper.insert(shareHolder);
-                        List<StockHolderDetailDTO> sdltgdDetail = stockHolderRecordDTO.getSdltgd();
-                        if (CollectionUtils.isNotEmpty(sdltgd)) {
-                            for(StockHolderDetailDTO holderDetailDTO : sdltgdDetail) {
-                                ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
-                                shareHolderDetail.setHolderId(shareHolder.getId());
-                                shareHolderDetail.setHolderRank(Integer.valueOf(holderDetailDTO.getMc()));
-                                shareHolderDetail.setHolderName(holderDetailDTO.getGdmc());
-                                shareHolderDetail.setHolderType(holderDetailDTO.getGdxz());
-                                shareHolderDetail.setStockType(holderDetailDTO.getGflx());
-                                shareHolderDetail.setHoldCount(Long.valueOf(holderDetailDTO.getCgs().replace(",","")));
-                                shareHolderDetail.setHoldPercent(holderDetailDTO.getZltgbcgbl());
-                                shareHolderDetail.setZj(holderDetailDTO.getZj());
-                                shareHolderDetail.setChangePercent(holderDetailDTO.getBdbl());
-                                shareHolderDetailMapper.insert(shareHolderDetail);
-                            }
-                        } else {
-                            log.warn("流通股东信息列表为空" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+        List<StockHolderDataDTO> dataDTOList =  eastMoneyCrawler.getHolderData(companyStock.getStockCode());
+        if(dataDTOList != null && !dataDTOList.isEmpty()) {
+            for (StockHolderDataDTO data  : dataDTOList) {
+                CompanyShareHolder shareHolder = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
+                        .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
+                        .eq(CompanyShareHolder::getReportTime, data.getEND_DATE().substring(0, 10))
+                        .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.LT.getCode()));
+                if (shareHolder == null) {
+                    shareHolder = new CompanyShareHolder();
+                    shareHolder.setCompanyStockId(companyStock.getId());
+                    shareHolder.setHolderType(HolderTypeEnum.LT.getCode());
+                    shareHolder.setReportTime(data.getEND_DATE().substring(0, 10));
+                    companyShareHolderMapper.insert(shareHolder);
+                    List<StockFreeHolderRecordDTO> stockFreeHolderRecordDTOList = eastMoneyCrawler.getStockFreeHodlerInfoByCode(companyStock.getStockCode(), data.getEND_DATE().substring(0, 10));
+                    if(stockFreeHolderRecordDTOList != null && !stockFreeHolderRecordDTOList.isEmpty()) {
+                        for(StockFreeHolderRecordDTO stockFreeHolderRecordDTO : stockFreeHolderRecordDTOList) {
+                            ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
+                            shareHolderDetail.setHolderId(shareHolder.getId());
+                            shareHolderDetail.setHolderRank(Integer.valueOf(stockFreeHolderRecordDTO.getHOLDER_RANK()));
+                            shareHolderDetail.setHolderName(stockFreeHolderRecordDTO.getHOLDER_NAME());
+                            shareHolderDetail.setHolderType(stockFreeHolderRecordDTO.getHOLDER_TYPE());
+                            shareHolderDetail.setStockType(stockFreeHolderRecordDTO.getSHARES_TYPE());
+                            shareHolderDetail.setHoldCount(Long.valueOf(stockFreeHolderRecordDTO.getHOLD_NUM().replace(",","")));
+                            shareHolderDetail.setHoldPercent(stockFreeHolderRecordDTO.getFREE_HOLDNUM_RATIO());
+                            shareHolderDetail.setZj(stockFreeHolderRecordDTO.getHOLD_NUM_CHANGE());
+                            shareHolderDetail.setChangePercent(stockFreeHolderRecordDTO.getCHANGE_RATIO());
+                            shareHolderDetailMapper.insert(shareHolderDetail);
                         }
-
                     } else {
-                        log.warn("流通股东信息已经更新" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+                        log.warn("流通股东信息列表为空" + companyStock.getStockCode() + data.getEND_DATE().substring(0, 10));
                     }
+                } else {
+                    log.warn("流通股东信息已经更新" + companyStock.getStockCode() + data.getEND_DATE().substring(0, 10));
                 }
-            } else {
-                log.warn("流通股东为空！" + companyStock.getStockCode());
-            }
 
-            List<StockHolderRecordDTO> sdgd = stockHodlerInfoByCode.getSdgd();
-            if (CollectionUtils.isNotEmpty(sdgd)) {
-                for (StockHolderRecordDTO stockHolderRecordDTO : sdgd) {
-                    CompanyShareHolder shareHolder = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
-                            .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
-                            .eq(CompanyShareHolder::getReportTime, stockHolderRecordDTO.getRq())
-                            .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.GD.getCode()));
-                    if (shareHolder == null) {
-                        shareHolder = new CompanyShareHolder();
-                        shareHolder.setCompanyStockId(companyStock.getId());
-                        shareHolder.setHolderType(HolderTypeEnum.GD.getCode());
-                        shareHolder.setReportTime(stockHolderRecordDTO.getRq());
-                        companyShareHolderMapper.insert(shareHolder);
-                        List<StockHolderDetailDTO> sdltgdDetail = stockHolderRecordDTO.getSdgd();
-                        if (CollectionUtils.isNotEmpty(sdltgd)) {
-                            for(StockHolderDetailDTO holderDetailDTO : sdltgdDetail) {
-                                ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
-                                shareHolderDetail.setHolderId(shareHolder.getId());
-                                shareHolderDetail.setHolderRank(Integer.valueOf(holderDetailDTO.getMc()));
-                                shareHolderDetail.setHolderName(holderDetailDTO.getGdmc());
-                                shareHolderDetail.setHolderType(holderDetailDTO.getGdxz());
-                                shareHolderDetail.setStockType(holderDetailDTO.getGflx());
-                                shareHolderDetail.setHoldCount(Long.valueOf(holderDetailDTO.getCgs().replace(",","")));
-                                shareHolderDetail.setHoldPercent(holderDetailDTO.getZltgbcgbl());
-                                shareHolderDetail.setZj(holderDetailDTO.getZj());
-                                shareHolderDetail.setChangePercent(holderDetailDTO.getBdbl());
-                                shareHolderDetailMapper.insert(shareHolderDetail);
+                CompanyShareHolder shareHolderGD = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
+                        .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
+                        .eq(CompanyShareHolder::getReportTime, data.getEND_DATE().substring(0, 10))
+                        .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.GD.getCode()));
+                if (shareHolderGD == null) {
+                    shareHolder = new CompanyShareHolder();
+                    shareHolder.setCompanyStockId(companyStock.getId());
+                    shareHolder.setHolderType(HolderTypeEnum.GD.getCode());
+                    shareHolder.setReportTime(data.getEND_DATE().substring(0, 10));
+                    companyShareHolderMapper.insert(shareHolder);
+                    List<StockNewHolderRecordDTO> stockFreeHolderRecordDTOList = eastMoneyCrawler.getStockNewHodlerInfoByCode(companyStock.getStockCode(), data.getEND_DATE().substring(0, 10));
+                    if(stockFreeHolderRecordDTOList != null && !stockFreeHolderRecordDTOList.isEmpty()) {
+                        for(StockNewHolderRecordDTO stockFreeHolderRecordDTO : stockFreeHolderRecordDTOList) {
+                            ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
+                            shareHolderDetail.setHolderId(shareHolder.getId());
+                            if(stockFreeHolderRecordDTO.getHOLDER_RANK() != null) {
+                                shareHolderDetail.setHolderRank(Integer.valueOf(stockFreeHolderRecordDTO.getHOLDER_RANK()));
                             }
-                        } else {
-                            log.warn("股东信息列表为空" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+                            shareHolderDetail.setHolderName(stockFreeHolderRecordDTO.getHOLDER_NAME());
+                            shareHolderDetail.setStockType(stockFreeHolderRecordDTO.getSHARES_TYPE());
+                            shareHolderDetail.setHoldCount(Long.valueOf(stockFreeHolderRecordDTO.getHOLD_NUM().replace(",","")));
+                            shareHolderDetail.setHoldPercent(stockFreeHolderRecordDTO.getHOLD_NUM_RATIO());
+                            shareHolderDetail.setZj(stockFreeHolderRecordDTO.getHOLD_NUM_CHANGE());
+                            shareHolderDetail.setChangePercent(stockFreeHolderRecordDTO.getCHANGE_RATIO());
+                            shareHolderDetailMapper.insert(shareHolderDetail);
                         }
-
                     } else {
-                        log.warn("股东信息已经更新" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+                        log.warn("股东信息列表为空" + companyStock.getStockCode() + data.getEND_DATE().substring(0, 10));
                     }
+                } else {
+                    log.warn("股东信息已经更新" + companyStock.getStockCode() + data.getEND_DATE().substring(0, 10));
                 }
-            } else {
-                log.warn("股东为空！" + companyStock.getStockCode());
             }
-        } else {
-            log.error("sync Stock Holder failed: " + companyStock.getStockCode());
         }
+//        StockHolderRecordListDTO stockHodlerInfoByCode = eastMoneyCrawler.getStockHodlerInfoByCode(companyStock.getStockCode());
+//        if (stockHodlerInfoByCode != null) {
+//            List<StockHolderRecordDTO> sdltgd = stockHodlerInfoByCode.getSdltgd();
+//            if (CollectionUtils.isNotEmpty(sdltgd)) {
+//                for (StockHolderRecordDTO stockHolderRecordDTO : sdltgd) {
+//                    CompanyShareHolder shareHolder = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
+//                            .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
+//                            .eq(CompanyShareHolder::getReportTime, stockHolderRecordDTO.getRq())
+//                            .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.LT.getCode()));
+//                    if (shareHolder == null) {
+//                        shareHolder = new CompanyShareHolder();
+//                        shareHolder.setCompanyStockId(companyStock.getId());
+//                        shareHolder.setHolderType(HolderTypeEnum.LT.getCode());
+//                        shareHolder.setReportTime(stockHolderRecordDTO.getRq());
+//                        companyShareHolderMapper.insert(shareHolder);
+//                        List<StockHolderDetailDTO> sdltgdDetail = stockHolderRecordDTO.getSdltgd();
+//                        if (CollectionUtils.isNotEmpty(sdltgd)) {
+//                            for(StockHolderDetailDTO holderDetailDTO : sdltgdDetail) {
+//                                ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
+//                                shareHolderDetail.setHolderId(shareHolder.getId());
+//                                shareHolderDetail.setHolderRank(Integer.valueOf(holderDetailDTO.getMc()));
+//                                shareHolderDetail.setHolderName(holderDetailDTO.getGdmc());
+//                                shareHolderDetail.setHolderType(holderDetailDTO.getGdxz());
+//                                shareHolderDetail.setStockType(holderDetailDTO.getGflx());
+//                                shareHolderDetail.setHoldCount(Long.valueOf(holderDetailDTO.getCgs().replace(",","")));
+//                                shareHolderDetail.setHoldPercent(holderDetailDTO.getZltgbcgbl());
+//                                shareHolderDetail.setZj(holderDetailDTO.getZj());
+//                                shareHolderDetail.setChangePercent(holderDetailDTO.getBdbl());
+//                                shareHolderDetailMapper.insert(shareHolderDetail);
+//                            }
+//                        } else {
+//                            log.warn("流通股东信息列表为空" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+//                        }
+//
+//                    } else {
+//                        log.warn("流通股东信息已经更新" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+//                    }
+//                }
+//            } else {
+//                log.warn("流通股东为空！" + companyStock.getStockCode());
+//            }
+//
+//            List<StockHolderRecordDTO> sdgd = stockHodlerInfoByCode.getSdgd();
+//            if (CollectionUtils.isNotEmpty(sdgd)) {
+//                for (StockHolderRecordDTO stockHolderRecordDTO : sdgd) {
+//                    CompanyShareHolder shareHolder = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
+//                            .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
+//                            .eq(CompanyShareHolder::getReportTime, stockHolderRecordDTO.getRq())
+//                            .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.GD.getCode()));
+//                    if (shareHolder == null) {
+//                        shareHolder = new CompanyShareHolder();
+//                        shareHolder.setCompanyStockId(companyStock.getId());
+//                        shareHolder.setHolderType(HolderTypeEnum.GD.getCode());
+//                        shareHolder.setReportTime(stockHolderRecordDTO.getRq());
+//                        companyShareHolderMapper.insert(shareHolder);
+//                        List<StockHolderDetailDTO> sdltgdDetail = stockHolderRecordDTO.getSdgd();
+//                        if (CollectionUtils.isNotEmpty(sdltgd)) {
+//                            for(StockHolderDetailDTO holderDetailDTO : sdltgdDetail) {
+//                                ShareHolderDetail shareHolderDetail = new ShareHolderDetail();
+//                                shareHolderDetail.setHolderId(shareHolder.getId());
+//                                shareHolderDetail.setHolderRank(Integer.valueOf(holderDetailDTO.getMc()));
+//                                shareHolderDetail.setHolderName(holderDetailDTO.getGdmc());
+//                                shareHolderDetail.setHolderType(holderDetailDTO.getGdxz());
+//                                shareHolderDetail.setStockType(holderDetailDTO.getGflx());
+//                                shareHolderDetail.setHoldCount(Long.valueOf(holderDetailDTO.getCgs().replace(",","")));
+//                                shareHolderDetail.setHoldPercent(holderDetailDTO.getZltgbcgbl());
+//                                shareHolderDetail.setZj(holderDetailDTO.getZj());
+//                                shareHolderDetail.setChangePercent(holderDetailDTO.getBdbl());
+//                                shareHolderDetailMapper.insert(shareHolderDetail);
+//                            }
+//                        } else {
+//                            log.warn("股东信息列表为空" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+//                        }
+//
+//                    } else {
+//                        log.warn("股东信息已经更新" + companyStock.getStockCode() + stockHolderRecordDTO.getRq());
+//                    }
+//                }
+//            } else {
+//                log.warn("股东为空！" + companyStock.getStockCode());
+//            }
+//        } else {
+//            log.error("sync Stock Holder failed: " + companyStock.getStockCode());
+//        }
     }
 
     @Override

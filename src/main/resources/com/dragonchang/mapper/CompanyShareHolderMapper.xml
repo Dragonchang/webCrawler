@@ -10,7 +10,7 @@
         LEFT JOIN t_company_stock c on b.company_stock_id = c.id
         WHERE 1=1 and b.holder_type='2'
         <if test="name != null and name != ''">
-            and holder_name = #{name}
+            and holder_name like CONCAT('%', #{name} , '%')
         </if>
         ORDER BY c.last_price DESC ,b.report_time DESC;
     </select>
