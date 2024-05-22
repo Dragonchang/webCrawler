@@ -10,6 +10,7 @@ import com.dragonchang.domain.vo.EastResult;
 import com.dragonchang.domain.vo.TycResult;
 import com.dragonchang.tianyancha.HeaderUtils;
 import com.dragonchang.tianyancha.HttpClientUtils;
+import com.dragonchang.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -104,10 +105,19 @@ public class EastMoneyCrawler {
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
                 HeaderUtils.getEastMoneyHolderDataHeaders(), params);
         EastResult result1 = JSONObject.parseObject(result, EastResult.class);
-        JSONArray jsonArray = (JSONArray)result1.getResult().getData();
-        String str = jsonArray.toJSONString();
-        List<StockHolderDataDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockHolderDataDTO>>() {});
-        return ret;
+        if(result1 != null) {
+            EastData result2 = result1.getResult();
+            if(result2 != null) {
+                JSONArray jsonArray = (JSONArray) result2.getData();
+                if(jsonArray != null) {
+                    String str = jsonArray.toJSONString();
+                    List<StockHolderDataDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockHolderDataDTO>>() {
+                    });
+                    return ret;
+                }
+            }
+        }
+        return null;
     }
     /**
      * 获取公司流通股股东细信息
@@ -133,12 +143,22 @@ public class EastMoneyCrawler {
         params.put("v", "006951842539512065");
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Holder_Info_URL,
                 HeaderUtils.getEastMoneyHolderDataHeaders(), params);
-
-        EastResult result1 = JSONObject.parseObject(result, EastResult.class);
-        JSONArray jsonArray = (JSONArray)result1.getResult().getData();
-        String str = jsonArray.toJSONString();
-        List<StockFreeHolderRecordDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockFreeHolderRecordDTO>>() {});
-        return ret;
+        if(result != null) {
+            EastResult result1 = JSONObject.parseObject(result, EastResult.class);
+            if(result1 != null) {
+                EastData result3 = result1.getResult();
+                if(result3 != null){
+                    JSONArray jsonArray = (JSONArray) result3.getData();
+                    if(jsonArray != null) {
+                        String str = jsonArray.toJSONString();
+                        List<StockFreeHolderRecordDTO> ret = JSONObject.parseObject(str, new TypeReference<List<StockFreeHolderRecordDTO>>() {
+                        });
+                        return ret;
+                    }
+                }
+            }
+        }
+        return  null;
     }
 
     /**
