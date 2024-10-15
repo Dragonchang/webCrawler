@@ -16,6 +16,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -82,29 +83,57 @@ public class DashboardService implements IDashboardService {
         List<String> dayList = new ArrayList<String>();
         List<BigDecimal> incomeList = new ArrayList<BigDecimal>();
         List<BigDecimal> profitList = new ArrayList<BigDecimal>();
+        List<BigDecimal> profitRateList = new ArrayList<BigDecimal>();
         List<Integer> count = new ArrayList<Integer>();
         List<IncomeProfitListDTO> list = financeAnalysisMapper.getIncomeAndProfit(timeSelect);
         String tempData = "";
         Integer tempCount = 0;
         BigDecimal tempTotalIncome = new BigDecimal(0);
         BigDecimal tempNetProfit =  new BigDecimal(0);
-
+        if(!list.isEmpty()) {
+            tempData = list.get(0).getReportTime();
+        }
         for (IncomeProfitListDTO incomeProfitListDTO : list  ) {
             if(!tempData.equals(incomeProfitListDTO.getReportTime())) {
+                log.warn("tempTotalIncome: "+tempTotalIncome+" tempNetProfit: "+tempNetProfit
+                        +" tempCount:" +tempCount+ " tempData: "+tempData);
                 if(tempCount != 0) {
                     count.add(tempCount);
                     tempCount = 0;
                 }
-                if(!tempTotalIncome.equals(0)) {
+                if(tempTotalIncome.compareTo(BigDecimal.ZERO)!=0 && tempNetProfit.compareTo(BigDecimal.ZERO)!=0)
+                {
+
+                    BigDecimal rate =  ExcelUtil.convertToBillion(tempNetProfit).divide(ExcelUtil.convertToBillion(tempTotalIncome), 4, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+                    log.warn("rate: "+rate+" tempData: "+tempData);
+                    profitRateList.add(rate);
+                } else {
+                    profitRateList.add(new BigDecimal(0));
+                }
+                if(tempTotalIncome.compareTo(BigDecimal.ZERO)!=0) {
                     incomeList.add(ExcelUtil.convertToBillion(tempTotalIncome));
+                    log.warn("tempTotalIncome: "+tempTotalIncome+" tempData: "+tempData);
                     tempTotalIncome = new BigDecimal(0);
+                } else {
+                    incomeList.add(new BigDecimal(0));
                 }
-                if(!tempNetProfit.equals(0)) {
+                if(tempNetProfit.compareTo(BigDecimal.ZERO)!=0) {
                     profitList.add(ExcelUtil.convertToBillion(tempNetProfit));
+                    log.warn("tempNetProfit: "+tempNetProfit+" tempData: "+tempData);
                     tempNetProfit =  new BigDecimal(0);
+                } else {
+                    profitList.add(new BigDecimal(0));
                 }
-                tempData = incomeProfitListDTO.getReportTime();
                 dayList.add(tempData);
+                tempData = incomeProfitListDTO.getReportTime();
+                log.warn(" tempData: "+tempData);
+                tempCount ++;
+                if(incomeProfitListDTO.getTotalIncome() != null) {
+                    tempTotalIncome = tempTotalIncome.add(incomeProfitListDTO.getTotalIncome());
+                }
+                if(incomeProfitListDTO.getNetProfit() != null) {
+                    tempNetProfit = tempNetProfit.add(incomeProfitListDTO.getNetProfit());
+                }
             } else {
                 tempCount ++;
                 if(incomeProfitListDTO.getTotalIncome() != null) {
@@ -115,12 +144,38 @@ public class DashboardService implements IDashboardService {
                 }
             }
         }
+        //添加最后一个时间记录
         if(tempCount != 0) {
             count.add(tempCount);
         }
+        if(tempTotalIncome.compareTo(BigDecimal.ZERO)!=0 && tempNetProfit.compareTo(BigDecimal.ZERO)!=0)
+        {
+            BigDecimal rate =  ExcelUtil.convertToBillion(tempNetProfit).divide(ExcelUtil.convertToBillion(tempTotalIncome), 2, RoundingMode.HALF_UP).multiply(new BigDecimal(100));
+            log.warn("rate: "+rate+" tempData: "+tempData);
+            profitRateList.add(rate);
+        } else {
+            profitRateList.add(new BigDecimal(0));
+        }
+        if(tempTotalIncome.compareTo(BigDecimal.ZERO)!=0) {
+            incomeList.add(ExcelUtil.convertToBillion(tempTotalIncome));
+            log.warn("tempTotalIncome: "+tempTotalIncome+" tempData: "+tempData);
+            tempTotalIncome = new BigDecimal(0);
+        } else {
+            incomeList.add(new BigDecimal(0));
+        }
+        if(tempNetProfit.compareTo(BigDecimal.ZERO)!=0) {
+            profitList.add(ExcelUtil.convertToBillion(tempNetProfit));
+            log.warn("tempNetProfit: "+tempNetProfit+" tempData: "+tempData);
+            tempNetProfit =  new BigDecimal(0);
+        } else {
+            profitList.add(new BigDecimal(0));
+        }
+        dayList.add(tempData);
+
         result.put("dayList", dayList);
         result.put("incomeList", incomeList);
         result.put("profitList", profitList);
+        result.put("profitRateList", profitRateList);
         result.put("count", count);
         return JsonResult.success(result);
     }

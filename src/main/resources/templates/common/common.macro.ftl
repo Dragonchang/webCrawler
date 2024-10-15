@@ -10,6 +10,7 @@
                 <li class="nav-click " ><a href="${request.contextPath}/companyStock"><i class="fa fa-circle-o text-yellow"></i><span>${"股份公司管理"}</span></a></li>
                 <li class="nav-click " ><a href="${request.contextPath}/financeAnalysis"><i class="fa fa-circle-o text-yellow"></i><span>${"公司价值分析"}</span></a></li>
                 <li class="nav-click " ><a href="${request.contextPath}/northfund"><i class="fa fa-circle-o text-yellow"></i><span>${"北向资金分析"}</span></a></li>
+                <li class="nav-click " ><a href="${request.contextPath}/holderDetail"><i class="fa fa-circle-o text-yellow"></i><span>${"持股分析"}</span></a></li>
                 <li class="nav-click " ><a href="${request.contextPath}/recommend"><i class="fa fa-circle-o text-yellow"></i><span>${"推荐"}</span></a></li>
             </ul>
         </section>

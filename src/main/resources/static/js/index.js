@@ -372,9 +372,14 @@ $(function () {
                     name:"总利润(亿)",
                     type:'line',
                     data: data.data.profitList
+                },
+                {
+                    name:"利润率(%)",
+                    type:'line',
+                    data: data.data.profitRateList
                 }
             ],
-            color:['#c23632', '#F39C12', '#F32288']
+            color:['#c23632', '#F39C12', '#F32288', '#123632']
         };
 
         var lineChart = echarts.init(document.getElementById('income_profit_lineChart'));

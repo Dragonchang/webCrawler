@@ -41,6 +41,11 @@ public class HolderDetailController {
     @Autowired
     private ICompanyShareHolderService companyShareHolderService;
 
+    @RequestMapping
+    public String index(Model model) {
+        return "holderDetail";
+    }
+
     @RequestMapping(value = "/getDetail")
     public String getDetail(Model model, @RequestParam String name) {
         List<HolderCompanyListDTO> list = companyShareHolderService.getHolderListByName(name);

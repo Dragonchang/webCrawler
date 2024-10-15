@@ -56,12 +56,12 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
         List<StockHolderDataDTO> dataDTOList =  eastMoneyCrawler.getHolderData(companyStock.getStockCode());
         if(dataDTOList != null && !dataDTOList.isEmpty()) {
             for (StockHolderDataDTO data  : dataDTOList) {
-                CompanyShareHolder shareHolder = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
+                List<CompanyShareHolder> shareHolderList = companyShareHolderMapper.selectList(new LambdaQueryWrapper<CompanyShareHolder>()
                         .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
                         .eq(CompanyShareHolder::getReportTime, data.getEND_DATE().substring(0, 10))
                         .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.LT.getCode()));
-                if (shareHolder == null) {
-                    shareHolder = new CompanyShareHolder();
+                if (shareHolderList == null || shareHolderList.isEmpty()) {
+                    CompanyShareHolder shareHolder = new CompanyShareHolder();
                     shareHolder.setCompanyStockId(companyStock.getId());
                     shareHolder.setHolderType(HolderTypeEnum.LT.getCode());
                     shareHolder.setReportTime(data.getEND_DATE().substring(0, 10));
@@ -88,12 +88,12 @@ public class CompanyShareHolderService implements ICompanyShareHolderService {
                     log.warn("流通股东信息已经更新" + companyStock.getStockCode() + data.getEND_DATE().substring(0, 10));
                 }
 
-                CompanyShareHolder shareHolderGD = companyShareHolderMapper.selectOne(new LambdaQueryWrapper<CompanyShareHolder>()
+                List<CompanyShareHolder> shareHolderGD = companyShareHolderMapper.selectList(new LambdaQueryWrapper<CompanyShareHolder>()
                         .eq(CompanyShareHolder::getCompanyStockId, companyStock.getId())
                         .eq(CompanyShareHolder::getReportTime, data.getEND_DATE().substring(0, 10))
                         .eq(CompanyShareHolder::getHolderType,HolderTypeEnum.GD.getCode()));
-                if (shareHolderGD == null) {
-                    shareHolder = new CompanyShareHolder();
+                if (shareHolderGD == null || shareHolderGD.isEmpty()) {
+                    CompanyShareHolder shareHolder = new CompanyShareHolder();
                     shareHolder.setCompanyStockId(companyStock.getId());
                     shareHolder.setHolderType(HolderTypeEnum.GD.getCode());
                     shareHolder.setReportTime(data.getEND_DATE().substring(0, 10));
