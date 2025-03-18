@@ -38,9 +38,9 @@ public class EastMoneyCrawler {
         Integer pageSize = 0;
         Integer page = 1;
         Map<String, String> params = new HashMap<>();
-
+        Integer page_number = 100;
         params.put("pn", "1");
-        params.put("pz", "200");
+        params.put("pz", "100");
         params.put("po", "1");
         params.put("np", "1");
         params.put("ut", "bd1d9ddb04089700cf9c27f6f7426281");
@@ -48,20 +48,20 @@ public class EastMoneyCrawler {
         params.put("invt", "2");
         params.put("fid", "f3");
         params.put("fs", "m:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23,m:0 t:81 s:2048");
-        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152");
+        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f26,f27,f28,f29,f30,f128,f136,f115,f152");
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Info_URL,
                 HeaderUtils.getEastStockListWebHeaders(), params);
         TycResult<StockInfoListDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockInfoListDto>>() {
         });
         data.addAll(eastMoneyResult.getData().getDiff());
         Integer total = Integer.parseInt(eastMoneyResult.getData().getTotal());
-        pageSize = (total % 200 == 0)? (total / 200): (total / 200 + 1);
+        pageSize = (total % page_number == 0)? (total / page_number): (total / page_number + 1);
         for(page = 2; page <= pageSize; ++page)
         {
             Map<String, String> params1 = new HashMap<>();
 
             params1.put("pn", page.toString());
-            params1.put("pz", "200");
+            params1.put("pz", "100");
             params1.put("po", "1");
             params1.put("np", "1");
             params1.put("ut", "bd1d9ddb04089700cf9c27f6f7426281");
