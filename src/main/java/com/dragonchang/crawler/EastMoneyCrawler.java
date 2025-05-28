@@ -90,7 +90,7 @@ public class EastMoneyCrawler {
         params.put("fltt", "2");
         params.put("invt", "2");
         params.put("volt", "2");
-        if(stockCode.startsWith("300") || stockCode.startsWith("00") || stockCode.startsWith("8")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00") || stockCode.startsWith("8")) {
             params.put("secid", "0." + stockCode);
         } else if(stockCode.startsWith("6")) {
             params.put("secid", "1." + stockCode);
@@ -464,8 +464,8 @@ public class EastMoneyCrawler {
 
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
-        List<StockInfoDto> list = tycCrawler.getStockList();
-//        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("300290");
+//        List<StockInfoDto> list = tycCrawler.getStockList();
+        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("301255");
 //        List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
 //        List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
 //        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");
