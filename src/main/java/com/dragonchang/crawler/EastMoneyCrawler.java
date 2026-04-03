@@ -114,7 +114,7 @@ public class EastMoneyCrawler {
      */
     public List<StockHolderDataDTO> getHolderData(String stockCode) {
         Map<String, String> params = new HashMap<>();
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             stockCode = stockCode+".SZ";
         } else if(stockCode.startsWith("6")) {
             stockCode = stockCode + ".SH";
@@ -153,7 +153,7 @@ public class EastMoneyCrawler {
      */
     public List<StockFreeHolderRecordDTO> getStockFreeHodlerInfoByCode(String stockCode, String data) {
         Map<String, String> params = new HashMap<>();
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             stockCode = stockCode+".SZ";
         } else if(stockCode.startsWith("6")) {
             stockCode = stockCode + ".SH";
@@ -195,7 +195,7 @@ public class EastMoneyCrawler {
      */
     public List<StockNewHolderRecordDTO> getStockNewHodlerInfoByCode(String stockCode, String data) {
         Map<String, String> params = new HashMap<>();
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             stockCode = stockCode+".SZ";
         } else if(stockCode.startsWith("6")) {
             stockCode = stockCode + ".SH";
@@ -235,7 +235,7 @@ public class EastMoneyCrawler {
      */
     public StockHolderRecordListDTO getStockHodlerInfoByCode(String stockCode) {
         Map<String, String> params = new HashMap<>();
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             stockCode = stockCode+".SZ";
         } else if(stockCode.startsWith("6")) {
             stockCode = stockCode + ".SH";
@@ -259,7 +259,7 @@ public class EastMoneyCrawler {
         params.put("fqt", "1");
         params.put("beg", "0");
         params.put("end", "20500000");
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             params.put("secid", "0." + stockCode);
         } else if(stockCode.startsWith("6")) {
             params.put("secid", "1." + stockCode);
@@ -287,7 +287,7 @@ public class EastMoneyCrawler {
         params.put("fltt", "2");
         params.put("invt", "2");
         params.put("volt", "2");
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             params.put("secid", "0." + stockCode);
         } else if(stockCode.startsWith("6")) {
             params.put("secid", "1." + stockCode);
@@ -310,7 +310,7 @@ public class EastMoneyCrawler {
      */
     public List<FinanceReportTimeDTO> getFinanceReport(String stockCode) {
         Map<String, String> params = new HashMap<>();
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             stockCode = "SZ"+stockCode;
         } else if(stockCode.startsWith("6")) {
             stockCode = "SH"+stockCode;
@@ -337,7 +337,7 @@ public class EastMoneyCrawler {
      */
     public List<FinanceAnalysisDataDTO> getFinanceAnalysisData(String dates, String stockCode) {
         Map<String, String> params = new HashMap<>();
-        if(stockCode.startsWith("300") || stockCode.startsWith("00")) {
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
             stockCode = "SZ"+stockCode;
         } else if(stockCode.startsWith("6")) {
             stockCode = "SH"+stockCode;
@@ -462,9 +462,52 @@ public class EastMoneyCrawler {
 
 
 
+    /**
+     * 获取财报发布详细信息
+     * @param stockCode
+     */
+    public List<NewFinanceAnalysisDataDTO> getNewFinanceAnalysisData(String stockCode) {
+        Map<String, String> params = new HashMap<>();
+        if(stockCode.startsWith("30") || stockCode.startsWith("00")) {
+            stockCode = stockCode + ".SZ";
+        } else if(stockCode.startsWith("6")) {
+            stockCode = stockCode+".SH";
+        } else if(stockCode.startsWith("9")) {
+            stockCode = stockCode+".BJ";
+        }
+        params.put("filter", "(SECUCODE=\"" + stockCode + "\")");
+        params.put("type", "RPT_F10_FINANCE_MAINFINADATA");
+        params.put("sty", "APP_F10_MAINFINADATA");
+        params.put("p", "1");
+        params.put("ps", "200");
+        params.put("sr", "-1");
+        params.put("st", "REPORT_DATE");
+        params.put("source", "HSF10");
+        params.put("client", "PC");
+        params.put("v", "05444903085407953");
+        String result = HttpClientUtils.doGetForString(UrlConstant.New_Data_Url,
+                null, params);
+        System.out.println(result);
+        EastResult result1 = JSONObject.parseObject(result, EastResult.class);
+        if(result1 != null) {
+            EastData result2 = result1.getResult();
+            if(result2 != null) {
+                JSONArray jsonArray = (JSONArray) result2.getData();
+                if(jsonArray != null) {
+                    String str = jsonArray.toJSONString();
+                    List<NewFinanceAnalysisDataDTO> ret = JSONObject.parseObject(str, new TypeReference<List<NewFinanceAnalysisDataDTO>>() {
+                    });
+                    return ret;
+                }
+            }
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
-//        List<StockInfoDto> list = tycCrawler.getStockList();
+        //List<NewFinanceAnalysisDataDTO> result = tycCrawler.getNewFinanceAnalysisData("600487");
+        List<StockInfoDto> list = tycCrawler.getStockList();
         StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("301255");
 //        List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
 //        List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");

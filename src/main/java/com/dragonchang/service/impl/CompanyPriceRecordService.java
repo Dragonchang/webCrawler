@@ -3,10 +3,7 @@ package com.dragonchang.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.dragonchang.crawler.EastMoneyCrawler;
-import com.dragonchang.domain.dto.eastmoney.FinanceAnalysisDataDTO;
-import com.dragonchang.domain.dto.eastmoney.FinanceReportTimeDTO;
-import com.dragonchang.domain.dto.eastmoney.KlineDetailDTO;
-import com.dragonchang.domain.dto.eastmoney.TodayPriceDTO;
+import com.dragonchang.domain.dto.eastmoney.*;
 import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyPriceRecord;
 import com.dragonchang.domain.po.CompanyStock;
@@ -143,32 +140,58 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
     public void syncAllCompanyFinance(Integer companyStockId) {
         List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
         for (CompanyStock stock : companyStockList) {
-//            if (companyStockId != null && stock.getId() < companyStockId) {
-//                continue;
-//            }
-            List<FinanceReportTimeDTO> reportTimeDTOS = eastMoneyCrawler.getFinanceReport(stock.getStockCode());
-            if (CollectionUtils.isNotEmpty(reportTimeDTOS)) {
-                int index = 0;
-                String dates = "";
-                List<FinanceAnalysis> tempFinanceAnalysisDataDTOS = new ArrayList<>();
-                for (FinanceReportTimeDTO dto : reportTimeDTOS) {
-                    index++;
-                    dates = dates + "," + dto.getREPORT_DATE().split(" ")[0];
-                    if (index % 5 == 0) {
-                        sync(dates, stock, tempFinanceAnalysisDataDTOS);
-                        dates = "";
+            List<NewFinanceAnalysisDataDTO> result = eastMoneyCrawler.getNewFinanceAnalysisData(stock.getStockCode());
+            if (CollectionUtils.isNotEmpty(result)) {
+                for(NewFinanceAnalysisDataDTO newFinanceAnalysisDataDTO : result) {
+                    String reportTime = newFinanceAnalysisDataDTO.getREPORT_DATE().split(" ")[0];
+                    FinanceAnalysis query = financeAnalysisMapper.selectOne(new LambdaQueryWrapper<FinanceAnalysis>()
+                            .eq(FinanceAnalysis::getStockCompanyId, stock.getId())
+                            .eq(FinanceAnalysis::getReportTime, reportTime));
+                    if (query != null) {
+                        continue;
                     }
-                    if (index == reportTimeDTOS.size()) {
-                        sync(dates, stock, tempFinanceAnalysisDataDTOS);
-                    }
-                }
+                    FinanceAnalysis financeAnalysis = new FinanceAnalysis();
+                    financeAnalysis.setStockCompanyId(stock.getId());
+                    if (newFinanceAnalysisDataDTO != null && StringUtils.isNotBlank(newFinanceAnalysisDataDTO.getTOTALOPERATEREVE())) {
+                        financeAnalysis.setTotalIncome(new BigDecimal(newFinanceAnalysisDataDTO.getTOTALOPERATEREVE()));
 
-                for(FinanceAnalysis financeAnalysis : tempFinanceAnalysisDataDTOS) {
-                    financeAnalysis.setTotalAddPercent(getAddPercent(financeAnalysis.getTotalIncome(),
-                            getBeforeTotalQuarter(financeAnalysis, tempFinanceAnalysisDataDTOS)));
-                    financeAnalysis.setNetProfitPercent(getAddPercent(financeAnalysis.getNetProfit(),
-                            getBeforeProfitQuarter(financeAnalysis, tempFinanceAnalysisDataDTOS)));
-                    financeAnalysisMapper.updateById(financeAnalysis);
+                    }
+                    if (newFinanceAnalysisDataDTO != null && StringUtils.isNotBlank(newFinanceAnalysisDataDTO.getKCFJCXSYJLR())) {
+                        financeAnalysis.setNetProfit(new BigDecimal(newFinanceAnalysisDataDTO.getKCFJCXSYJLR()));
+                    }
+                    BigDecimal netProfit = financeAnalysis.getNetProfit();
+                    BigDecimal total = financeAnalysis.getTotalIncome();
+                    if(total != null && netProfit != null) {
+                        if(netProfit.compareTo(new BigDecimal(0)) > 0  && total.compareTo(new BigDecimal(0)) > 0) {
+                            BigDecimal percent = netProfit.divide(total,4, RoundingMode.HALF_UP);
+                            financeAnalysis.setProfitTotalPercent(percent.multiply(new BigDecimal(100)));
+                        } else {
+                            financeAnalysis.setProfitTotalPercent(new BigDecimal(0));
+                        }
+
+                    } else {
+                        financeAnalysis.setProfitTotalPercent(new BigDecimal(0));
+                    }
+
+                    financeAnalysis.setReportTime(reportTime);
+                    if (newFinanceAnalysisDataDTO.getREPORT_TYPE() != null) {
+                        if (FinanceReportTypeEnum.firstQuarter.getName().equals(newFinanceAnalysisDataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.firstQuarter.getCode());
+                        }
+                        if (FinanceReportTypeEnum.secondQuarter.getName().equals(newFinanceAnalysisDataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.secondQuarter.getCode());
+                        }
+                        if (FinanceReportTypeEnum.thirdQuarter.getName().equals(newFinanceAnalysisDataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.thirdQuarter.getCode());
+                        }
+                        if (FinanceReportTypeEnum.annualQuarter.getName().equals(newFinanceAnalysisDataDTO.getREPORT_TYPE())) {
+                            financeAnalysis.setReportType(FinanceReportTypeEnum.annualQuarter.getCode());
+                        }
+                    }
+                    if (newFinanceAnalysisDataDTO != null && StringUtils.isNotBlank(newFinanceAnalysisDataDTO.getUPDATE_DATE()) && !newFinanceAnalysisDataDTO.getUPDATE_DATE().startsWith("1900-01-01")) {
+                        financeAnalysis.setUpdatedTime(LocalDateTime.parse(newFinanceAnalysisDataDTO.getUPDATE_DATE(), df));
+                    }
+                    financeAnalysisMapper.insert(financeAnalysis);
                 }
             }
         }

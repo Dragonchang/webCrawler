@@ -1,0 +1,4 @@
+CREATE DATABASE dr_crawler;
+mysql -u root -p dr_crawler < /media/dragonchang/B6E4350AE434CE7D/Project/webCrawler/dr_crawler_2025_7.sql
+
+java -Xms512m -Xmx1g -Dfile.encoding=UTF-8 -jar webcrawler.jar > /dev/null 2>&1 &

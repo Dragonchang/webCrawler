@@ -10,11 +10,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * date util
@@ -251,7 +249,94 @@ public class DateUtil {
         return data;
     }
 
+    public static float int2float(int value) {
+        // 将int类型转换为float类型并除以10
+        float result = (float) value / 10;
+        // 使用Math.round()方法对结果进行四舍五入，并保留一位小数
+        result = (float) Math.round(result * 10) / 10;
+        return result;
+    }
+
+    public static int float2int(float voltage) {
+        if (voltage < 0 || voltage > 25.5) {
+            return -1;
+        }
+        // 转换为字符串并处理尾部0和小数点
+        String numStr = String.format("%.10f", voltage)
+                .replaceAll("0+$", "") // 去除小数部分尾部的0
+                .replaceAll("\\.$", ""); // 若只剩小数点则去除
+
+        // 分割整数和小数部分
+        String[] parts = numStr.split("\\.");
+
+        // 无小数部分（整数）或小数部分长度 <=1，直接返回原数
+        if (parts.length < 2 || parts[1].length() <= 1) {
+            return (int) voltage;
+        } else {
+            // 小数部分长度 >1，保留1位小数（四舍五入）
+            float convertValue = (float) Math.round(voltage * 10) / 10;
+            int setValue = (int) (convertValue * 10);
+            return setValue ;
+        }
+    }
+
+    private static final String TAG = "StringToIntConverter";
+    // 匹配x数字y数字格式的正则表达式（如x1y2、x10y20）
+    private static final Pattern PATTERN = Pattern.compile("x(\\d+)y(\\d+)");
+
+    /**
+     * 将x1y2格式的字符串列表转换为整数列表（x后的数字乘以y后的数字）
+     * @param stringList 输入的字符串列表，格式如["x1y2", "x3y4"]
+     * @return 转换后的整数列表，如[2, 12]
+     */
+    public static List<Integer> convert(List<String> stringList) {
+        List<Integer> resultList = new ArrayList<>();
+        if (stringList == null || stringList.isEmpty()) {
+            //Log.w(TAG, "输入列表为空");
+            return resultList;
+        }
+
+        for (String str : stringList) {
+            try {
+                Matcher matcher = PATTERN.matcher(str);
+                if (matcher.matches()) {
+                    // 提取x后面的数字和y后面的数字
+                    int x = Integer.parseInt(matcher.group(1));
+                    int y = Integer.parseInt(matcher.group(2));
+                    // 计算乘积并添加到结果列表
+                    resultList.add(x * y);
+                } else {
+                    //Log.e(TAG, "字符串格式不正确: " + str);
+                    // 可根据需求选择是否添加默认值，如-1表示格式错误
+                    // resultList.add(-1);
+                }
+            } catch (NumberFormatException e) {
+                //Log.e(TAG, "数字解析失败: " + str, e);
+                // 可根据需求选择是否添加默认值
+                // resultList.add(-1);
+            }
+        }
+
+        return resultList;
+    }
     public static void main(String[] args) {
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("x3y4");
+        System.out.println(">>>"+float2int(25.4f));
+        System.out.println(">>>"+float2int(25.4111f));
+        System.out.println(">>>"+float2int(0.4f));
+        System.out.println(">>>"+float2int(0.46666f));
+        System.out.println(">>>"+float2int(0.433333f));
+        System.out.println(">>>"+float2int(10.2f));
+
+
+        System.out.println(">>>"+int2float(255));
+        System.out.println(">>>"+int2float(255));
+        System.out.println(">>>"+int2float(110));
+        System.out.println(">>>"+int2float(11));
+        System.out.println(">>>"+int2float(5));
+
         int tet = getCurrentQuarter();
         LocalDateTime str = DateUtil.strToLocalDateTime("20201203");
         System.out.println(">>>"+str.toString());

@@ -83,4 +83,8 @@ public class UrlConstant {
      * https://data.eastmoney.com/bkzj/BK1141.html
      */
     public static final String Concept_Stock_Info_URL = "https://push2.eastmoney.com/api/qt/clist/get";
+
+
+
+    public static final String New_Data_Url =  "https://datacenter.eastmoney.com/securities/api/data/get";
 }
