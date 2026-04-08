@@ -21,120 +21,131 @@
     </select>
 
     <select id="findPage" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,
-        b.dtzf, b.dtcjl, b.dtcjje, b.dthsl, b.lb, b.syl,
-        b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
-        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
-        a.total_income/b.total_capitalization as incomeTotalPercent,
-        c.bk_name as bkInfo
-        FROM t_finance_analysis a
-        LEFT JOIN t_company_stock b on a.stock_company_id = b.id
-        LEFT JOIN t_bk_stock c on a.stock_company_id = c.company_stock_id
-        WHERE 1=1
-        <if test="request.name != null and request.name != ''">
-            and b.name like CONCAT('%', #{request.name} , '%')
-        </if>
-        <if test="request.stockCode != null and request.stockCode != ''">
-            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
-        </if>
-        <if test="request.reportTime != null and request.reportTime != ''">
-            and a.report_time = #{request.reportTime}
-        </if>
-        <if test="request.totalCapitalization != null">
-            and b.total_capitalization >= #{request.totalCapitalization}
-        </if>
-        <if test="request.totalAddPercent != null">
-            and a.total_add_percent >= #{request.totalAddPercent}
-        </if>
-        <if test="request.netProfitPercent != null">
-            and a.net_profit_percent >= #{request.netProfitPercent}
-        </if>
-        <if test="request.netProfit != null">
-            and a.net_profit >= #{request.netProfit}
-        </if>
-        <if test="request.bkinfo != null and request.bkinfo != ''">
-            and c.bk_name = #{request.bkinfo}
-        </if>
-        <if test="request.order != null and request.order == 1">
-            ORDER BY a.total_income DESC
-        </if>
-        <if test="request.order != null and request.order == 2">
-            ORDER BY a.net_profit DESC
-        </if>
-        <if test="request.order != null and request.order == 3">
-            ORDER BY a.total_add_percent DESC
-        </if>
-        <if test="request.order != null and request.order == 4">
-            ORDER BY a.net_profit_percent DESC
-        </if>
-        <if test="request.order != null and request.order == 5">
-            ORDER BY a.profit_total_percent DESC
-        </if>
-        <if test="request.order != null and request.order == 6">
-            ORDER BY a.updated_time DESC
-        </if>
-        <if test="request.order != null and request.order == 7">
-            ORDER BY incomeTotalPercent DESC
-        </if>
-
-    </select>
+    SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,
+    b.dtzf, b.dtcjl, b.dtcjje, b.dthsl, b.lb, b.syl,
+    b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
+    a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
+    a.total_income/b.total_capitalization as incomeTotalPercent,
+    c.bk_name as bkInfo
+    FROM t_finance_analysis a
+    LEFT JOIN t_company_stock b on a.stock_company_id = b.id
+    LEFT JOIN (
+        SELECT
+            company_stock_id,
+            GROUP_CONCAT(DISTINCT bk_name ORDER BY bk_name SEPARATOR ' ') AS bk_name
+        FROM t_bk_stock
+        GROUP BY company_stock_id
+    ) c on a.stock_company_id = c.company_stock_id
+    WHERE 1=1
+    <if test="request.name != null and request.name != ''">
+        and b.name like CONCAT('%', #{request.name} , '%')
+    </if>
+    <if test="request.stockCode != null and request.stockCode != ''">
+        and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+    </if>
+    <if test="request.reportTime != null and request.reportTime != ''">
+        and a.report_time = #{request.reportTime}
+    </if>
+    <if test="request.totalCapitalization != null">
+        and b.total_capitalization >= #{request.totalCapitalization}
+    </if>
+    <if test="request.totalAddPercent != null">
+        and a.total_add_percent >= #{request.totalAddPercent}
+    </if>
+    <if test="request.netProfitPercent != null">
+        and a.net_profit_percent >= #{request.netProfitPercent}
+    </if>
+    <if test="request.netProfit != null">
+        and a.net_profit >= #{request.netProfit}
+    </if>
+    <if test="request.bkinfo != null and request.bkinfo != ''">
+        and c.bk_name like CONCAT('%', #{request.bkinfo} , '%')
+    </if>
+    <if test="request.order != null and request.order == 1">
+        ORDER BY a.total_income DESC
+    </if>
+    <if test="request.order != null and request.order == 2">
+        ORDER BY a.net_profit DESC
+    </if>
+    <if test="request.order != null and request.order == 3">
+        ORDER BY a.total_add_percent DESC
+    </if>
+    <if test="request.order != null and request.order == 4">
+        ORDER BY a.net_profit_percent DESC
+    </if>
+    <if test="request.order != null and request.order == 5">
+        ORDER BY a.profit_total_percent DESC
+    </if>
+    <if test="request.order != null and request.order == 6">
+        ORDER BY a.updated_time DESC
+    </if>
+    <if test="request.order != null and request.order == 7">
+        ORDER BY incomeTotalPercent DESC
+    </if>
+</select>
     <select id="findList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
-        SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,
-        b.dtzf, b.dtcjl, b.dtcjje, b.dthsl, b.lb, b.syl,
-        b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
-        a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
-        a.total_income/b.total_capitalization as incomeTotalPercent,
-        c.bk_name as bkInfo
-        FROM t_finance_analysis a
-        LEFT JOIN t_company_stock b on a.stock_company_id = b.id
-        LEFT JOIN t_bk_stock c on a.stock_company_id = c.company_stock_id
-        WHERE 1=1
-        <if test="request.name != null and request.name != ''">
-            and b.name like CONCAT('%', #{request.name} , '%')
-        </if>
-        <if test="request.stockCode != null and request.stockCode != ''">
-            and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
-        </if>
-        <if test="request.reportTime != null and request.reportTime != ''">
-            and a.report_time = #{request.reportTime}
-        </if>
-        <if test="request.totalCapitalization != null">
-            and b.total_capitalization >= #{request.totalCapitalization}
-        </if>
-        <if test="request.totalAddPercent != null">
-            and a.total_add_percent >= #{request.totalAddPercent}
-        </if>
-        <if test="request.netProfitPercent != null">
-            and a.net_profit_percent >= #{request.netProfitPercent}
-        </if>
-        <if test="request.netProfit != null">
-            and a.net_profit >= #{request.netProfit}
-        </if>
-        <if test="request.bkinfo != null and request.bkinfo != ''">
-            and c.bk_name = #{request.bkinfo}
-        </if>
-        <if test="request.order != null and request.order == 1">
-            ORDER BY a.total_income DESC
-        </if>
-        <if test="request.order != null and request.order == 2">
-            ORDER BY a.net_profit DESC
-        </if>
-        <if test="request.order != null and request.order == 3">
-            ORDER BY a.total_add_percent DESC
-        </if>
-        <if test="request.order != null and request.order == 4">
-            ORDER BY a.net_profit_percent DESC
-        </if>
-        <if test="request.order != null and request.order == 5">
-            ORDER BY a.profit_total_percent DESC
-        </if>
-        <if test="request.order != null and request.order == 6">
-            ORDER BY a.updated_time DESC
-        </if>
-        <if test="request.order != null and request.order == 7">
-            ORDER BY incomeTotalPercent DESC
-        </if>
-    </select>
+    SELECT a.id, a.stock_company_id, b.stock_code, b.name,  b.last_price,
+    b.dtzf, b.dtcjl, b.dtcjje, b.dthsl, b.lb, b.syl,
+    b.total_capitalization, a.total_income, a.total_add_percent, a.net_profit,
+    a.net_profit_percent, a.profit_total_percent, a.report_time, a.report_type, a.updated_time,
+    a.total_income/b.total_capitalization as incomeTotalPercent,
+    c.bk_name as bkInfo
+    FROM t_finance_analysis a
+    LEFT JOIN t_company_stock b on a.stock_company_id = b.id
+    LEFT JOIN (
+        SELECT
+            company_stock_id,
+            GROUP_CONCAT(DISTINCT bk_name ORDER BY bk_name SEPARATOR ' ') AS bk_name
+        FROM t_bk_stock
+        GROUP BY company_stock_id
+    ) c on a.stock_company_id = c.company_stock_id
+    WHERE 1=1
+    <if test="request.name != null and request.name != ''">
+        and b.name like CONCAT('%', #{request.name} , '%')
+    </if>
+    <if test="request.stockCode != null and request.stockCode != ''">
+        and b.stock_code like CONCAT('%', #{request.stockCode} , '%')
+    </if>
+    <if test="request.reportTime != null and request.reportTime != ''">
+        and a.report_time = #{request.reportTime}
+    </if>
+    <if test="request.totalCapitalization != null">
+        and b.total_capitalization >= #{request.totalCapitalization}
+    </if>
+    <if test="request.totalAddPercent != null">
+        and a.total_add_percent >= #{request.totalAddPercent}
+    </if>
+    <if test="request.netProfitPercent != null">
+        and a.net_profit_percent >= #{request.netProfitPercent}
+    </if>
+    <if test="request.netProfit != null">
+        and a.net_profit >= #{request.netProfit}
+    </if>
+    <if test="request.bkinfo != null and request.bkinfo != ''">
+        and c.bk_name like CONCAT('%', #{request.bkinfo} , '%')
+    </if>
+    <if test="request.order != null and request.order == 1">
+        ORDER BY a.total_income DESC
+    </if>
+    <if test="request.order != null and request.order == 2">
+        ORDER BY a.net_profit DESC
+    </if>
+    <if test="request.order != null and request.order == 3">
+        ORDER BY a.total_add_percent DESC
+    </if>
+    <if test="request.order != null and request.order == 4">
+        ORDER BY a.net_profit_percent DESC
+    </if>
+    <if test="request.order != null and request.order == 5">
+        ORDER BY a.profit_total_percent DESC
+    </if>
+    <if test="request.order != null and request.order == 6">
+        ORDER BY a.updated_time DESC
+    </if>
+    <if test="request.order != null and request.order == 7">
+        ORDER BY incomeTotalPercent DESC
+    </if>
+</select>
 
     <select id="findRecommendList" resultType="com.dragonchang.domain.dto.FinanceAnalysisResponseDTO">
 

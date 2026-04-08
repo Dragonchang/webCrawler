@@ -487,7 +487,8 @@ public class EastMoneyCrawler {
         params.put("v", "05444903085407953");
         String result = HttpClientUtils.doGetForString(UrlConstant.New_Data_Url,
                 null, params);
-        System.out.println(result);
+        //System.out.println(stockCode);
+        //System.out.println(result);
         EastResult result1 = JSONObject.parseObject(result, EastResult.class);
         if(result1 != null) {
             EastData result2 = result1.getResult();

@@ -66,10 +66,6 @@ public class CompanyFinanceAnalysisController {
                                         String order, String name, String stockCode, String reportTime,
                                         BigDecimal totalCapitalization, BigDecimal totalAddPercent, BigDecimal netProfitPercent, BigDecimal netProfit,
                                         String bkinfo) {
-
-        if(StringUtils.isNotBlank(stockCode) || StringUtils.isNotBlank(name)) {
-            reportTime = null;
-        }
         FinanceAnalysisRequestDTO pageRequest = new FinanceAnalysisRequestDTO();
         pageRequest.setName(name);
         pageRequest.setStockCode(stockCode);
