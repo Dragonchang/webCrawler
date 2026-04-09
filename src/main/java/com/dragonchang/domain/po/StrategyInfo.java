@@ -41,6 +41,8 @@ public class StrategyInfo {
     private LocalDateTime lastRunTime;
 
     private String lastRunStatus;
+    private String validateStatus;
+    private String validateMessage;
     private Integer deleted;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

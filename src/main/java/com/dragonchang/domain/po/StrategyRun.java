@@ -24,6 +24,8 @@ public class StrategyRun {
 
     private Long strategyId;
     private Long strategyVersionId;
+    private String engineType;
+    private String scriptType;
     private String runType;
     private String triggerSource;
     private String runStatus;

@@ -15,6 +15,8 @@ public class StrategyRunDTO {
     private String strategyName;
     private String strategyCode;
     private Integer versionNo;
+    private String engineType;
+    private String scriptType;
     private String runType;
     private String triggerSource;
     private String runStatus;

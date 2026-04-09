@@ -7,6 +7,8 @@
     <style>
         pre.log-panel { background: #111827; color: #d1fae5; border-radius: 4px; padding: 12px; min-height: 220px; white-space: pre-wrap; }
         pre.json-panel { background: #f7f7f7; border: 1px solid #ddd; border-radius: 4px; padding: 12px; min-height: 180px; white-space: pre-wrap; }
+        .progress-status-card { margin-bottom: 15px; }
+        .live-status-line { display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px; }
     </style>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -18,6 +20,23 @@
         </section>
         <section class="content">
             <input type="hidden" id="run_id" value="${runId?c}">
+            <div class="row progress-status-card">
+                <div class="col-md-12">
+                    <div class="box box-success">
+                        <div class="box-header with-border"><h3 class="box-title">实时进度</h3></div>
+                        <div class="box-body">
+                            <div class="live-status-line">
+                                <span>当前状态：<b id="live_status">等待连接</b></span>
+                                <span>进度：<b id="live_progress_text">0%</b></span>
+                            </div>
+                            <div class="progress progress-sm active">
+                                <div id="live_progress_bar" class="progress-bar progress-bar-success" style="width:0%"></div>
+                            </div>
+                            <div id="live_message" class="text-muted">尚未收到实时消息</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-12">
                     <div class="box box-primary">
@@ -77,4 +96,3 @@
 <script src="${request.contextPath}/js/strategyRunDetail.js"></script>
 </body>
 </html>
-

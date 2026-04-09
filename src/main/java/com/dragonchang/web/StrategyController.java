@@ -3,8 +3,10 @@ package com.dragonchang.web;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.dragonchang.domain.dto.StrategyRequestDTO;
 import com.dragonchang.domain.dto.StrategySaveRequestDTO;
+import com.dragonchang.domain.dto.StrategyValidateRequestDTO;
 import com.dragonchang.domain.po.StrategyInfo;
 import com.dragonchang.domain.vo.JsonResult;
+import com.dragonchang.domain.vo.ScriptTemplateVO;
 import com.dragonchang.service.IStrategyService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +100,18 @@ public class StrategyController {
     @ResponseBody
     public JsonResult changeStatus(@RequestParam Long id, @RequestParam Integer status) {
         return strategyService.changeStatus(id, status);
+    }
+
+    @PostMapping("/validate")
+    @ResponseBody
+    public JsonResult validate(@RequestBody StrategyValidateRequestDTO request) {
+        return strategyService.validateScript(request);
+    }
+
+    @GetMapping("/groovyTemplates")
+    @ResponseBody
+    public JsonResult<List<ScriptTemplateVO>> groovyTemplates() {
+        return JsonResult.success(strategyService.getGroovyTemplates());
     }
 }
 

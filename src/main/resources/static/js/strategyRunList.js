@@ -22,6 +22,8 @@ $(function() {
             {"data": 'strategyName'},
             {"data": 'strategyCode'},
             {"data": 'versionNo'},
+            {"data": 'engineType'},
+            {"data": 'scriptType'},
             {"data": 'runType'},
             {"data": 'runStatus'},
             {"data": 'startTime'},

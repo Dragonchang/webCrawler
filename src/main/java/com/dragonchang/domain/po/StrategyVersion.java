@@ -24,6 +24,7 @@ public class StrategyVersion {
 
     private Long strategyId;
     private Integer versionNo;
+    private String scriptType;
     private String scriptContent;
     private String paramSchema;
     private String defaultParams;

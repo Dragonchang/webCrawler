@@ -19,6 +19,8 @@
         <result column="cron_expr" property="cronExpr"/>
         <result column="last_run_time" property="lastRunTime"/>
         <result column="last_run_status" property="lastRunStatus"/>
+        <result column="validate_status" property="validateStatus"/>
+        <result column="validate_message" property="validateMessage"/>
         <result column="deleted" property="deleted"/>
         <result column="created_time" property="createdTime"/>
         <result column="created_by" property="createdBy"/>

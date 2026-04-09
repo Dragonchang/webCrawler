@@ -7,7 +7,9 @@ import com.dragonchang.domain.dto.StrategyRunPageRequestDTO;
 import com.dragonchang.domain.dto.StrategyRunRequestDTO;
 import com.dragonchang.domain.po.StrategyRunLog;
 import com.dragonchang.domain.vo.JsonResult;
+import com.dragonchang.domain.vo.StrategyRunPushMessageVO;
 import com.dragonchang.service.IStrategyRunService;
+import com.dragonchang.service.StrategyRunAsyncService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,9 @@ public class StrategyRunController {
     @Autowired
     private IStrategyRunService strategyRunService;
 
+    @Autowired
+    private StrategyRunAsyncService strategyRunAsyncService;
+
     @RequestMapping
     public String index(Model model) {
         return "strategyRunList";
@@ -43,7 +48,16 @@ public class StrategyRunController {
     @PostMapping("/execute")
     @ResponseBody
     public JsonResult execute(@RequestBody StrategyRunRequestDTO request) {
-        return strategyRunService.execute(request);
+        JsonResult startResult = strategyRunService.createRun(request);
+        if (!startResult.isSuccess()) {
+            return startResult;
+        }
+        Map<String, Object> data = (Map<String, Object>) startResult.getData();
+        Long runId = data == null ? null : Long.valueOf(String.valueOf(data.get("runId")));
+        if (runId != null) {
+            strategyRunAsyncService.executeAsync(runId);
+        }
+        return startResult;
     }
 
     @RequestMapping("/pageList")
@@ -94,5 +108,10 @@ public class StrategyRunController {
     public JsonResult<List<StrategyResultDTO>> resultList(@RequestParam Long runId) {
         return JsonResult.success(strategyRunService.getResults(runId));
     }
-}
 
+    @GetMapping("/snapshot")
+    @ResponseBody
+    public JsonResult<StrategyRunPushMessageVO> snapshot(@RequestParam Long runId) {
+        return JsonResult.success(strategyRunService.getRunSnapshot(runId));
+    }
+}
