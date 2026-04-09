@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -32,13 +31,13 @@ public class CompanyStockTask {
     ICompanyStockService companyStockService;
 
     @Autowired
-    ICompanyPriceRecordService companyPriceRecordService;
-
-    @Autowired
     IUpwardTrendService upwardTrendService;
 
     @Autowired
     IBKInfoService bKInfoService;
+
+    @Autowired
+    ICompanyPriceRecordService companyPriceRecordService;
     /**
      * 每天下午3点执行
      */
@@ -46,7 +45,6 @@ public class CompanyStockTask {
     @Scheduled(cron = "0 0 15 ? * MON-FRI")
     public void tempMigrateWithMerchantTask() {
         companyStockService.syncStockListInfo();
-        companyPriceRecordService.syncCompanyTodayPrice();
         companyStockService.syncAllStockShareHolder();
 
         bKInfoService.updateBKInfo();
@@ -59,7 +57,7 @@ public class CompanyStockTask {
     @Async
     @Scheduled(cron = "0 0 23 ? * MON-FRI")
     public void syncFinance() {
-        //companyPriceRecordService.syncAllCompanyFinance(null);
+        companyPriceRecordService.syncAllCompanyFinance(null);
     }
 
     /**

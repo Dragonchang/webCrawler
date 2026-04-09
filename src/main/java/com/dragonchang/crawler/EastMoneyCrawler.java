@@ -48,7 +48,7 @@ public class EastMoneyCrawler {
         params.put("invt", "2");
         params.put("fid", "f3");
         params.put("fs", "m:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23,m:0 t:81 s:2048");
-        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f26,f27,f28,f29,f30,f128,f136,f115,f152");
+        params.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f26,f27,f28,f29,f30,f55,f115,f116,f117,f128,f136,f152");
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Info_URL,
                 HeaderUtils.getEastStockListWebHeaders(), params);
         TycResult<StockInfoListDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockInfoListDto>>() {
@@ -69,7 +69,7 @@ public class EastMoneyCrawler {
             params1.put("invt", "2");
             params1.put("fid", "f3");
             params1.put("fs", "m:0 t:6,m:0 t:80,m:1 t:2,m:1 t:23,m:0 t:81 s:2048");
-            params1.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f12,f13,f14,f15,f16,f17,f18,f20,f21,f23,f24,f25,f22,f11,f62,f128,f136,f115,f152");
+            params1.put("fields", "f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f20,f21,f22,f23,f24,f25,f26,f27,f28,f29,f30,f55,f115,f116,f117,f128,f136,f152");
             String result1 = HttpClientUtils.doGetForString(UrlConstant.Stock_Info_URL,
                     HeaderUtils.getEastStockListWebHeaders(), params1);
             TycResult<StockInfoListDto> eastMoneyResult1 = JSONObject.parseObject(result1, new TypeReference<TycResult<StockInfoListDto>>() {
@@ -79,32 +79,6 @@ public class EastMoneyCrawler {
         return data;
     }
 
-    /**
-     * 获取公司股票详细信息
-     * @return
-     */
-    private static  String detailFields = "f43,f44,f45,f46,f47,f48,f49,f50,f51,f52,f55,f57,f58,f60,f62,f168,f169,f170,f164,f163,f116,f167,f117,f71,f161,f530,f135,f136,f137,f138,f139,f141,f142,f144,f145,f147,f148,f140,f143,f146,f149,f162,f92,f173,f104,f105,f84,f85,f183,f184,f185,f186,f187,f188,f189,f190,f191,f192,f107,f111,f86,f177,f78,f110,f262,f263,f264,f267,f268,f250,f251,f252,f253,f254,f255,f256,f257,f258,f266,f269,f270,f271,f273,f274,f275,f127,f199,f128,f198,f259,f260,f261,f171,f277,f278,f279,f288,f292,f182";
-    public StockDetailDto getStockInfoByStockCode(String stockCode) {
-        Map<String, String> params = new HashMap<>();
-        params.put("ut", "fa5fd1943c7b386f172d6893dbfba10b");
-        params.put("fltt", "2");
-        params.put("invt", "2");
-        params.put("volt", "2");
-        if(stockCode.startsWith("30") || stockCode.startsWith("00") || stockCode.startsWith("8")) {
-            params.put("secid", "0." + stockCode);
-        } else if(stockCode.startsWith("6")) {
-            params.put("secid", "1." + stockCode);
-        }
-        params.put("fields", detailFields);
-        String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Detail_Info_URL,
-                HeaderUtils.getEastMoneyWebHeaders(), params);
-        TycResult<StockDetailDto> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<StockDetailDto>>() {
-        });
-        if(eastMoneyResult == null) {
-            return null;
-        }
-        return eastMoneyResult.getData();
-    }
 
 
     /**
@@ -292,7 +266,6 @@ public class EastMoneyCrawler {
         } else if(stockCode.startsWith("6")) {
             params.put("secid", "1." + stockCode);
         }
-        params.put("fields", detailFields);
         String result = HttpClientUtils.doGetForString(UrlConstant.Stock_Detail_Info_URL,
                 HeaderUtils.getEastMoneyWebHeaders(), params);
         TycResult<TodayPriceDTO> eastMoneyResult = JSONObject.parseObject(result, new TypeReference<TycResult<TodayPriceDTO>>() {
@@ -488,7 +461,7 @@ public class EastMoneyCrawler {
         String result = HttpClientUtils.doGetForString(UrlConstant.New_Data_Url,
                 null, params);
         //System.out.println(stockCode);
-        //System.out.println(result);
+        System.out.println(result);
         EastResult result1 = JSONObject.parseObject(result, EastResult.class);
         if(result1 != null) {
             EastData result2 = result1.getResult();
@@ -509,7 +482,6 @@ public class EastMoneyCrawler {
         EastMoneyCrawler tycCrawler = new EastMoneyCrawler();
         //List<NewFinanceAnalysisDataDTO> result = tycCrawler.getNewFinanceAnalysisData("600487");
         List<StockInfoDto> list = tycCrawler.getStockList();
-        StockDetailDto detailDto = tycCrawler.getStockInfoByStockCode("301255");
 //        List<BKInfoDTO> bkInfoDTOList = tycCrawler.getConceptList();
 //        List<StockInfoDto> bkstock = tycCrawler.getStockListByConceptCode("BK1141");
 //        List<FinanceReportTimeDTO> ret = tycCrawler.getFinanceReport("300716");

@@ -7,14 +7,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dragonchang.crawler.EastMoneyCrawler;
 import com.dragonchang.domain.dto.CompanyStockRequestDTO;
 import com.dragonchang.domain.dto.ExcelData;
-import com.dragonchang.domain.dto.FinanceAnalysisResponseDTO;
-import com.dragonchang.domain.dto.eastmoney.StockDetailDto;
 import com.dragonchang.domain.dto.eastmoney.StockInfoDto;
-import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.TotalStockRecord;
+import com.dragonchang.domain.po.CompanyPriceRecord;
 import com.dragonchang.mapper.CompanyStockMapper;
 import com.dragonchang.mapper.TotalStockRecordMapper;
+import com.dragonchang.mapper.CompanyPriceRecordMapper;
 import com.dragonchang.service.ICompanyStockService;
 import com.dragonchang.util.DateUtil;
 import com.dragonchang.util.ExcelUtil;
@@ -26,9 +25,15 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @program: webcrawler
@@ -46,8 +51,12 @@ public class CompanyStockService implements ICompanyStockService {
     @Autowired
     private CompanyStockMapper mapper;
 
+
     @Autowired
     private TotalStockRecordMapper totalStockRecordMapper;
+
+    @Autowired
+    private CompanyPriceRecordMapper companyPriceRecordMapper;
 
     @Autowired
     private CompanyShareHolderService companyShareHolderService;
@@ -57,132 +66,185 @@ public class CompanyStockService implements ICompanyStockService {
     public void syncStockListInfo() {
         List<StockInfoDto> stockInfoDtoList = eastMoneyCrawler.getStockList();
         if (CollectionUtils.isNotEmpty(stockInfoDtoList)) {
-            BigDecimal total_price = new BigDecimal(0);
-            BigDecimal total_capitalization = new BigDecimal(0);
-            BigDecimal total_circulation = new BigDecimal(0);
-            for (StockInfoDto stockInfoDto : stockInfoDtoList) {
-                //获取详细信息
-                StockDetailDto detailDto = eastMoneyCrawler.getStockInfoByStockCode(stockInfoDto.getF12());
-                CompanyStock companyStock = mapper.selectOne(new LambdaQueryWrapper<CompanyStock>()
-                        .eq(CompanyStock::getStockCode, stockInfoDto.getF12()));
-                String marketTime = stockInfoDto.getF26();
-                log.info(marketTime);
-                if (companyStock != null) {
-                    companyStock.setName(stockInfoDto.getF14());
-                    if(StringUtils.isNotEmpty(marketTime)) {
-                        companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
+            long totalStart = System.currentTimeMillis();
+            int cpuThreads = Runtime.getRuntime().availableProcessors() * 2;
+            int threadCount = Math.min(cpuThreads, stockInfoDtoList.size());
+            int chunkSize = (stockInfoDtoList.size() + threadCount - 1) / threadCount;
+
+            log.info("syncStockListInfo start, totalStock={}, cpuThreads={}, workerThreads={}, chunkSize={}",
+                    stockInfoDtoList.size(), cpuThreads, threadCount, chunkSize);
+
+            ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
+            List<Future<StockSyncSummary>> futures = new ArrayList<>();
+            for (int i = 0; i < stockInfoDtoList.size(); i += chunkSize) {
+                int start = i;
+                int end = Math.min(i + chunkSize, stockInfoDtoList.size());
+                List<StockInfoDto> stockChunk = new ArrayList<>(stockInfoDtoList.subList(start, end));
+                int chunkNo = (i / chunkSize) + 1;
+                futures.add(executorService.submit(() -> processStockChunk(stockChunk, chunkNo, start, end)));
+            }
+
+            BigDecimal totalPrice = BigDecimal.ZERO;
+            BigDecimal totalCapitalization = BigDecimal.ZERO;
+            BigDecimal totalCirculation = BigDecimal.ZERO;
+            try {
+                for (Future<StockSyncSummary> future : futures) {
+                    StockSyncSummary summary = future.get();
+                    totalPrice = totalPrice.add(summary.getTotalPrice());
+                    totalCapitalization = totalCapitalization.add(summary.getTotalCapitalization());
+                    totalCirculation = totalCirculation.add(summary.getTotalCirculation());
+                }
+            } catch (Exception e) {
+                log.error("syncStockListInfo parallel execute error", e);
+                throw new RuntimeException("syncStockListInfo parallel execute error", e);
+            } finally {
+                executorService.shutdown();
+                try {
+                    if (!executorService.awaitTermination(5, TimeUnit.MINUTES)) {
+                        executorService.shutdownNow();
                     }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF3())) {
-                        companyStock.setDtzf(stockInfoDto.getF3());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF5())) {
-                        companyStock.setDtcjl(stockInfoDto.getF5());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF6()) && StringUtil.isNumeric2(stockInfoDto.getF6())) {
-                        companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF8())) {
-                        companyStock.setDthsl(stockInfoDto.getF8());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF10())) {
-                        companyStock.setLb(stockInfoDto.getF10());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF115())) {
-                        companyStock.setSyl(stockInfoDto.getF115());
-                    }
-                    if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
-                        BigDecimal price = new BigDecimal(stockInfoDto.getF2());
-                        total_price = total_price.add(price);
-                        companyStock.setLastPrice(price);
-                    } else {
-                        if(!StringUtils.isEmpty(stockInfoDto.getF18()) && !stockInfoDto.getF18().equals("-")) {
-                            BigDecimal price = new BigDecimal(stockInfoDto.getF18());
-                            total_price = total_price.add(price);
-                            companyStock.setLastPrice(new BigDecimal(stockInfoDto.getF18()));
-                        }
-                    }
-                    if(detailDto != null) {
-                        if (!StringUtils.isEmpty(detailDto.getF55()) && !detailDto.getF55().equals("-")) {
-                            companyStock.setLastIncome(new BigDecimal(detailDto.getF55()));
-                        }
-                        if (!StringUtils.isEmpty(detailDto.getF116()) && !detailDto.getF116().equals("-")) {
-                            BigDecimal totalCapitalization = new BigDecimal(detailDto.getF116()).divide(BillionUnits, 4, RoundingMode.HALF_UP);
-                            total_capitalization = total_capitalization.add(totalCapitalization);
-                            companyStock.setTotalCapitalization(totalCapitalization);
-                        }
-                        if (!StringUtils.isEmpty(detailDto.getF117()) && !detailDto.getF117().equals("-")) {
-                            BigDecimal circulation = new BigDecimal(detailDto.getF117()).divide(BillionUnits, 4, RoundingMode.HALF_UP);
-                            total_circulation = total_circulation.add(circulation);
-                            companyStock.setLastCirculation(circulation);
-                        }
-                    }
-                    companyStock.setUpdatedTime(LocalDateTime.now());
-                    mapper.updateById(companyStock);
-                    //同步股东信息
-                    //companyShareHolderService.syncStockHolderByCode(companyStock);
-                } else {
-                    companyStock = new CompanyStock();
-                    companyStock.setStockCode(stockInfoDto.getF12());
-                    companyStock.setName(stockInfoDto.getF14());
-                    if(StringUtils.isNotEmpty(marketTime)) {
-                        companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF3())) {
-                        companyStock.setDtzf(stockInfoDto.getF3());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF5())) {
-                        companyStock.setDtcjl(stockInfoDto.getF5());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF6()) && StringUtil.isNumeric2(stockInfoDto.getF6())) {
-                        companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF8())) {
-                        companyStock.setDthsl(stockInfoDto.getF8());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF10())) {
-                        companyStock.setLb(stockInfoDto.getF10());
-                    }
-                    if(StringUtils.isNotEmpty(stockInfoDto.getF115())) {
-                        companyStock.setSyl(stockInfoDto.getF115());
-                    }
-                    if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
-                        BigDecimal price = new BigDecimal(stockInfoDto.getF2());
-                        total_price = total_price.add(price);
-                        companyStock.setLastPrice(new BigDecimal(stockInfoDto.getF2()));
-                    } else {
-                        if(!StringUtils.isEmpty(stockInfoDto.getF18()) && !stockInfoDto.getF18().equals("-")) {
-                            BigDecimal price = new BigDecimal(stockInfoDto.getF18());
-                            total_price = total_price.add(price);
-                            companyStock.setLastPrice(new BigDecimal(stockInfoDto.getF18()));
-                        }
-                    }
-                    if(detailDto != null) {
-                        if (!StringUtils.isEmpty(detailDto.getF55()) && !detailDto.getF55().equals("-")) {
-                            companyStock.setLastIncome(new BigDecimal(detailDto.getF55()));
-                        }
-                        if (!StringUtils.isEmpty(detailDto.getF116()) && !detailDto.getF116().equals("-")) {
-                            BigDecimal totalCapitalization = new BigDecimal(detailDto.getF116()).divide(BillionUnits, 4, RoundingMode.HALF_UP);
-                            total_capitalization = total_capitalization.add(totalCapitalization);
-                            companyStock.setTotalCapitalization(totalCapitalization);
-                        }
-                        if (!StringUtils.isEmpty(detailDto.getF117()) && !detailDto.getF117().equals("-")) {
-                            BigDecimal circulation = new BigDecimal(detailDto.getF117()).divide(BillionUnits, 4, RoundingMode.HALF_UP);
-                            total_circulation = total_circulation.add(circulation);
-                            companyStock.setLastCirculation(circulation);
-                        }
-                    }
-                    mapper.insert(companyStock);
-                    //同步股东信息
-                    //companyShareHolderService.syncStockHolderByCode(companyStock);
+                } catch (InterruptedException e) {
+                    executorService.shutdownNow();
+                    Thread.currentThread().interrupt();
                 }
             }
+
             TotalStockRecord totalStockRecord = new TotalStockRecord();
-            totalStockRecord.setAveragePrice(total_price.divide(new BigDecimal(stockInfoDtoList.size()), 6, RoundingMode.HALF_UP));
-            totalStockRecord.setTotalCapitalization(total_capitalization);
-            totalStockRecord.setLastCirculation(total_circulation);
+            totalStockRecord.setAveragePrice(totalPrice.divide(new BigDecimal(stockInfoDtoList.size()), 6, RoundingMode.HALF_UP));
+            totalStockRecord.setTotalCapitalization(totalCapitalization);
+            totalStockRecord.setLastCirculation(totalCirculation);
             totalStockRecordMapper.insert(totalStockRecord);
+
+            long totalCost = System.currentTimeMillis() - totalStart;
+            log.info("syncStockListInfo finish, totalStock={}, workerThreads={}, chunkSize={}, totalCost={}ms",
+                    stockInfoDtoList.size(), threadCount, chunkSize, totalCost);
         } else {
             log.warn("get stock list failed!");
+        }
+    }
+
+    private StockSyncSummary processStockChunk(List<StockInfoDto> stockChunk, int chunkNo, int start, int end) {
+        long chunkStart = System.currentTimeMillis();
+        log.info("stock chunk {} start, range=[{}, {}), size={}", chunkNo, start, end, stockChunk.size());
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        BigDecimal totalCapitalization = BigDecimal.ZERO;
+        BigDecimal totalCirculation = BigDecimal.ZERO;
+        for (StockInfoDto stockInfoDto : stockChunk) {
+            CompanyStock companyStock = mapper.selectOne(new LambdaQueryWrapper<CompanyStock>()
+                    .eq(CompanyStock::getStockCode, stockInfoDto.getF12()));
+            String marketTime = stockInfoDto.getF26();
+            log.info(marketTime);
+            if (companyStock == null) {
+                companyStock = new CompanyStock();
+                companyStock.setStockCode(stockInfoDto.getF12());
+            }
+
+            companyStock.setName(stockInfoDto.getF14());
+            if (StringUtils.isNotEmpty(marketTime)) {
+                companyStock.setMarketTime(DateUtil.strToLocalDateTime(stockInfoDto.getF26()));
+            }
+            if (StringUtils.isNotEmpty(stockInfoDto.getF3())) {
+                companyStock.setDtzf(stockInfoDto.getF3());
+            }
+            if (StringUtils.isNotEmpty(stockInfoDto.getF5())) {
+                companyStock.setDtcjl(stockInfoDto.getF5());
+            }
+            if (StringUtils.isNotEmpty(stockInfoDto.getF6()) && StringUtil.isNumeric2(stockInfoDto.getF6())) {
+                companyStock.setDtcjje(new BigDecimal(stockInfoDto.getF6()));
+            }
+            if (StringUtils.isNotEmpty(stockInfoDto.getF8())) {
+                companyStock.setDthsl(stockInfoDto.getF8());
+            }
+            if (StringUtils.isNotEmpty(stockInfoDto.getF10())) {
+                companyStock.setLb(stockInfoDto.getF10());
+            }
+            if (StringUtils.isNotEmpty(stockInfoDto.getF115())) {
+                companyStock.setSyl(stockInfoDto.getF115());
+            }
+            if (!StringUtils.isEmpty(stockInfoDto.getF2()) && !stockInfoDto.getF2().equals("-")) {
+                BigDecimal price = new BigDecimal(stockInfoDto.getF2());
+                totalPrice = totalPrice.add(price);
+                companyStock.setLastPrice(price);
+            } else if (!StringUtils.isEmpty(stockInfoDto.getF18()) && !stockInfoDto.getF18().equals("-")) {
+                BigDecimal price = new BigDecimal(stockInfoDto.getF18());
+                companyStock.setLastPrice(price);
+            }
+//                if (!StringUtils.isEmpty(stockInfoDto.getF55()) && !stockInfoDto.getF55().equals("-") && StringUtil.isNumeric2(stockInfoDto.getF55())) {
+//                    companyStock.setLastIncome(new BigDecimal(stockInfoDto.getF55()));
+//                }
+            if (!StringUtils.isEmpty(stockInfoDto.getF20()) && !stockInfoDto.getF20().equals("-") && StringUtil.isNumeric2(stockInfoDto.getF20())) {
+                BigDecimal stockTotalCapitalization = new BigDecimal(stockInfoDto.getF20()).divide(BillionUnits, 4, RoundingMode.HALF_UP);
+                totalCapitalization = totalCapitalization.add(stockTotalCapitalization);
+                companyStock.setTotalCapitalization(stockTotalCapitalization);
+            }
+            if (!StringUtils.isEmpty(stockInfoDto.getF21()) && !stockInfoDto.getF21().equals("-") && StringUtil.isNumeric2(stockInfoDto.getF21())) {
+                BigDecimal circulation = new BigDecimal(stockInfoDto.getF21()).divide(BillionUnits, 4, RoundingMode.HALF_UP);
+                totalCirculation = totalCirculation.add(circulation);
+                companyStock.setLastCirculation(circulation);
+            }
+            companyStock.setUpdatedTime(LocalDateTime.now());
+            if (companyStock.getId() == null) {
+                mapper.insert(companyStock);
+            } else {
+                mapper.updateById(companyStock);
+            }
+            syncTodayPriceRecord(companyStock, stockInfoDto);
+        }
+        long chunkCost = System.currentTimeMillis() - chunkStart;
+        log.info("stock chunk {} finish, size={}, cost={}ms", chunkNo, stockChunk.size(), chunkCost);
+        return new StockSyncSummary(totalPrice, totalCapitalization, totalCirculation);
+    }
+
+    private static class StockSyncSummary {
+        private final BigDecimal totalPrice;
+        private final BigDecimal totalCapitalization;
+        private final BigDecimal totalCirculation;
+
+        private StockSyncSummary(BigDecimal totalPrice, BigDecimal totalCapitalization, BigDecimal totalCirculation) {
+            this.totalPrice = totalPrice;
+            this.totalCapitalization = totalCapitalization;
+            this.totalCirculation = totalCirculation;
+        }
+
+        public BigDecimal getTotalPrice() {
+            return totalPrice;
+        }
+
+        public BigDecimal getTotalCapitalization() {
+            return totalCapitalization;
+        }
+
+        public BigDecimal getTotalCirculation() {
+            return totalCirculation;
+        }
+    }
+
+    private void syncTodayPriceRecord(CompanyStock companyStock, StockInfoDto stockInfoDto) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = sdf.format(d);
+        CompanyPriceRecord record = companyPriceRecordMapper.selectOne(new LambdaQueryWrapper<CompanyPriceRecord>()
+                .eq(CompanyPriceRecord::getCompanyStockId, companyStock.getId())
+                .eq(CompanyPriceRecord::getReportTime, currentTime));
+        if (record == null) {
+            record = new CompanyPriceRecord();
+            record.setCompanyStockId(companyStock.getId());
+            record.setReportTime(currentTime);
+        }
+        record.setOpenPrice(stockInfoDto.getF17());
+        record.setClosePrice(stockInfoDto.getF2());
+        record.setHighestPrice(stockInfoDto.getF15());
+        record.setLowestPrice(stockInfoDto.getF16());
+        record.setDtzf(companyStock.getDtzf());
+        record.setDtcjl(companyStock.getDtcjl());
+        record.setDtcjje(companyStock.getDtcjje());
+        record.setDthsl(companyStock.getDthsl());
+        record.setLb(companyStock.getLb());
+        record.setSyl(companyStock.getSyl());
+        if (record.getId() == null) {
+            companyPriceRecordMapper.insert(record);
+        } else {
+            companyPriceRecordMapper.updateById(record);
         }
     }
 

@@ -2,9 +2,10 @@ package com.dragonchang.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.SystemClock;
 import com.dragonchang.crawler.EastMoneyCrawler;
-import com.dragonchang.domain.dto.eastmoney.*;
+import com.dragonchang.domain.dto.eastmoney.FinanceAnalysisDataDTO;
+import com.dragonchang.domain.dto.eastmoney.KlineDetailDTO;
+import com.dragonchang.domain.dto.eastmoney.NewFinanceAnalysisDataDTO;
 import com.dragonchang.domain.enums.FinanceReportTypeEnum;
 import com.dragonchang.domain.po.CompanyPriceRecord;
 import com.dragonchang.domain.po.CompanyStock;
@@ -20,10 +21,12 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -81,44 +84,6 @@ public class CompanyPriceRecordService implements ICompanyPriceRecordService {
                     }
                 }
             }
-        }
-    }
-
-    @Override
-    public void syncCompanyTodayPrice() {
-        Date d = new Date();
-        System.out.println(d);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String currentTime = sdf.format(d);
-        System.out.println("格式化后的日期：" + currentTime);
-        List<CompanyStock> companyStockList = companyStockMapper.selectList(new LambdaQueryWrapper<CompanyStock>());
-        for (CompanyStock stock : companyStockList) {
-            TodayPriceDTO priceDTO = eastMoneyCrawler.getTodayPrice(stock.getStockCode());
-            if(priceDTO == null) {
-                continue;
-            }
-            CompanyPriceRecord record = new CompanyPriceRecord();
-            record.setOpenPrice(priceDTO.getF46());
-            record.setClosePrice(priceDTO.getF43());
-            record.setHighestPrice(priceDTO.getF44());
-            record.setLowestPrice(priceDTO.getF45());
-            record.setCompanyStockId(stock.getId());
-            record.setReportTime(currentTime);
-
-            record.setDtzf(stock.getDtzf());
-            record.setDtcjl(stock.getDtcjl());
-            record.setDtcjje(stock.getDtcjje());
-            record.setDthsl(stock.getDthsl());
-            record.setLb(stock.getLb());
-            record.setSyl(stock.getSyl());
-
-            CompanyPriceRecord query = companyPriceRecordMapper.selectOne(new LambdaQueryWrapper<CompanyPriceRecord>()
-                    .eq(CompanyPriceRecord::getCompanyStockId, stock.getId())
-                    .eq(CompanyPriceRecord::getReportTime, currentTime));
-            if (query != null) {
-                continue;
-            }
-            companyPriceRecordMapper.insert(record);
         }
     }
 

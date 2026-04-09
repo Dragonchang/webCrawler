@@ -105,6 +105,8 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
             row.add(income);
             if(finance.getIncomeTotalPercent() != null) {
                 row.add(finance.getIncomeTotalPercent().divide(BigDecimal.valueOf(100000000),2, RoundingMode.HALF_UP));
+            } else {
+                row.add("-");
             }
             row.add(finance.getTotalAddPercent());
             row.add(ExcelUtil.convertToBillion(finance.getNetProfit()));
@@ -122,6 +124,8 @@ public class CompanyFinanceAnalysisService implements ICompanyFinanceAnalysisSer
                     conceptInfo = conceptInfo + stock.getBkName() + " ";
                 }
                 row.add(conceptInfo);
+            } else {
+                row.add("-");
             }
 
             row.add(finance.getReportTime());

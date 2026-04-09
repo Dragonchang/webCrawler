@@ -9,11 +9,6 @@ public interface ICompanyPriceRecordService {
     void syncCompanyPrice(Integer companyStockId);
 
     /**
-     * 同步所有公司的当天股价
-     */
-    void syncCompanyTodayPrice();
-
-    /**
      * 获取公司的K line集合
      * @param companyStockId
      * @return
