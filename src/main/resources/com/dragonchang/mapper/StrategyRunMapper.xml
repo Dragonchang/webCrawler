@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragonchang.mapper.StrategyRunMapper">
+    <select id="findPage" resultType="com.dragonchang.domain.dto.StrategyRunDTO">
+        select r.id,
+               r.strategy_id as strategyId,
+               r.strategy_version_id as strategyVersionId,
+               i.strategy_name as strategyName,
+               i.strategy_code as strategyCode,
+               v.version_no as versionNo,
+               r.run_type as runType,
+               r.trigger_source as triggerSource,
+               r.run_status as runStatus,
+               r.data_snapshot_date as dataSnapshotDate,
+               r.start_time as startTime,
+               r.end_time as endTime,
+               r.duration_ms as durationMs,
+               r.result_count as resultCount,
+               r.error_message as errorMessage,
+               r.created_time as createdTime
+          from t_strategy_run r
+          left join t_strategy_info i on r.strategy_id = i.id
+          left join t_strategy_version v on r.strategy_version_id = v.id
+         where 1 = 1
+        <if test="request.strategyId != null">
+            and r.strategy_id = #{request.strategyId}
+        </if>
+        <if test="request.strategyName != null and request.strategyName != ''">
+            and i.strategy_name like CONCAT('%', #{request.strategyName}, '%')
+        </if>
+        <if test="request.runStatus != null and request.runStatus != ''">
+            and r.run_status = #{request.runStatus}
+        </if>
+        order by r.id desc
+    </select>
+
+    <select id="getDetail" resultType="com.dragonchang.domain.dto.StrategyRunDTO">
+        select r.id,
+               r.strategy_id as strategyId,
+               r.strategy_version_id as strategyVersionId,
+               i.strategy_name as strategyName,
+               i.strategy_code as strategyCode,
+               v.version_no as versionNo,
+               r.run_type as runType,
+               r.trigger_source as triggerSource,
+               r.run_status as runStatus,
+               r.data_snapshot_date as dataSnapshotDate,
+               r.start_time as startTime,
+               r.end_time as endTime,
+               r.duration_ms as durationMs,
+               r.result_count as resultCount,
+               r.error_message as errorMessage,
+               r.created_time as createdTime
+          from t_strategy_run r
+          left join t_strategy_info i on r.strategy_id = i.id
+          left join t_strategy_version v on r.strategy_version_id = v.id
+         where r.id = #{runId}
+    </select>
+</mapper>
+

@@ -1,0 +1,137 @@
+package com.dragonchang.service.impl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dragonchang.domain.dto.StrategyRequestDTO;
+import com.dragonchang.domain.dto.StrategySaveRequestDTO;
+import com.dragonchang.domain.po.StrategyInfo;
+import com.dragonchang.domain.po.StrategyVersion;
+import com.dragonchang.domain.vo.JsonResult;
+import com.dragonchang.mapper.StrategyInfoMapper;
+import com.dragonchang.mapper.StrategyVersionMapper;
+import com.dragonchang.service.IStrategyService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
+
+import java.time.LocalDateTime;
+
+@Slf4j
+@Service
+public class StrategyService implements IStrategyService {
+
+    @Autowired
+    private StrategyInfoMapper strategyInfoMapper;
+
+    @Autowired
+    private StrategyVersionMapper strategyVersionMapper;
+
+    @Override
+    public IPage<StrategyInfo> findPage(StrategyRequestDTO pageRequest) {
+        Page page = new Page();
+        page.setCurrent(pageRequest.getPage());
+        page.setSize(pageRequest.getSize());
+        return strategyInfoMapper.findPage(page, pageRequest);
+    }
+
+    @Override
+    public StrategyInfo getById(Long id) {
+        return strategyInfoMapper.selectById(id);
+    }
+
+    @Override
+    public JsonResult saveStrategy(StrategySaveRequestDTO request) {
+        if (StringUtils.isBlank(request.getStrategyCode()) || StringUtils.isBlank(request.getStrategyName())) {
+            return JsonResult.failure("策略编码和策略名称不能为空");
+        }
+        StrategyInfo entity;
+        LocalDateTime now = LocalDateTime.now();
+        if (request.getId() == null) {
+            StrategyInfo exists = strategyInfoMapper.selectOne(new LambdaQueryWrapper<StrategyInfo>()
+                    .eq(StrategyInfo::getStrategyCode, request.getStrategyCode())
+                    .eq(StrategyInfo::getDeleted, 0));
+            if (exists != null) {
+                return JsonResult.failure("策略编码已存在");
+            }
+            entity = new StrategyInfo();
+            BeanUtils.copyProperties(request, entity);
+            entity.setDeleted(0);
+            entity.setStatus(0);
+            entity.setLatestVersionNo(0);
+            entity.setCreatedTime(now);
+            entity.setUpdatedTime(now);
+            entity.setScriptType(StringUtils.defaultIfBlank(request.getScriptType(), "RULE"));
+            entity.setScheduleType(StringUtils.defaultIfBlank(request.getScheduleType(), "MANUAL"));
+            strategyInfoMapper.insert(entity);
+        } else {
+            entity = strategyInfoMapper.selectById(request.getId());
+            if (entity == null) {
+                return JsonResult.failure("策略不存在");
+            }
+            StrategyInfo exists = strategyInfoMapper.selectOne(new LambdaQueryWrapper<StrategyInfo>()
+                    .eq(StrategyInfo::getStrategyCode, request.getStrategyCode())
+                    .ne(StrategyInfo::getId, request.getId())
+                    .eq(StrategyInfo::getDeleted, 0));
+            if (exists != null) {
+                return JsonResult.failure("策略编码已存在");
+            }
+            String oldScriptType = entity.getScriptType();
+            String oldScheduleType = entity.getScheduleType();
+            BeanUtils.copyProperties(request, entity);
+            entity.setUpdatedTime(now);
+            entity.setScriptType(StringUtils.defaultIfBlank(request.getScriptType(), oldScriptType));
+            entity.setScheduleType(StringUtils.defaultIfBlank(request.getScheduleType(), oldScheduleType));
+            strategyInfoMapper.updateById(entity);
+        }
+        return JsonResult.success(entity.getId());
+    }
+
+    @Override
+    public JsonResult publish(Long strategyId) {
+        StrategyInfo info = strategyInfoMapper.selectById(strategyId);
+        if (info == null || info.getDeleted() != null && info.getDeleted() == 1) {
+            return JsonResult.failure("策略不存在");
+        }
+        if (StringUtils.isBlank(info.getScriptContent())) {
+            return JsonResult.failure("策略脚本不能为空");
+        }
+        Integer nextVersion = info.getLatestVersionNo() == null ? 1 : info.getLatestVersionNo() + 1;
+        StrategyVersion version = new StrategyVersion();
+        version.setStrategyId(info.getId());
+        version.setVersionNo(nextVersion);
+        version.setScriptContent(info.getScriptContent());
+        version.setParamSchema(info.getParamSchema());
+        version.setDefaultParams(info.getDefaultParams());
+        version.setUniverseConfig(info.getUniverseConfig());
+        version.setScriptHash(DigestUtils.md5DigestAsHex(StringUtils.defaultString(info.getScriptContent()).getBytes()));
+        version.setIsPublished(1);
+        version.setCreatedTime(LocalDateTime.now());
+        strategyVersionMapper.insert(version);
+
+        info.setLatestVersionNo(nextVersion);
+        info.setPublishedVersionNo(nextVersion);
+        if (info.getStatus() == null || info.getStatus() == 0) {
+            info.setStatus(1);
+        }
+        info.setUpdatedTime(LocalDateTime.now());
+        strategyInfoMapper.updateById(info);
+        return JsonResult.success(version.getId());
+    }
+
+    @Override
+    public JsonResult changeStatus(Long strategyId, Integer status) {
+        StrategyInfo info = strategyInfoMapper.selectById(strategyId);
+        if (info == null) {
+            return JsonResult.failure("策略不存在");
+        }
+        info.setStatus(status);
+        info.setUpdatedTime(LocalDateTime.now());
+        strategyInfoMapper.updateById(info);
+        return JsonResult.success();
+    }
+}
+

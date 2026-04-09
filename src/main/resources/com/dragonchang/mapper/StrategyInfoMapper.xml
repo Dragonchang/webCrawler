@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dragonchang.mapper.StrategyInfoMapper">
+    <resultMap id="BaseResultMap" type="com.dragonchang.domain.po.StrategyInfo">
+        <id column="id" property="id"/>
+        <result column="strategy_code" property="strategyCode"/>
+        <result column="strategy_name" property="strategyName"/>
+        <result column="category" property="category"/>
+        <result column="description" property="description"/>
+        <result column="script_type" property="scriptType"/>
+        <result column="script_content" property="scriptContent"/>
+        <result column="param_schema" property="paramSchema"/>
+        <result column="default_params" property="defaultParams"/>
+        <result column="universe_config" property="universeConfig"/>
+        <result column="latest_version_no" property="latestVersionNo"/>
+        <result column="published_version_no" property="publishedVersionNo"/>
+        <result column="status" property="status"/>
+        <result column="schedule_type" property="scheduleType"/>
+        <result column="cron_expr" property="cronExpr"/>
+        <result column="last_run_time" property="lastRunTime"/>
+        <result column="last_run_status" property="lastRunStatus"/>
+        <result column="deleted" property="deleted"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="created_by" property="createdBy"/>
+        <result column="updated_time" property="updatedTime"/>
+        <result column="updated_by" property="updatedBy"/>
+    </resultMap>
+
+    <select id="findPage" resultMap="BaseResultMap">
+        select * from t_strategy_info
+        where deleted = 0
+        <if test="request.strategyName != null and request.strategyName != ''">
+            and strategy_name like CONCAT('%', #{request.strategyName}, '%')
+        </if>
+        <if test="request.strategyCode != null and request.strategyCode != ''">
+            and strategy_code like CONCAT('%', #{request.strategyCode}, '%')
+        </if>
+        <if test="request.category != null and request.category != ''">
+            and category = #{request.category}
+        </if>
+        <if test="request.status != null">
+            and status = #{request.status}
+        </if>
+        order by updated_time desc, id desc
+    </select>
+</mapper>
+
