@@ -5,9 +5,13 @@ import com.dragonchang.domain.po.CompanyStock;
 import com.dragonchang.domain.po.FinanceAnalysis;
 import com.dragonchang.strategy.support.StrategyFinanceDataService;
 import com.dragonchang.strategy.support.StrategyMarketDataService;
+import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +70,93 @@ public class StrategyApi {
         return marketDataService.latestPrices(stockId, days);
     }
 
+    public BigDecimal ma(Integer stockId, Integer days) {
+        return marketDataService.movingAverage(stockId, days);
+    }
+
+    public BigDecimal ma(CompanyStock stock, Integer days) {
+        if (stock == null) {
+            return null;
+        }
+        return ma(stock.getId(), days);
+    }
+
+    public List<CompanyStock> filter_paused_stock(List<CompanyStock> stocks) {
+        List<CompanyStock> ret = new ArrayList<CompanyStock>();
+        if (stocks == null) {
+            return ret;
+        }
+        for (CompanyStock stock : stocks) {
+            if (!isPausedStock(stock)) {
+                ret.add(stock);
+            }
+        }
+        return ret;
+    }
+
+    public List<CompanyStock> filter_st_stock(List<CompanyStock> stocks) {
+        List<CompanyStock> ret = new ArrayList<CompanyStock>();
+        if (stocks == null) {
+            return ret;
+        }
+        for (CompanyStock stock : stocks) {
+            if (!isStStock(stock)) {
+                ret.add(stock);
+            }
+        }
+        return ret;
+    }
+
+    public List<CompanyStock> filter_new_stock(List<CompanyStock> stocks, Integer days) {
+        List<CompanyStock> ret = new ArrayList<CompanyStock>();
+        if (stocks == null) {
+            return ret;
+        }
+        int minDays = days == null || days <= 0 ? 60 : days;
+        for (CompanyStock stock : stocks) {
+            if (!isNewStock(stock, minDays)) {
+                ret.add(stock);
+            }
+        }
+        return ret;
+    }
+
+    public boolean isPausedStock(CompanyStock stock) {
+        if (stock == null) {
+            return true;
+        }
+        if (stock.getLastPrice() == null || stock.getLastPrice().compareTo(BigDecimal.ZERO) <= 0) {
+            return true;
+        }
+        String volume = StringUtils.trimToEmpty(stock.getDtcjl());
+        String amount = stock.getDtcjje() == null ? "" : stock.getDtcjje().stripTrailingZeros().toPlainString();
+        if (isZeroLike(volume) && isZeroLike(amount)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isStStock(CompanyStock stock) {
+        if (stock == null || StringUtils.isBlank(stock.getName())) {
+            return false;
+        }
+        String name = StringUtils.upperCase(StringUtils.deleteWhitespace(stock.getName()));
+        return name.contains("ST") || name.contains("*ST") || name.contains("退");
+    }
+
+    public boolean isNewStock(CompanyStock stock, Integer days) {
+        if (stock == null) {
+            return false;
+        }
+        int minDays = days == null || days <= 0 ? 60 : days;
+        LocalDateTime marketTime = stock.getMarketTime();
+        if (marketTime == null) {
+            return false;
+        }
+        long listedDays = ChronoUnit.DAYS.between(marketTime.toLocalDate(), LocalDate.now());
+        return listedDays < minDays;
+    }
+
     public BigDecimal score(CompanyStock stock) {
         BigDecimal score = BigDecimal.ZERO;
         if (stock.getTotalCapitalization() != null) {
@@ -91,5 +182,12 @@ public class StrategyApi {
         }
         return new BigDecimal(String.valueOf(value));
     }
-}
 
+    private boolean isZeroLike(String value) {
+        if (StringUtils.isBlank(value)) {
+            return true;
+        }
+        String normalized = StringUtils.replaceEach(value.trim(), new String[]{",", "手", "股", "元"}, new String[]{"", "", "", ""});
+        return StringUtils.equalsAny(normalized, "0", "0.0", "0.00", "--", "-");
+    }
+}
